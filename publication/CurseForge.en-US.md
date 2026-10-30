@@ -26,7 +26,7 @@ The radial menu can open your inventory, switch perspective, swap hands, drop it
 
 By default, **hold the middle mouse button, point at an action, and release**. Click-based operation is also available.
 
-Vanilla actions and supported mod keybinds can be bound to visible slots. While the HUD is enabled, mod function keys are routed through Fingertip. Use the **Key takeover** page to allow a mod through when you want to retain its original shortcuts. Basic movement, attack, use, and other reserved controls remain available.
+Vanilla actions and supported mod keybinds can be bound to visible slots. While the HUD is enabled, mod function keys are routed through Fingertip. Open **Key takeover → Mod whitelist** and turn on a mod when you want to retain its original shortcuts. Basic movement, attack, use, and other reserved controls remain available.
 
 ## Supported mod skills
 
@@ -41,7 +41,7 @@ Other mods can add skill providers and inventory-source integrations through the
 1. Install Fingertip in your Minecraft instance. For multiplayer, install it on the server and participating clients.
 2. Open your inventory and click the Fingertip logo near the upper-right corner.
 3. Bind items or actions, assign shortcuts, and arrange the layout.
-4. Review Key takeover and allow through the mods whose original shortcuts you want to keep.
+4. Open Key takeover → Mod whitelist and turn on the mods whose original shortcuts you want to keep.
 5. Return to the world and use the slot keys or the radial menu.
 
 ## Requirements and compatibility
@@ -54,7 +54,7 @@ Other mods can add skill providers and inventory-source integrations through the
 
 Item shortcuts use the vanilla player inventory. Third-party backpack contents require an inventory-source integration. Mods with their own physical-input handling may need additional compatibility support.
 
-For items that require a real vanilla hotbar position, try the owning mod's **Use real slot** option in Key takeover. In Fingertip mode, selection uses assigned slot keys; the mouse wheel does not select slots.
+**Use real slot** in Key takeover is a global switch, enabled by default. During right-click use, it lets other mods see the held item's real inventory slot; turn it off if a mod misbehaves. In Fingertip mode, selection uses assigned slot keys; the mouse wheel does not select slots.
 
 ## License
 

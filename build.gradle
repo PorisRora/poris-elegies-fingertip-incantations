@@ -41,9 +41,10 @@ neoForge {
     mods { poris_elegies_fingertip_incantations { sourceSet sourceSets.main } }
 }
 
+def modMetadataVersion = project.version.toString()
 var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
     var properties = [minecraft_version_range: minecraft_version_range,
-                      loader_version_range: loader_version_range, mod_version: project.version]
+                      loader_version_range: loader_version_range, mod_version: modMetadataVersion]
     inputs.properties properties
     filteringCharset = 'UTF-8'
     expand properties
@@ -51,7 +52,7 @@ var generateModMetadata = tasks.register('generateModMetadata', ProcessResources
     into layout.buildDirectory.dir('generated/sources/modMetadata')
     doLast {
         new File(destinationDir, 'PORIS_BUILD.txt').setText(
-                "${project.version}\nFingertip Incantations | Minecraft 1.21.1 | protocol 3\n", 'UTF-8')
+                "${modMetadataVersion}\nFingertip Incantations | Minecraft 1.21.1 | protocol 3\n", 'UTF-8')
     }
 }
 sourceSets.main.resources.srcDir generateModMetadata

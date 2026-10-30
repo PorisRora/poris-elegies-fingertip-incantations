@@ -22,6 +22,8 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 Create and arrange slots around the screen. Bind items or actions by dragging them from the editor, swap two bindings by dragging one onto another, and clear a binding by dragging it into empty space. Alignment, snapping, and group arrangement help keep the layout tidy.
 
+![The editor: your slots on the left, the content library on the right with Items, Vanilla, Mods and Skills pages](docs/images/en/editor-skills.webp)
+
 Choose between two modes:
 
 - **Mixed:** keep the vanilla nine-slot hotbar and add Fingertip slots alongside it. The vanilla row moves as a group and keeps its usual selection controls.
@@ -29,11 +31,17 @@ Choose between two modes:
 
 The **Classic**, **Starlight**, and **Poris** themes share the same controls. Choose which slots remain visible and whether to show item durability percentages.
 
+| Slot configuration | Display settings |
+| --- | --- |
+| ![Slot configuration: add slots, arrange in a row, column or grid, gap, snapping, canvas](docs/images/en/layout-editor.webp) | ![Display settings: style, which slots show, mod function icons, durability percentage](docs/images/en/display-settings.webp) |
+
 ## Keep equipment and supplies close
 
 Equipment bindings remember the particular item you chose, including tools or weapons with their own durability and data. Supply bindings find matching items in your inventory and continue with another matching stack when the current stack is consumed.
 
 Press a bound item's key to equip it. Press the same slot's key again to put it away and use an empty hand. Your items remain in the inventory; the HUD does not add storage slots.
+
+![Hovering an item slot: the item's own tooltip, then where it is in your inventory, how many you have, and its key](docs/images/en/item-tooltip.webp)
 
 ## Put controls on the screen
 
@@ -41,28 +49,30 @@ Bind vanilla actions and supported mod keybinds to visible slots. The configurab
 
 By default, **hold the middle mouse button, point at an action, and release**. A click-based mode is available too.
 
-**Key takeover changes how mod shortcuts work while the HUD is enabled.** Unbound mod shortcuts are not forwarded unless their mod is allowed through the **Key takeover** page. Movement, attack, use, and other basic controls remain available. Use the per-mod allowlist for mods whose original controls you want to keep.
+| Mod keybinds on slots | Wheel Setup |
+| --- | --- |
+| ![Mods page: other mods' keybinds can be dragged straight onto a slot](docs/images/en/mod-keybinds.webp) | ![Wheel Setup: pick a position, then a vanilla or mod function](docs/images/en/radial-setup.webp) |
+
+**Key takeover changes how mod shortcuts work while the HUD is enabled.** Unbound mod shortcuts are not forwarded unless their mod is turned on in the **Mod whitelist**, opened from the **Key takeover** page. Movement, attack, use, and other basic controls remain available.
+
+| Key takeover | Mod whitelist |
+| --- | --- |
+| ![Key takeover: F1–F9, Q, E, T and Use real slot](docs/images/en/key-takeover.webp) | ![Mod whitelist: mods switched on keep their own keys](docs/images/en/mod-allowlist.webp) |
 
 ## See supported skills at a glance
 
 The built-in Iron's Spells 'n Spellbooks integration adds available spells to the **Skills** page. Skill slots can display cooldowns, active states, charges, and recast counts when the integration provides them. Hovering can show the skill's own information, such as damage, range, or duration.
 
+![Hovering a skill slot: ready or not, level, mana, and the spell's own HP and damage](docs/images/en/skill-tooltip.webp)
+
 The spell's own mod still handles casting rules and gameplay. Fingertip supplies the interface and forwards the action. Other mods can add integrations through the public API.
-
-## In-game views
-
-| Layout editor | Radial menu |
-| --- | --- |
-| ![Poris theme layout editor](docs/images/editor-poris.png) | ![Poris theme radial menu](docs/images/radial-poris.png) |
-
-The Poris theme with an example layout and the radial menu in click mode. Open either image to see the full-size screenshot.
 
 ## Start playing
 
 1. Install the mod in your Minecraft instance. For multiplayer, the server and participating clients also need it.
 2. Open your inventory and click the **Fingertip Incantations** logo near the upper-right corner.
 3. Drag items or actions to slots, assign their shortcuts, and arrange the layout.
-4. Check **Key takeover** and allow through any mods whose original shortcuts you want to keep.
+4. Check **Key takeover**, and in its **Mod whitelist** switch on any mods whose original shortcuts you want to keep.
 5. Return to the world. Use your slot keys or open the radial menu with the middle mouse button.
 
 See the [user guide](docs/USER_GUIDE.md) for mode differences, key conflicts, controls, and compatibility options.
@@ -75,7 +85,7 @@ Fingertip works on its own with Minecraft and NeoForge. Iron's Spells is optiona
 | --- | --- |
 | Items in the vanilla player inventory | Supported as shortcut sources |
 | A mod exposes standard Minecraft keybinds | Its functions can be assigned through the editor |
-| An item expects a real vanilla hotbar position | Try that mod's **Use real slot** option in Key takeover |
+| An item needs its real inventory slot during right-click use | **Use real slot** in Key takeover exposes that slot during use (one global switch, on by default) |
 | A mod reads physical input through its own system | May require a dedicated integration |
 | Items inside a third-party backpack or container | Requires an inventory-source integration; containers are not automatically scanned |
 | A skill from another mod | Requires a skill provider; arbitrary spells are not detected automatically |

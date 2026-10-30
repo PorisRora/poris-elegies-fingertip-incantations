@@ -41,7 +41,7 @@ The default source is the player's main inventory, including the vanilla hotbar.
 
 ## Key takeover
 
-While the HUD is enabled, mod function keybinds are routed through Fingertip slots. A mod's original unbound shortcuts do not trigger unless you allow that mod through in **Key takeover**.
+While the HUD is enabled, mod function keybinds are routed through Fingertip slots. A mod's original unbound shortcuts do not trigger unless you turn that mod on in **Key takeover → Mod whitelist**.
 
 The basic movement, attack/use, inventory, chat, and other reserved controls stay available. Optional settings can take over some additional controls. The editor prevents configurations that would remove the required way back to the inventory.
 
@@ -65,7 +65,7 @@ The owning mod still validates the action and performs the gameplay. Fingertip's
 
 ## Compatibility options
 
-- **Use real slot:** try this per-mod option for an item whose behavior depends on a real vanilla hotbar position.
+- **Use real slot:** a global switch in Key takeover, enabled by default. During right-click use of an item held through a Fingertip slot, other mods see the inventory slot the item is really in. It only affects that right-click; turn it off if a mod misbehaves.
 - **Custom input handling:** mods that bypass Minecraft's normal keybind handling may need an integration.
 - **External inventories:** third-party backpacks need an inventory-source integration. Fingertip does not automatically scan container contents.
 - **Other skill mods:** support requires a skill provider; the existence of a spell item alone does not provide an integration.
