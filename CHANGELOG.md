@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.2.4-beta
+
+- Lower the optional Iron's Spells 'n Spellbooks requirement to 1.21-3.4.4 for Minecraft 1.21.1.
+- Keep the NeoForge minimum at 21.1.181.
+- Verify the minimum combination across skill actions, key takeover, the radial menu, and dedicated-server loading.
+- Update the English and Chinese documentation. Runtime code, artwork, configuration, and protocol 3 are unchanged.
+
 ## 0.2.3-beta
 
 ### First public beta

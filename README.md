@@ -11,11 +11,11 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 | Requirement | Supported |
 | --- | --- |
-| Version | **0.2.3-beta** |
+| Version | **0.2.4-beta** |
 | Minecraft | Java Edition **1.21.1** |
 | Loader | **NeoForge 21.1.181 or later** for Minecraft 1.21.1 |
 | Installation | Client and server; single-player uses its integrated server |
-| Optional integration | Iron's Spells 'n Spellbooks **1.21.1-3.15.5 or later** |
+| Optional integration | Iron's Spells 'n Spellbooks **1.21-3.4.4 or later** |
 | License | Source code: **MIT** · Logo and artwork: **All Rights Reserved** |
 
 ## Make the hotbar your own

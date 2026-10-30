@@ -19,7 +19,7 @@
 
 [h2=安装与使用]
 
-当前版本：0.2.3 Beta。
+当前版本：0.2.4 Beta。
 
 支持 Minecraft Java 版 1.21.1，使用对应的 NeoForge 21.1.181 或更新版本。
 
@@ -61,7 +61,7 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 
 [h1=兼容与联动]
 
-指尖咒文可以独立使用，Iron's Spells 'n Spellbooks 为可选联动，内置适配支持 1.21.1-3.15.5 及以上版本。安装联动模组时，还需满足该模组自己的依赖要求。
+指尖咒文可以独立使用，Iron's Spells 'n Spellbooks 为可选联动，内置适配支持 1.21-3.4.4 及以上版本。安装联动模组时，还需满足该模组自己的依赖要求。
 
 技能能否施放、消耗多少资源和产生什么效果，由技能所属模组决定。指尖负责显示与操作转发，其他技能模组需要通过接口接入，不会自动识别任意法术。
 
@@ -76,45 +76,45 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 源码采用 MIT 许可，Logo 与美术素材保留所有权利。素材声明允许将未经修改的官方发行包加入整合包，并保留许可与来源信息。
 
 - [GitHub 源码](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
-- [0.2.3-beta 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v0.2.3-beta)
-- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/docs/USER_GUIDE.zh-CN.md)
+- [0.2.4-beta 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v0.2.4-beta)
+- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/docs/USER_GUIDE.zh-CN.md)
 - [问题反馈](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
-- [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/ASSET_LICENSE.md)
+- [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/ASSET_LICENSE.md)
 
 [h1=画廊]
 
 编辑器与技能内容库。
 
-![编辑器与技能内容库](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/editor-skills.webp)
+![编辑器与技能内容库](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/editor-skills.webp)
 
 指尖格配置：添加格子、横排竖排、网格、间距和吸附对齐。
 
-![指尖格配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/layout-editor.webp)
+![指尖格配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/layout-editor.webp)
 
 显示设置：主题、格子显示范围、模组功能图标和耐久百分比。
 
-![显示设置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/display-settings.webp)
+![显示设置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/display-settings.webp)
 
 物品悬停说明：物品属性、库存位置、数量和快捷键。
 
-![物品悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/item-tooltip.webp)
+![物品悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/item-tooltip.webp)
 
 将模组功能按键绑定到格子。
 
-![模组功能按键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-keybinds.webp)
+![模组功能按键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/mod-keybinds.webp)
 
 轮盘配置：为扇区选择原生或模组功能。
 
-![轮盘配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/radial-setup.webp)
+![轮盘配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/radial-setup.webp)
 
 按键接管与「使用真实格」开关。
 
-![按键接管](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/key-takeover.webp)
+![按键接管](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/key-takeover.webp)
 
 模组白名单：允许指定模组保留自己的快捷键。
 
-![模组白名单](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-allowlist.webp)
+![模组白名单](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/mod-allowlist.webp)
 
 技能悬停说明：施放状态、等级、资源状态和法术数值。
 
-![技能悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/skill-tooltip.webp)
+![技能悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/skill-tooltip.webp)

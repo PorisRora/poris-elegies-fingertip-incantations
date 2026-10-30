@@ -10,6 +10,8 @@ The public repository is a standalone NeoForge project. Use its repository root 
 
 The build pins ModDevGradle and the compile-time Iron's Spells version. Iron's Spells is resolved from its author's [release Maven repository](https://iron.wiki/developers/), as a compile-only dependency. Its JAR is not committed to this repository or bundled in the output.
 
+The compile-time Iron's version stays at **1.21.1-3.15.5**. Runtime integration starts at **1.21-3.4.4** on Minecraft 1.21.1 / NeoForge 21.1.181; that separate compatibility floor is declared in `src/main/templates/META-INF/neoforge.mods.toml`.
+
 ## Build and test
 
 Windows:
