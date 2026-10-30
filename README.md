@@ -2,10 +2,10 @@
   <img src="docs/images/logo-horizontal.png" width="860" alt="Poris Elegies: Fingertip Incantations">
 </p>
 
-<p align="center"><strong>A hotbar you arrange around the way you play.</strong></p>
+<p align="center"><strong>Keep the items, controls, and skills you use most within reach.</strong></p>
 <p align="center">English · <a href="README.zh-CN.md">简体中文</a></p>
 
-**Fingertip Incantations** brings inventory items, keybinds, and supported mod skills into a customizable RPG-style HUD. Keep a sword, building blocks, a potion, or a supported spell within reach, with a visible slot and a shortcut you choose.
+**Fingertip Incantations** is a customizable RPG-style hotbar. Equipment, supplies, vanilla actions, mod keybinds, and supported mod skills can all be bound to visible slots on the screen.
 
 The slots point to your existing items. Selecting a sword equips that sword without moving it into a different inventory slot. Attacking, using items, placing blocks, and charging an action still use your normal controls.
 
@@ -26,7 +26,7 @@ Create and arrange slots around the screen. Bind items or actions by dragging th
 
 Choose between two modes:
 
-- **Mixed:** keep the vanilla nine-slot hotbar and add Fingertip slots alongside it. The vanilla row moves as a group and keeps its usual selection controls.
+- **Mixed:** keep the vanilla nine-slot hotbar and add Fingertip slots alongside it. The vanilla row moves as a group and keeps number-key and mouse-wheel selection.
 - **Fingertip:** use Fingertip bindings for the original nine positions as well. Slots can be moved, rebound, or removed, and selection uses their assigned shortcuts.
 
 The **Classic**, **Starlight**, and **Poris** themes share the same controls. Choose which slots remain visible and whether to show item durability percentages.
@@ -37,7 +37,7 @@ The **Classic**, **Starlight**, and **Poris** themes share the same controls. Ch
 
 ## Keep equipment and supplies close
 
-Equipment bindings remember the particular item you chose, including tools or weapons with their own durability and data. Supply bindings find matching items in your inventory and continue with another matching stack when the current stack is consumed.
+Equipment bindings remember the particular item you chose, including tools or weapons with their own durability and data. Supply bindings, such as food or blocks, match by item type and data, and continue with another matching stack when the current stack is consumed.
 
 Press a bound item's key to equip it. Press the same slot's key again to put it away and use an empty hand. Your items remain in the inventory; the HUD does not add storage slots.
 
@@ -65,7 +65,7 @@ The built-in Iron's Spells 'n Spellbooks integration adds available spells to th
 
 ![Hovering a skill slot: ready or not, level, mana, and the spell's own HP and damage](docs/images/en/skill-tooltip.webp)
 
-The spell's own mod still handles casting rules and gameplay. Fingertip supplies the interface and forwards the action. Other mods can add integrations through the public API.
+The spell's own mod still handles casting rules, resource costs, and gameplay effects. Fingertip supplies the interface and forwards the action. Other mods can add integrations through the public API.
 
 ## Start playing
 
@@ -92,7 +92,7 @@ Fingertip works on its own with Minecraft and NeoForge. Iron's Spells is optiona
 
 In Fingertip mode, the mouse wheel does not select slots. Use their assigned keys, or use Mixed mode for vanilla hotbar selection.
 
-## For developers
+## Development and feedback
 
 - [Build from source](docs/BUILDING.md)
 - [Skill and inventory integrations](docs/INTEGRATION.md)
