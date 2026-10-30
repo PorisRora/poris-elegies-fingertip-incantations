@@ -1,0 +1,43 @@
+Poris Elegies: Fingertip Incantations
+
+Source code: MIT License. Logo and artwork: All Rights Reserved, with the permissions below. Third-party files retain their own licenses.
+
+1. SOURCE CODE, BUILD SCRIPTS, CONFIGURATION DATA, TRANSLATIONS, AND TECHNICAL DOCUMENTATION
+
+MIT License
+
+Copyright (c) 2026 Rooboko
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+2. ARTWORK RIGHTS
+
+The project's source code, build scripts, configuration data, interface translations, and technical documentation are covered by the root MIT License (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/LICENSE). Third-party files retain their own licenses.
+
+The logo, textures, screenshots, and other artwork are excluded from the MIT License. All rights not expressly granted are reserved. This includes artwork in this repository, release JARs, and project pages.
+
+To the extent the project author has the right to grant permission, you may:
+
+1. Clone or fork the official source repository, retain the artwork and license notices, and use the unchanged artwork for local builds, debugging, and playing this project in Minecraft.
+2. Include and redistribute unmodified official mod releases in modpacks, retaining the licenses and source information.
+3. Show the mod as part of Minecraft gameplay videos or livestreams, including monetized gameplay.
+
+Other separate distribution, adaptation, sale, or use of the artwork in another project requires separate permission. The source code's MIT License does not by itself grant permission to distribute modified builds containing these reserved assets; you may replace them with assets you have the right to use.
+
+Rights granted by applicable law or the hosting platform's terms are unaffected. No rights beyond those held by the project author are granted. See third-party notices (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/THIRD_PARTY_NOTICES.md) for separately licensed components.

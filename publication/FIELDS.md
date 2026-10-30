@@ -8,7 +8,7 @@
 | Class | Mods |
 | Main category | Utility & QoL |
 | Additional categories | Optional; no extra category is required |
-| License | MIT License; explain artwork exclusions in the description and asset statement |
+| License | Custom License; paste the full text of [CurseForge-LICENSE.txt](CurseForge-LICENSE.txt), covering MIT source code and separate artwork rights |
 | Supported game version | Minecraft 1.21.1 |
 | Mod loader | NeoForge |
 | Environment | Client and server |
