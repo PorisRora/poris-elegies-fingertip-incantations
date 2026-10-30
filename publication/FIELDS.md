@@ -33,7 +33,7 @@ A customizable RPG-style hotbar for inventory items, keybinds, and supported mod
 | 运行环境 | 客户端、服务端均需 |
 | 开源状态 | 源码 MIT；美术素材保留权利 |
 | 封面素材 | `../docs/images/logo-horizontal.png` |
-| 介绍正文 | [MCMOD.zh-CN.md](MCMOD.zh-CN.md) |
+| 介绍正文 | [百科标题格式](MCMOD.editor.zh-CN.txt)；[Markdown 预览](MCMOD.zh-CN.md) |
 
 一句话简介：
 

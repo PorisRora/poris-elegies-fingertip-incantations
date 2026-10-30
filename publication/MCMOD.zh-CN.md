@@ -1,91 +1,120 @@
-![珀璃丝追忆录：指尖咒文](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/logo-horizontal.png)
+# 概述
 
-# 珀璃丝追忆录：指尖咒文
+咒文不止写在书页上。
 
-指尖咒文（Poris Elegies: Fingertip Incantations）是一个提供自定义快捷栏与操作轮盘的模组。玩家可以将背包物品、原版动作、模组按键和已适配的模组技能绑定到屏幕上的格子，设置快捷键并调整布局。
+也藏在每一次伸手、每一次抬起指尖的瞬间。
 
-以下介绍以 **0.2.3-beta** 为准，适用于 **Minecraft Java 版 1.21.1／NeoForge**，多人游戏需要客户端和服务端均安装。
+指尖咒文提供可自由编排的快捷栏和操作轮盘，将背包物品、原版动作、模组按键与已适配技能放进屏幕上的格子。
 
-物品格引用背包里已有的物品。按下剑对应的快捷键会将其拿到主手，物品仍留在原来的库存位置；攻击、使用、蓄力和放置继续使用正常操作。
+## 主要功能
 
-## 快捷栏与布局
+- 自由编排快捷栏，可调整格子的位置和快捷键，支持对齐、吸附、间距调整，以及横排、竖排和网格排列。
+- 提供混合、指尖两种模式，可保留原版九格并添加指尖格，也可将原来的九格一起交给指尖管理。
+- 拖放绑定物品或动作，拖到另一格交换绑定，拖到空白处并确认后清空。
+- 装备记住绑定的那一件物品，补给按种类和物品数据匹配，一叠用完后接续下一叠匹配物品。
+- 可配置操作轮盘，默认按住鼠标中键打开、指向后松开执行，也可改成点击式。
+- 内置 Iron's Spells 'n Spellbooks 适配，可将可用法术放入格子，并显示适配方提供的冷却、充能、开关状态与技能说明。
+- 提供普通、星辉、Poris 三套主题，可设置格子显示范围、模组功能图标和耐久百分比。
+- 界面支持简体中文和英文，随游戏语言切换。
 
-编辑器右侧的内容库分为「物品」「原生」「模组」「技能」四页。将其中的物品或动作拖到格子上即可绑定；拖到另一格可以交换绑定，拖到空白处并确认后可以清空。
+## 安装与使用
 
-![编辑器：左侧为屏幕上的格子，右侧为物品、原生、模组和技能内容库](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/editor-skills.webp)
+当前版本：0.2.3 Beta。
 
-快捷栏提供两种模式：
+支持 Minecraft Java 版 1.21.1，使用对应的 NeoForge 21.1.181 或更新版本。
 
-- **混合模式**：保留原版九格，额外增加指尖格。原版九格作为一组移动，数字键和鼠标滚轮继续用于原版选格。
-- **指尖模式**：原来的九格也使用指尖绑定，可以改绑、移动或删除，通过各格自己的快捷键选择。
+客户端与服务端均需安装，多人游戏建议使用相同版本。将模组 JAR 放入实例的 mods 文件夹，更新时移出旧版文件并完整重启游戏。
 
-布局编辑支持对齐、吸附、间距调整，以及横排、竖排和网格排列。界面提供普通、星辉、Poris 三套主题，并可设置格子显示范围、模组功能图标和剩余耐久百分比。
+打开背包，点击右上角附近的指尖咒文 Logo，即可进入编辑器。将内容库中的物品或动作拖到格子上绑定，再进入「指尖格配置」调整位置和快捷键。
 
-| 指尖格配置 | 显示设置 |
+HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷键时，请在「按键接管 → 模组白名单」里打开对应模组。
+
+# 快捷栏模式
+
+| 模式 | 原版九格 | 选格方式 |
+| --- | --- | --- |
+| 混合模式 | 保留原版行为，作为一组移动，旁边可添加指尖格 | 数字键与滚轮选择原版格；指尖格使用各自快捷键 |
+| 指尖模式 | 原来的九格也使用指尖绑定，可改绑、移动或删除 | 使用各格自己的快捷键，滚轮不切格 |
+
+物品格引用背包里已有的物品，不增加背包容量。按下物品格的快捷键会将对应物品拿到主手，再按同一个键收起为空手。
+
+选中物品不会自动攻击、进食、施法或放置，仍需使用正常的攻击与使用操作。物品格与技能格的行为不同，已适配的技能格会将施放请求交给技能所属模组处理。
+
+关闭编辑器顶部的启用开关，会恢复原版界面与控制；仅在显示设置中隐藏格子，不会停用指尖。
+
+# 操作
+
+| 操作 | 方法 |
 | --- | --- |
-| ![添加格子、调整排列与间距、吸附对齐](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/layout-editor.webp) | ![选择主题、格子显示范围、模组功能图标和耐久百分比](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/display-settings.webp) |
+| 打开编辑器 | 打开背包，点击右上角附近的指尖 Logo |
+| 绑定物品或动作 | 从内容库拖到屏幕上的格子 |
+| 交换绑定 | 将已有绑定拖到另一格 |
+| 清空绑定 | 将绑定拖到空白处，并确认提示 |
+| 调整格子位置 | 进入「指尖格配置」，拖动格子或使用排列、对齐功能 |
+| 设置快捷键 | 在「指尖格配置」中单击一个指尖格，再录入按键 |
+| 拿出或收起物品 | 按物品格的快捷键；再次按当前格的键收起为空手 |
+| 使用轮盘 | 默认按住鼠标中键，指向功能后松开；可在轮盘配置中改为点击式 |
+| 保留某个模组的原快捷键 | 在「按键接管 → 模组白名单」中打开对应模组 |
+| 临时停用指尖 | 长按 Esc 三秒，直到重新启动游戏前保持停用 |
 
-## 装备认这一件，补给认这一种
+快捷键与基础控制、白名单模组按键或其他格子冲突时，格子可能暂停，但绑定和布局会保留。悬停格子可以查看原因，再更换按键。
 
-工具、武器等装备绑定会记住选中的具体物品，包括其耐久与物品数据。食物、方块等补给按种类和物品数据匹配，一叠用完后继续使用下一叠匹配物品。
+# 兼容与联动
 
-按物品格的快捷键可以拿到主手，再按同一个键收起为空手。格子是已有物品的快捷入口，不增加背包容量；选中物品不会自动攻击、进食、施法或放置。
+指尖咒文可以独立使用，Iron's Spells 'n Spellbooks 为可选联动，内置适配支持 1.21.1-3.15.5 及以上版本。安装联动模组时，还需满足该模组自己的依赖要求。
 
-![悬停物品格可查看物品说明、库存位置、数量和快捷键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/item-tooltip.webp)
+技能能否施放、消耗多少资源和产生什么效果，由技能所属模组决定。指尖负责显示与操作转发，其他技能模组需要通过接口接入，不会自动识别任意法术。
 
-## 轮盘和模组按键
+默认物品来源为玩家主背包和原版快捷栏。箱子、第三方背包容器不会自动成为补给来源，第三方容器需要物品来源适配。
 
-轮盘可以打开背包、切换视角、交换副手、丢弃物品、打开编辑器，也可以执行分配给扇区的其他动作。
+使用 Minecraft 标准按键系统的模组功能可以在编辑器中绑定；使用私有物理输入处理的功能需要额外适配。
 
-默认**按住鼠标中键，指向功能，松开执行**；也可以改成点击式。
+「使用真实格」位于「按键接管」中，是默认开启的全局开关。右键使用通过指尖格拿着的物品时，让其他模组读取该物品实际所在的库存格；只影响这次右键，出现兼容问题时可关闭。
 
-| 模组按键 | 轮盘配置 |
-| --- | --- |
-| ![将模组按键绑定到屏幕格子](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-keybinds.webp) | ![选择轮盘扇区并分配原生或模组功能](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/radial-setup.webp) |
+# 许可与链接
 
-原版动作和支持的模组按键可以绑定到格子。**HUD 开启时，模组功能按键由指尖接管。** 没有绑定到格子、也没有被放行的模组功能键不会按原方式触发；需要保留某个模组的原快捷键时，可在「按键接管 → 模组白名单」里打开该模组。移动、攻击、使用等基础控制保留。
+源码采用 MIT 许可，Logo 与美术素材保留所有权利。素材声明允许将未经修改的官方发行包加入整合包，并保留许可与来源信息。
 
-| 按键接管 | 模组白名单 |
-| --- | --- |
-| ![配置可选按键接管和使用真实格](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/key-takeover.webp) | ![允许指定模组保留自己的原快捷键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-allowlist.webp) |
-
-## 已适配技能
-
-内置 Iron's Spells 'n Spellbooks 适配，可用法术出现在「技能」页。技能格能显示适配方提供的冷却、开关状态、充能和再施放次数；悬停可查看法术自己的伤害、范围、持续时间等说明。
-
-![技能格显示施放状态、等级、资源状态和法术自己的数值说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/skill-tooltip.webp)
-
-能否释放、消耗多少资源和实际效果仍由技能所属模组处理。其他模组可以通过[公开接口](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/docs/INTEGRATION.md)添加技能或物品来源适配。
-
-## 开始使用
-
-1. 将模组装入 Minecraft 实例；多人游戏的服务端和参与玩家都需要安装。
-2. 打开背包，点击右上角附近的指尖 Logo。
-3. 绑定物品或动作，配置快捷键并整理布局。
-4. 打开「按键接管 → 模组白名单」，放行需要保留原始快捷键的模组。
-5. 返回游戏，用格子的快捷键或中键轮盘操作。
-
-## 环境与兼容
-
-- Minecraft Java 版 **1.21.1**。
-- NeoForge **21.1.181 及以上**，需对应 Minecraft 1.21.1。
-- 客户端和服务端均需安装，单人使用内置服务端。
-- 可以独立使用，Iron's Spells 是可选联动。
-- 内置适配支持 Iron's Spells **1.21.1-3.15.5 及以上**。
-
-当前物品来源为原版玩家背包。第三方背包容器需要物品来源适配；使用私有物理输入的模组可能需要专门兼容。「按键接管」里的「使用真实格」是全局开关，默认开启，右键使用时会让其他模组读取物品实际所在的库存格；出现兼容问题时可关闭。
-
-指尖模式下滚轮不切格，需要使用格子快捷键；希望沿用原版选格方式时可使用混合模式。
-
-## 相关链接与反馈
-
-- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/docs/USER_GUIDE.zh-CN.md)
 - [GitHub 源码](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
 - [0.2.3-beta 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v0.2.3-beta)
-- [问题与建议](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
+- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/docs/USER_GUIDE.zh-CN.md)
+- [问题反馈](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
+- [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/ASSET_LICENSE.md)
 
-反馈问题时请提供模组和 NeoForge 版本、单人或多人环境、相关模组与复现步骤。
+# 画廊
 
-## 许可
+编辑器与技能内容库。
 
-源码、构建脚本、配置数据、界面翻译和技术文档采用 [**MIT 许可**](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/LICENSE)。Logo 和美术素材**保留所有权利**，按[独立素材声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.3-beta/ASSET_LICENSE.md)允许将未经修改的官方发行包加入整合包。
+![编辑器与技能内容库](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/editor-skills.webp)
+
+指尖格配置：添加格子、横排竖排、网格、间距和吸附对齐。
+
+![指尖格配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/layout-editor.webp)
+
+显示设置：主题、格子显示范围、模组功能图标和耐久百分比。
+
+![显示设置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/display-settings.webp)
+
+物品悬停说明：物品属性、库存位置、数量和快捷键。
+
+![物品悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/item-tooltip.webp)
+
+将模组功能按键绑定到格子。
+
+![模组功能按键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-keybinds.webp)
+
+轮盘配置：为扇区选择原生或模组功能。
+
+![轮盘配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/radial-setup.webp)
+
+按键接管与「使用真实格」开关。
+
+![按键接管](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/key-takeover.webp)
+
+模组白名单：允许指定模组保留自己的快捷键。
+
+![模组白名单](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/mod-allowlist.webp)
+
+技能悬停说明：施放状态、等级、资源状态和法术数值。
+
+![技能悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.3-beta/docs/images/zh-CN/skill-tooltip.webp)
