@@ -1,0 +1,53 @@
+name: Bug report
+description: Report a reproducible problem with Fingertip Incantations.
+title: "[Bug] "
+body:
+  - type: input
+    id: version
+    attributes:
+      label: Fingertip version
+      placeholder: Version from the installed JAR
+    validations:
+      required: true
+  - type: input
+    id: platform
+    attributes:
+      label: Minecraft and NeoForge versions
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - Single-player
+        - Multiplayer client
+        - Dedicated server
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Hotbar mode
+      options:
+        - Mixed
+        - Fingertip
+        - HUD disabled
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include relevant mods, keys, and key-takeover settings when applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected and actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs or screenshots
+      description: Attach the relevant log or screenshot.

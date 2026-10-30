@@ -1,0 +1,16 @@
+.gradle/
+build/
+run/
+.idea/
+.vscode/
+*.iml
+*.log
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+.local/
+.claude/
+.codex/
+__pycache__/
+*.py[cod]
+.DS_Store
+Thumbs.db

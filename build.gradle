@@ -1,0 +1,85 @@
+plugins {
+    id 'java-library'
+    id 'net.neoforged.moddev' version '2.0.146'
+}
+
+group = 'com.poris'
+version = project.mod_version
+base { archivesName = 'poris-elegies-fingertip-incantations' }
+java {
+    toolchain.languageVersion = JavaLanguageVersion.of(21)
+    withSourcesJar()
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'IronSpellsReleases'
+        url = 'https://code.redspace.io/releases'
+        content { includeGroup 'io.redspace' }
+    }
+}
+dependencies {
+    // Optional integration: the dependency is neither bundled nor required by the base mod.
+    compileOnly("io.redspace:irons_spellbooks:${irons_spells_version}") { transitive = false }
+    testImplementation platform('org.junit:junit-bom:5.10.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+def workspaceKey = projectDir.absolutePath.digest('SHA-256').take(16)
+tasks.withType(net.neoforged.nfrtgradle.NeoFormRuntimeTask).configureEach {
+    getWorkDirectory().set(new File(gradle.gradleUserHomeDir, "caches/fingertip-incantations/${workspaceKey}/neoform-work"))
+}
+
+neoForge {
+    version = project.neo_version
+    runs {
+        client { client(); gameDirectory = project.file('run/client') }
+        server { server(); gameDirectory = project.file('run/server'); programArgument '--nogui' }
+    }
+    mods { poris_elegies_fingertip_incantations { sourceSet sourceSets.main } }
+}
+
+var generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    var properties = [minecraft_version_range: minecraft_version_range,
+                      loader_version_range: loader_version_range, mod_version: project.version]
+    inputs.properties properties
+    filteringCharset = 'UTF-8'
+    expand properties
+    from 'src/main/templates'
+    into layout.buildDirectory.dir('generated/sources/modMetadata')
+    doLast {
+        new File(destinationDir, 'PORIS_BUILD.txt').setText(
+                "${project.version}\nFingertip Incantations | Minecraft 1.21.1 | protocol 3\n", 'UTF-8')
+    }
+}
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+tasks.withType(ProcessResources).configureEach { filteringCharset = 'UTF-8' }
+tasks.named('processResources', ProcessResources) {
+    from('LICENSE', 'ASSET_LICENSE.md', 'THIRD_PARTY_NOTICES.md')
+    into('licenses') { from 'licenses' }
+}
+tasks.named('jar', Jar) {
+    exclude 'com/poris/elegies/fingertip/smoke/**'
+    exclude 'data/poris_elegies_fingertip_incantations/structure/empty.nbt'
+}
+tasks.named('sourcesJar', Jar) {
+    from('LICENSE', 'ASSET_LICENSE.md', 'THIRD_PARTY_NOTICES.md')
+    into('licenses') { from 'licenses' }
+}
+
+def testCopyDirectory = new File(gradle.gradleUserHomeDir, "caches/fingertip-incantations/${workspaceKey}/test-classes")
+var copyForTests = tasks.register('copyForTests', Sync) {
+    into testCopyDirectory
+    into('main') { from sourceSets.main.output }
+    into('test') { from sourceSets.test.output }
+}
+tasks.named('test', Test) {
+    useJUnitPlatform()
+    dependsOn copyForTests
+    testClassesDirs = files(new File(testCopyDirectory, 'test'))
+    classpath = files(new File(testCopyDirectory, 'test'), new File(testCopyDirectory, 'main')) + configurations.testRuntimeClasspath
+}
