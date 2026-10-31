@@ -28,7 +28,7 @@ SOFTWARE.
 
 2. ARTWORK RIGHTS
 
-The project's source code, build scripts, configuration data, interface translations, and technical documentation are covered by the root MIT License (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/LICENSE). Third-party files retain their own licenses.
+The project's source code, build scripts, configuration data, interface translations, and technical documentation are covered by the root MIT License (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/LICENSE). Third-party files retain their own licenses.
 
 The logo, textures, screenshots, and other artwork are excluded from the MIT License. All rights not expressly granted are reserved. This includes artwork in this repository, release JARs, and project pages.
 
@@ -40,4 +40,4 @@ To the extent the project author has the right to grant permission, you may:
 
 Other separate distribution, adaptation, sale, or use of the artwork in another project requires separate permission. The source code's MIT License does not by itself grant permission to distribute modified builds containing these reserved assets; you may replace them with assets you have the right to use.
 
-Rights granted by applicable law or the hosting platform's terms are unaffected. No rights beyond those held by the project author are granted. See third-party notices (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/THIRD_PARTY_NOTICES.md) for separately licensed components.
+Rights granted by applicable law or the hosting platform's terms are unaffected. No rights beyond those held by the project author are granted. See third-party notices (https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/THIRD_PARTY_NOTICES.md) for separately licensed components.

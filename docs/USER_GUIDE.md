@@ -14,9 +14,13 @@ Iron's Spells 'n Spellbooks is optional. If you install it, also install the dep
 
 Open the inventory and click the Fingertip logo near the upper-right corner. The editor's item and action pages supply the things you can bind.
 
-Drag an item or action to a slot. Drag one bound slot onto another to swap them, or drag its binding to clear space and confirm the prompt to clear it. Open **Slots** for layout editing: drag to position slots, or click a single Fingertip slot and press the shortcut you want to assign. Alignment and group-arrangement controls help organize the layout.
+Drag an item or action to a slot. Drag one bound slot onto another to swap them, or drag its binding to clear space and confirm the prompt to clear it. Open **Slot configuration** for layout editing: drag to position slots, or click a single Fingertip slot and press the shortcut you want to assign. Alignment and group-arrangement controls help organize the layout.
 
 The HUD can show all slots, only bound slots, or be hidden. Classic, Starlight, and Poris change the visual theme without changing the controls.
+
+While the key capture box is open, the layout toolbar is disabled except for **Delete**. Click Delete to remove the selected slot after confirmation. The Delete key itself can be assigned as a shortcut while capture is open; Backspace clears the shortcut and Esc cancels. A left click outside the box cancels capture; clicking blank canvas also clears the editor selection.
+
+The editor uses an outer selection outline. The slot for the item currently held keeps its normal gameplay highlight.
 
 ## Choose a mode
 
@@ -31,7 +35,7 @@ Turning **Enabled** off restores vanilla display and controls. This is separate 
 
 An item shortcut equips the referenced item. It does not automatically attack, eat, drink, cast, or place it. Use the normal attack/use controls after selection.
 
-Press the selected slot's key again to put the item away. The binding remains available.
+Press the selected slot's key again to put the item away. The binding remains available. Removing, clearing, or rebinding the held Fingertip slot also returns to an empty hand in either mode.
 
 Equipment bindings remember a particular item, rather than picking any tool of the same type. Supply bindings find matching items and their data, ignoring stack count. Different potion effects or other differing item data do not get mixed together.
 

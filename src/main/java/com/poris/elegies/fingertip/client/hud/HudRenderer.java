@@ -56,7 +56,7 @@ public final class HudRenderer {
         // The off hand keeps its own saved place and shows only while it holds something (2026-10-26, user).
         var offhandSlot = HudLayout.INSTANCE.offhand();
         int offhandX = offhandSlot.screenX(width), offhandY = offhandSlot.screenY(height);
-        renderOffhand(g, offhandX, offhandY, false, false);
+        renderOffhand(g, offhandX, offhandY, false);
         if (mc.options.attackIndicator().get() != AttackIndicatorStatus.HOTBAR) return;
         float charge = mc.player.getAttackStrengthScale(0);
         if (charge >= 1) return;
@@ -78,15 +78,15 @@ public final class HudRenderer {
      * The real off-hand item in its frame. Gameplay skips an empty hand; the layout editor draws the empty frame with
      * vanilla's faint shield outline so it can still be found and moved.
      */
-    static void renderOffhand(GuiGraphics g, int x, int y, boolean editing, boolean selected) {
+    static void renderOffhand(GuiGraphics g, int x, int y, boolean editing) {
         var mc = Minecraft.getInstance();
         var item = mc.player == null ? ItemStack.EMPTY : mc.player.getOffhandItem();
         if (item.isEmpty() && !editing) return;
-        frame(g, x, y, false, selected, false);
+        frame(g, x, y, false, false, false);
         if (!item.isEmpty()) {
             UiSkin.item(g, item, x + 2, y + 2, 20, false);
             g.pose().pushPose(); g.pose().translate(x, y, 200);
-            try { UiSkin.rim(g, false, selected, 20); } finally { g.pose().popPose(); }
+            try { UiSkin.rim(g, false, false, 20); } finally { g.pose().popPose(); }
             g.renderItemDecorations(mc.font, item, x + 2, y + 2);
             return;
         }
@@ -96,32 +96,30 @@ public final class HudRenderer {
         try { g.blit(x + 2, y + 2, 0, 16, 16, shield); }
         finally { g.setColor(1, 1, 1, 1); RenderSystem.disableBlend(); g.pose().popPose(); }
     }
-    public static void renderSlots(GuiGraphics g, int editing) {
-        for (var slot : HudLayout.INSTANCE.activeSlots()) renderSlot(g, slot, editing == slot.id);
-    }
-    public static void renderSlots(GuiGraphics g, java.util.Set<Integer> editing) {
-        for (var slot : HudLayout.INSTANCE.activeSlots()) renderSlot(g, slot, editing.contains(slot.id));
+    /**
+     * Every slot as in gameplay, the one in hand lit. The editor marks its own selection with the outline around the slot,
+     * never with the selected frame, which only means "in hand" (2026-10-31, user: "编辑器做好自己分内的事情就好了").
+     */
+    public static void renderSlots(GuiGraphics g) {
+        for (var slot : HudLayout.INSTANCE.activeSlots()) renderAt(g, slot.id, slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()));
     }
     /** Filtering never deletes bindings, changes coordinates or hides remembered missing items as empty. */
     public static java.util.List<HudLayout.Slot> gameplaySlots() {
         return HudLayout.INSTANCE.activeSlots().stream().filter(slot -> HudVisibility.includes(slot.id)).toList();
     }
-    private static void renderSlot(GuiGraphics g, HudLayout.Slot slot, boolean editing) {
-        renderAt(g, slot.id, slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()), editing);
-    }
     /** Frame, icon, overlays and labels always share one local origin, in both editor and gameplay. */
-    public static void renderAt(GuiGraphics g, int id, int x, int y, boolean editing) {
-        draw(g, id, HudContent.forFrame(id), x, y, editing, Pass.ALL);
+    public static void renderAt(GuiGraphics g, int id, int x, int y) {
+        draw(g, id, HudContent.forFrame(id), x, y, Pass.ALL);
     }
     /** The gameplay HUD's passes, bottom to top; the editor draws each slot whole (ALL), in the same order. */
     private enum Pass { ALL, FRAMES, ICONS, SHADING, RIM, ORBIT, BARS, LABELS, KEYS, LAST }
     private static void pass(GuiGraphics g, java.util.List<HudLayout.Slot> slots, HudContent[] views, Pass pass) {
         for (int i = 0; i < views.length; i++) {
             var slot = slots.get(i);
-            draw(g, slot.id, views[i], slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()), false, pass);
+            draw(g, slot.id, views[i], slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()), pass);
         }
     }
-    private static void draw(GuiGraphics g, int id, HudContent view, int x, int y, boolean editing, Pass pass) {
+    private static void draw(GuiGraphics g, int id, HudContent view, int x, int y, Pass pass) {
         boolean all = pass == Pass.ALL;
         g.pose().pushPose();
         try {
@@ -129,9 +127,9 @@ public final class HudRenderer {
             g.setColor(1, 1, 1, 1);
             boolean nativeSlot = HotbarControl.nativeSlot(id);
             boolean paused = HotbarControl.shortcutPaused(id);
-            // The slot in hand (and the one being edited) takes the selected frame, a recoloured copy of the plain one
-            // (2026-10-29: no lift, no overlay). A skill that is on keeps the plain frame and a light runs round it (orbit).
-            boolean on = view.toggle() == ActionState.Toggle.ON, lit = editing || view.selected();
+            // The slot in hand takes the selected frame, a recoloured copy of the plain one (2026-10-29: no lift, no
+            // overlay). A skill that is on keeps the plain frame and a light runs round it (orbit).
+            boolean on = view.toggle() == ActionState.Toggle.ON, lit = view.selected();
             if (all || pass == Pass.FRAMES) frame(g, 0, 0, nativeSlot, lit, paused);
             if (all || pass == Pass.ICONS) {
                 if (view.sprite() != null) UiSkin.sprite(g, view.sprite(), 2, 2, 20, nativeSlot);

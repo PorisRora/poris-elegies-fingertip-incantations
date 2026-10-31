@@ -207,6 +207,7 @@ public final class ClientSession {
     /**
      * A vanilla hotbar slot is chosen (number key, scroll wheel, pick block), or Fingertip lets go of the hand. Only
      * vanilla's own slot packet goes out, and the server ends a HUD choice when it arrives. While a HUD slot holds the hand, vanilla's number underneath stays where it was, so the
+
      * same number again would change nothing and vanilla would not send it: then it is sent here. With the HUD taking
      * over the hotbar the server ignores it; the settings message that follows a change of mode does the rest.
      */

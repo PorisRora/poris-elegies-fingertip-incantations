@@ -11,7 +11,7 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 | Requirement | Supported |
 | --- | --- |
-| Version | **0.2.4-beta** |
+| Version | **1.0.0** |
 | Minecraft | Java Edition **1.21.1** |
 | Loader | **NeoForge 21.1.181 or later** for Minecraft 1.21.1 |
 | Installation | Client and server; single-player uses its integrated server |
@@ -22,7 +22,7 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 Create and arrange slots around the screen. Bind items or actions by dragging them from the editor, swap two bindings by dragging one onto another, and clear a binding by dragging it into empty space. Alignment, snapping, and group arrangement help keep the layout tidy.
 
-![The editor: your slots on the left, the content library on the right with Items, Vanilla, Mods and Skills pages](docs/images/en/editor-skills.webp)
+![Drag to swap: drop one slot's content on another and release; the two swap and keep their keys](docs/images/en/drag-swap.webp)
 
 Choose between two modes:
 
@@ -33,7 +33,7 @@ The **Classic**, **Starlight**, and **Poris** themes share the same controls. Ch
 
 | Slot configuration | Display settings |
 | --- | --- |
-| ![Slot configuration: add slots, arrange in a row, column or grid, gap, snapping, canvas](docs/images/en/layout-editor.webp) | ![Display settings: style, which slots show, mod function icons, durability percentage](docs/images/en/display-settings.webp) |
+| ![Slot configuration: add and delete slots, arrange in a row, column or grid, gap, snapping, canvas](docs/images/en/layout-editor.webp) | ![Display settings: style, which slots show, mod function icons, durability percentage](docs/images/en/display-settings.webp) |
 
 ## Keep equipment and supplies close
 
@@ -41,7 +41,7 @@ Equipment bindings remember the particular item you chose, including tools or we
 
 Press a bound item's key to equip it. Press the same slot's key again to put it away and use an empty hand. Your items remain in the inventory; the HUD does not add storage slots.
 
-![Hovering an item slot: the item's own tooltip, then where it is in your inventory, how many you have, and its key](docs/images/en/item-tooltip.webp)
+![Hovering an item slot: the item's own tooltip, slot number, shortcut, and relevant status](docs/images/en/item-tooltip.webp)
 
 ## Put controls on the screen
 
@@ -63,7 +63,7 @@ By default, **hold the middle mouse button, point at an action, and release**. A
 
 The built-in Iron's Spells 'n Spellbooks integration adds available spells to the **Skills** page. Skill slots can display cooldowns, active states, charges, and recast counts when the integration provides them. Hovering can show the skill's own information, such as damage, range, or duration.
 
-![Hovering a skill slot: ready or not, level, mana, and the spell's own HP and damage](docs/images/en/skill-tooltip.webp)
+![The Skills page and a skill tooltip: supported spells grouped by mod; hovering shows readiness, level, mana, and damage](docs/images/en/skill-tooltip.webp)
 
 The spell's own mod still handles casting rules, resource costs, and gameplay effects. Fingertip supplies the interface and forwards the action. Other mods can add integrations through the public API.
 

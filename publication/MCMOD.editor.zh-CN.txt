@@ -19,7 +19,7 @@
 
 [h2=安装与使用]
 
-当前版本：0.2.4 Beta。
+当前版本：1.0.0。
 
 支持 Minecraft Java 版 1.21.1，使用对应的 NeoForge 21.1.181 或更新版本。
 
@@ -76,45 +76,45 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 源码采用 MIT 许可，Logo 与美术素材保留所有权利。素材声明允许将未经修改的官方发行包加入整合包，并保留许可与来源信息。
 
 - [GitHub 源码](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
-- [0.2.4-beta 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v0.2.4-beta)
-- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/docs/USER_GUIDE.zh-CN.md)
+- [1.0.0 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.0.0)
+- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/docs/USER_GUIDE.zh-CN.md)
 - [问题反馈](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
-- [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v0.2.4-beta/ASSET_LICENSE.md)
+- [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/ASSET_LICENSE.md)
 
 [h1=画廊]
 
-编辑器与技能内容库。
+拖动互换：把一格的内容拖到另一格上，松开就两格互换，按键不变。
 
-![编辑器与技能内容库](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/editor-skills.webp)
+![拖动互换](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/drag-swap.webp)
 
-指尖格配置：添加格子、横排竖排、网格、间距和吸附对齐。
+指尖格配置：添加和删除格子、横排竖排、网格、间距和吸附对齐。
 
-![指尖格配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/layout-editor.webp)
+![指尖格配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/layout-editor.webp)
 
 显示设置：主题、格子显示范围、模组功能图标和耐久百分比。
 
-![显示设置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/display-settings.webp)
+![显示设置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/display-settings.webp)
 
-物品悬停说明：物品属性、库存位置、数量和快捷键。
+物品悬停说明：物品自己的说明、格号和快捷键。
 
-![物品悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/item-tooltip.webp)
+![物品悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/item-tooltip.webp)
 
 将模组功能按键绑定到格子。
 
-![模组功能按键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/mod-keybinds.webp)
+![模组功能按键](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/mod-keybinds.webp)
 
 轮盘配置：为扇区选择原生或模组功能。
 
-![轮盘配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/radial-setup.webp)
+![轮盘配置](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/radial-setup.webp)
 
 按键接管与「使用真实格」开关。
 
-![按键接管](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/key-takeover.webp)
+![按键接管](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/key-takeover.webp)
 
 模组白名单：允许指定模组保留自己的快捷键。
 
-![模组白名单](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/mod-allowlist.webp)
+![模组白名单](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/mod-allowlist.webp)
 
-技能悬停说明：施放状态、等级、资源状态和法术数值。
+技能页与技能悬停：已适配的法术按模组分组，悬停显示施放状态、等级、资源状态和法术数值。
 
-![技能悬停说明](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v0.2.4-beta/docs/images/zh-CN/skill-tooltip.webp)
+![技能页与技能悬停](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/zh-CN/skill-tooltip.webp)

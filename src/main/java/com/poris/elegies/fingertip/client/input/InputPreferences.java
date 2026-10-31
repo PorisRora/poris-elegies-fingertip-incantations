@@ -16,6 +16,7 @@ public final class InputPreferences {
     /**
      * Drag (default): hold the middle button, release over an action to run it once, in the centre to cancel. Off: the
      * click wheel of 0.1-beta, where drop can be clicked again and again. A layout saved before it has no such field and reads as drag.
+
      */
     public boolean wheelDrag = true;
     /**

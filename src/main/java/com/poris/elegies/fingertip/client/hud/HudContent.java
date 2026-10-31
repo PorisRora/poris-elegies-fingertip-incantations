@@ -53,10 +53,11 @@ public record HudContent(ItemStack icon, Component name, boolean available, Sele
         if (detail != null) return detail;
         if (selection == Selection.PENDING) return Component.translatable("poris_elegies_fingertip_incantations.selection_pending");
         if (selection == Selection.RESELECT) return Component.translatable("poris_elegies_fingertip_incantations.selection_again");
-        if (source != null) return Component.translatable("poris_elegies_fingertip_incantations.source_count_named", InventorySources.name(source),
-                source.slot() + 1, icon.getCount(), total);
-        return sourceStatus == null ? Component.empty()
-                : Component.translatable("poris_elegies_fingertip_incantations." + sourceStatus.name().toLowerCase(java.util.Locale.ROOT));
+        // 2026-10-31 (user: "在背包XX格....很冗杂"): no source slot or stack count; the slot already draws the count.
+        // Only an item that is not in the backpack gets a line.
+        if (sourceStatus == SourceResolver.Status.MISSING) return Component.translatable("poris_elegies_fingertip_incantations.missing");
+        if (sourceStatus == SourceResolver.Status.OFFHAND) return Component.translatable("poris_elegies_fingertip_incantations.in_offhand");
+        return Component.empty();
     }
     public static HudContent forFrame(int id) {
         var player = Minecraft.getInstance().player;
@@ -69,7 +70,7 @@ public record HudContent(ItemStack icon, Component name, boolean available, Sele
             return new HudContent(icon, icon.isEmpty() ? Component.translatable("poris_elegies_fingertip_incantations.native_slot", id + 1) : icon.getHoverName(),
                     !icon.isEmpty(), selected ? Selection.HELD : Selection.NONE, selected, icon.getCount(),
                     icon.isEmpty() ? 0 : player.getCooldowns().getCooldownPercent(icon.getItem(), 0),
-                    Component.translatable("poris_elegies_fingertip_incantations.native_slot_hint", id + 1), false);
+                    Component.translatable("poris_elegies_fingertip_incantations.native_slot_hint"), false);
         }
         if (binding.isItem()) {
             var hand = HandAccess.of(player.getInventory());

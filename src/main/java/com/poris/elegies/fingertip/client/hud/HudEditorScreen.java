@@ -210,6 +210,18 @@ public final class HudEditorScreen extends Screen {
         drag.clear(); selection.cancel();
         if (actionList != null) actionList.endScroll();
     }
+    /**
+     * The binding page marks its slot with the same outline as the layout page; slots keep their gameplay frames, so the
+     * one in hand stays lit (2026-10-31, user: "编辑器做好自己分内的事情就好了"). None after a click on blank canvas.
+     */
+    private void outlineSelected(GuiGraphics g) {
+        g.pose().pushPose(); g.pose().translate(0, 0, 300);
+        for (var slot : layout().activeSlots())
+            if (slot.id == selected) SelectionFrame.slot(g, slot.screenX(width) - 1, slot.screenY(height) - 1, 22, 22);
+        g.pose().popPose();
+    }
+    /** Blank canvas leaves the slot on both pages (2026-10-31, user: "鼠标点外面 指尖格的失焦选中"). */
+    private void deselect() { selected = -1; selection.single(-1); }
     private void ensureSelection() {
         if (selected >= 0 && !layout().visible(selected))
             selected = layout().activeSlots().isEmpty() ? -1 : layout().activeSlots().getFirst().id;
@@ -241,9 +253,14 @@ public final class HudEditorScreen extends Screen {
         ensureSelection();
         if (canvasOnly) return;
         if (positioning) {
-            addButton.active = canBind() && layout().activeSlots().size() < Fingertip.SLOT_COUNT;
+            // While the key box is open the toolbar goes dark, all but 删除: deleting the clicked slot is the one other thing
+            // to do with it (2026-10-31, user: "点击以后上面全暗 删除所选亮", then "删除所选就可以改叫删除了"; the Delete key
+            // stays a key a slot can take).
+            for (var child : children())
+                if (child instanceof net.minecraft.client.gui.components.AbstractWidget widget && widget != removeSelectionButton) widget.active = !capture;
+            if (!capture) addButton.active = canBind() && layout().activeSlots().size() < Fingertip.SLOT_COUNT;
             removeSelectionButton.active = canBind() && selection.ids.stream().anyMatch(id -> id != HudLayout.OFFHAND && !HotbarControl.nativeSlot(id))
-                    && !selection.boxing() && !drag.active() && !capture;
+                    && !selection.boxing() && !drag.active();
             return;
         }
         positionButton.active = ready();
@@ -282,14 +299,14 @@ public final class HudEditorScreen extends Screen {
     private void renderEditor(GuiGraphics g, int mouseX, int mouseY, float partial) {
         updateControls();
         if (canvasOnly && !positioning && !drag.canvas) {
-            if (ready()) HudRenderer.renderSlots(g, selected);
+            if (ready()) { HudRenderer.renderSlots(g); outlineSelected(g); }
             g.pose().pushPose(); g.pose().translate(0, 0, 400);
             super.render(g, mouseX, mouseY, partial); renderTooltip(g, mouseX, mouseY);
             g.pose().popPose(); return;
         }
         if (positioning) { renderPositioning(g, mouseX, mouseY, partial); return; }
         g.fill(0, 0, width, height, 0x4010131C);
-        if (ready()) HudRenderer.renderSlots(g, selected);
+        if (ready()) { HudRenderer.renderSlots(g); outlineSelected(g); }
         if (drag.canvas) {
             if (drag.fromHud >= 0) {
                 // A slot's content: onto another slot they trade places, onto blank canvas it is cleared (2026-10-29,
@@ -348,9 +365,9 @@ public final class HudEditorScreen extends Screen {
     private void renderPositioning(GuiGraphics g, int mouseX, int mouseY, float partial) {
         g.fill(0, 0, width, height, 0x1810131C);
         if (ready()) {
-            HudRenderer.renderSlots(g, selection.ids);
+            HudRenderer.renderSlots(g);
             var offhand = layout().offhand();
-            HudRenderer.renderOffhand(g, offhand.screenX(width), offhand.screenY(height), true, selection.ids.contains(HudLayout.OFFHAND));
+            HudRenderer.renderOffhand(g, offhand.screenX(width), offhand.screenY(height), true);
             g.pose().pushPose(); g.pose().translate(0, 0, 300);
             SelectionFrame.guides(g, drag.guideX, drag.guideY, canvasOnly || drag.moved ? 0 : toolbar.canvasTop(), width, height);
             if (selection.boxing()) {
@@ -368,7 +385,7 @@ public final class HudEditorScreen extends Screen {
         if (canvasOnly) {
             g.pose().pushPose(); g.pose().translate(0, 0, 400);
             super.render(g, mouseX, mouseY, partial);
-            if (capture) renderCapture(g); else renderTooltip(g, mouseX, mouseY);
+            if (capture) renderCapture(g, mouseX, mouseY, partial); else renderTooltip(g, mouseX, mouseY);
             g.pose().popPose(); return;
         }
         // Paint the toolbar above the canvas so slots cannot cover its controls.
@@ -391,7 +408,7 @@ public final class HudEditorScreen extends Screen {
                 g.fill(dividerX, toolbar.labelY(i) + 1, dividerX + 1, toolbar.buttonY(i) + 16, 0x405F5264);
             }
         }
-        if (capture) { renderCapture(g); g.pose().popPose(); return; }
+        if (capture) { renderCapture(g, mouseX, mouseY, partial); g.pose().popPose(); return; }
         g.pose().popPose();
         if (!ready()) g.drawCenteredString(font, tr("poris_elegies_fingertip_incantations.enter_world"), width / 2, toolbar.canvasTop(), EditorTheme.TEXT);
         BindingPresentation.feedback(g, height - 30);
@@ -406,12 +423,20 @@ public final class HudEditorScreen extends Screen {
         ActionIcons.draw(g, drag.sprite, drag.icon, mouseX + 13, mouseY - 10);
         g.pose().popPose();
     }
-    private void renderCapture(GuiGraphics g) {
-        int w = Math.min(380, width - 24), x = (width - w) / 2, y = Math.max(40, height / 2 - 40);
+    private static final int CAPTURE_HEIGHT = 80;
+    private int captureWidth() { return Math.min(380, width - 24); }
+    private int captureY() { return Math.max(40, height / 2 - 40); }
+    private void renderCapture(GuiGraphics g, int mouseX, int mouseY, float partial) {
+        int w = captureWidth(), x = (width - w) / 2, y = captureY();
         g.fill(0, 0, width, height, 0x66100F19);
-        EditorTheme.panel(g, x, y, w, 80, true);
+        // 删除 is drawn again above the shade: the one lit control on the dark toolbar (see updateControls).
+        if (!canvasOnly && removeSelectionButton != null) removeSelectionButton.render(g, mouseX, mouseY, partial);
+        EditorTheme.panel(g, x, y, w, CAPTURE_HEIGHT, true);
         g.drawString(font, tr("poris_elegies_fingertip_incantations.capture_slot", selected + 1), x + 12, y + 12, EditorTheme.accent(), false);
-        wrapped(g, keyError != null ? keyError : tr("poris_elegies_fingertip_incantations.capture_key"), x + 12, y + 31, w - 24, 40, EditorTheme.TEXT);
+        // The prompt or the error takes two lines (what is wrong, then what to do); the controls sit in the bottom-left
+        // corner, as far from the bottom as the title is from the top, so an error never hides Esc (2026-10-31, user).
+        wrapped(g, keyError != null ? keyError : tr("poris_elegies_fingertip_incantations.capture_key"), x + 12, y + 31, w - 24, 20, EditorTheme.TEXT);
+        g.drawString(font, tr("poris_elegies_fingertip_incantations.capture_controls"), x + 12, y + CAPTURE_HEIGHT - 12 - font.lineHeight, EditorTheme.MUTED, false);
     }
     private void renderInventory(GuiGraphics g, int mx, int my) {
         for (int index = 0; index < 36; index++) {
@@ -453,19 +478,24 @@ public final class HudEditorScreen extends Screen {
             var binding = ClientSession.binding(slot.id);
             boolean action = !nativeSlot && binding.kind() == com.poris.elegies.fingertip.binding.HudBinding.Kind.ACTION;
             var lines = new java.util.ArrayList<Component>();
-            lines.add(TooltipStyle.muted(tr(nativeSlot ? "poris_elegies_fingertip_incantations.native_slot" : "poris_elegies_fingertip_incantations.selected_slot", slot.id + 1)));
+            // The key shares the heading line (2026-10-31 text pass); pauses and conflicts still get their own line below.
+            lines.add(TooltipStyle.muted(tr(nativeSlot ? "poris_elegies_fingertip_incantations.native_slot" : "poris_elegies_fingertip_incantations.selected_slot", slot.id + 1)
+                    .copy().append(" · ").append(ShortcutKeyLabels.description(slot.id))));
             // An item shows its own hover text, as in the inventory, other mods' lines included (2026-10-30, user:
             // "我们物品要不要直接展示它原来的tag"); Fingertip's own lines around it stay muted.
-            if ((nativeSlot || binding.isItem()) && !view.icon().isEmpty()) lines.addAll(getTooltipFromItem(minecraft, view.icon()));
+            boolean item = (nativeSlot || binding.isItem()) && !view.icon().isEmpty();
+            if (item) lines.addAll(getTooltipFromItem(minecraft, view.icon()));
             else lines.add(TooltipStyle.title(view.name()));
             lines.add(action ? TooltipStyle.state(view.detail(), view.available(), view.lacksResource(), view.cooldown())
                     : view.missingItem() ? TooltipStyle.warning(view.detail()) : TooltipStyle.muted(view.detail()));
             HudContent.details(slot.id).forEach(line -> lines.add(TooltipStyle.body(line)));
-            lines.add(TooltipStyle.muted(ShortcutKeyLabels.description(slot.id)));
             var conflict = com.poris.elegies.fingertip.client.input.ShortcutKeyRules.conflict(slot.id);
             if (conflict != null) lines.add(TooltipStyle.warning(tr("poris_elegies_fingertip_incantations.shortcut_conflict_paused", conflict)));
             else if (HotbarControl.shortcutPaused(slot.id)) lines.add(TooltipStyle.warning(pausedReason(ShortcutKeys.SLOTS[slot.id].getKey())));
-            tooltip(g, lines, mx, my);
+            // An item goes through the same path as the inventory, with its stack and image, so other mods can still turn
+            // their markers into pictures (Apotheosis sockets showed as "APOTH_SOCKET_MARKER", 2026-10-31).
+            if (item) g.renderTooltip(font, lines.stream().filter(c -> !c.getString().isBlank()).toList(), view.icon().getTooltipImage(), view.icon(), mx, my);
+            else tooltip(g, lines, mx, my);
         } else if (!canvasOnly && !positioning && !actions) {
             int index = ui.inventoryAt(mx, my);
             if (index >= 0 && !InventorySources.read(minecraft.player, SourceAddress.vanilla(index)).isEmpty())
@@ -484,18 +514,36 @@ public final class HudEditorScreen extends Screen {
         }
         g.renderTooltip(font, wrapped, TOOLTIP_POSITION, x, y);
     }
+    /** The binding page's header and content panel: clicks there belong to the panel, not to the canvas behind it. */
+    private boolean onPanel(double x, double y) {
+        return !canvasOnly && !positioning && (EditorGeometry.inside(x, y, ui.x, ui.y, ui.width, ui.headerHeight)
+                || EditorGeometry.inside(x, y, ui.rightX - ui.panelPad, ui.tabsY - ui.panelPad,
+                        ui.rightWidth + ui.panelPad * 2, ui.bodyBottom - ui.tabsY + ui.panelPad * 2));
+    }
     private HudLayout.Slot slotAt(double x, double y) {
         if (!canvasOnly && positioning && toolbar.contains(x, y)) return null;
-        if (!canvasOnly && !positioning && !drag.canvas && (EditorGeometry.inside(x, y, ui.x, ui.y, ui.width, ui.headerHeight)
-                || EditorGeometry.inside(x, y, ui.rightX - ui.panelPad, ui.tabsY - ui.panelPad,
-                        ui.rightWidth + ui.panelPad * 2, ui.bodyBottom - ui.tabsY + ui.panelPad * 2))) return null;
+        if (!drag.canvas && onPanel(x, y)) return null;
         // Only the layout page can pick up the off-hand frame; binding pages never target it.
         for (var slot : (positioning ? layout().layoutSlots() : layout().activeSlots()).reversed())
             if (EditorGeometry.inside(x, y, slot.screenX(width), slot.screenY(height), 20, 20)) return slot;
         return null;
     }
     @Override public boolean mouseClicked(double x, double y, int button) {
-        if (capture) { setKey(InputConstants.Type.MOUSE.getOrCreate(button)); return true; }
+        if (capture) {
+            // 2026-10-31 (user): a left click outside the key box closes it like Esc instead of reporting the attack
+            // key as reserved. Inside the box it is still recorded, for players who moved attack to another key.
+            if (button != 0 || EditorGeometry.inside(x, y, (width - captureWidth()) / 2, captureY(), captureWidth(), CAPTURE_HEIGHT)) {
+                setKey(InputConstants.Type.MOUSE.getOrCreate(button)); return true;
+            }
+            capture = false;
+            // Only 删除 is lit while the box is open (updateControls), so only it takes this click: click a slot, then 删除
+            // deletes it (2026-10-31, user: "我要删1个指尖格的时候怎么办", "点击以后上面全暗 删除所选亮").
+            // The dark buttons only close the box, like any click outside it; the canvas view has no 删除 to take it.
+            if (!canvasOnly && super.mouseClicked(x, y, button)) return true;
+            // The same click also leaves the slot when it lands on blank canvas (2026-10-31, user: "样式还在选中").
+            if (slotAt(x, y) == null && !onPanel(x, y) && !(positioning && !canvasOnly && toolbar.contains(x, y))) deselect();
+            return true;
+        }
         if (super.mouseClicked(x, y, button)) return true;
         if (positioning && !canvasOnly && toolbar.contains(x, y)) return true;
         if (!ready() || button != 0) return false;
@@ -527,6 +575,9 @@ public final class HudEditorScreen extends Screen {
             if (canvasOnly || y >= toolbar.canvasTop()) { selection.begin(x, y, hasShiftDown()); return true; }
             return false;
         }
+        // 2026-10-31 (user: "鼠标点外面 指尖格的失焦选中是不是应该做一些"): a click on blank canvas drops the selected
+        // slot, as an empty box does on the layout page; picking content afterwards asks for a slot first.
+        if (!onPanel(x, y)) { deselect(); return false; }
         if (!canBind() || canvasOnly) return false;
         if (actions && actionList.at(x, y) != null) {
             var entry = actionList.at(x, y);
@@ -561,10 +612,19 @@ public final class HudEditorScreen extends Screen {
             cancelDrag();
             if (!moved || !canBind()) return true;
             if (target == null) confirmClear(id);   // blank canvas: clear, after asking
-            else if (target.id != id && target.id != HudLayout.OFFHAND) ClientSession.swap(id, target.id);
+            else if (target.id != id && target.id != HudLayout.OFFHAND) {
+                ClientSession.swap(id, target.id);
+                // The selection follows the dragged content, as a dropped binding selects its slot and the hand follows
+                // its item on the server (2026-10-31, user: "指尖格换位的勾选好像反了"). Vanilla slots refuse a swap.
+                if (!HotbarControl.nativeSlot(target.id)) selected = target.id;
+            }
             return true;
         }
-        if (selection.boxing()) { selection.move(x, y, layout().layoutSlots(), width, height); selection.end(); return true; }
+        if (selection.boxing()) {
+            selection.move(x, y, layout().layoutSlots(), width, height); selection.end();
+            if (selection.ids.isEmpty()) selected = -1;   // an empty box is a click on blank canvas: back on the binding page nothing is lit
+            return true;
+        }
         if (drag.inventory >= 0 || drag.action != null) {
             var target = slotAt(x, y);
             boolean valid = drag.action != null ? ActionCatalog.entries().stream().anyMatch(e -> e.id().equals(drag.action) && e.catalog().visible())

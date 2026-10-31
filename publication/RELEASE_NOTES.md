@@ -1,36 +1,43 @@
-# 0.2.4-beta · Broader Iron's Spells compatibility
+# 1.0.0 · First stable release
 
-The optional Iron's Spells 'n Spellbooks integration now accepts **1.21-3.4.4 and later**, lowering the previous 1.21.1-3.15.5 requirement. Minecraft stays at **1.21.1**, and the NeoForge minimum stays at **21.1.181**.
+Fingertip Incantations brings customizable item, keybind, and skill slots, Mixed/Fingertip hotbar modes, a radial menu, and three visual themes to Minecraft.
 
-The existing skill adapter already handles the older spell API. Gameplay code, artwork, settings, and network protocol are unchanged from 0.2.3-beta. Spells follow the behavior available in the installed Iron's version.
+This release adopts the 0.2.8-beta gameplay and interface baseline with the final drag-swap feedback fix. Network protocol remains 3.
 
-## Requirements
+## Changes since 0.2.4-beta
 
-- Minecraft Java Edition **1.21.1**
-- **NeoForge 21.1.181 or later** for Minecraft 1.21.1
-- Install Fingertip on both the client and server for multiplayer
-- Iron's Spells is optional; if installed, use **1.21-3.4.4 or later** and satisfy its own dependency requirements
+- Cleaner item/skill tooltips and shorter key-takeover text.
+- Drag-swap confirmation stays in the bottom banner without marking either slot; editor selection follows the dragged binding to its destination.
+- Item tooltips support the item-aware NeoForge path, including mod-provided visual components.
+- Clearer key capture with persistent Backspace/Esc instructions and click-outside cancellation.
+- During key capture, only the Delete toolbar button remains active; the Delete key can still be assigned as a shortcut.
+- Blank canvas deselects editor slots; editing uses an outer outline while held-item highlighting remains visible.
+- Removing, clearing, or rebinding the held Fingertip slot returns to an empty hand in either mode.
 
-## Validation
+## Requirements and updating
 
-The minimum combination was checked with Iron's 1.21-3.4.4, NeoForge 21.1.181, Curios 9.5.1, GeckoLib 4.9.3, Player Animation Library 2.0.4, and Caelus 7.0.1. Skill actions, key takeover, the radial menu, and dedicated-server loading passed. All runtime classes and game resources are unchanged from the tested 0.2.3-beta code.
+- Minecraft Java Edition **1.21.1** and **NeoForge 21.1.181 or later** for that game version.
+- Install on both the client and server for multiplayer.
+- Iron's Spells 'n Spellbooks is optional; supported versions start at **1.21-3.4.4**. Install its own required dependencies as well.
+- Close the game, remove the old Fingertip JAR, and install `poris-elegies-fingertip-incantations-1.0.0.jar`. Keep only one Fingertip JAR in `mods`.
+- The `-sources.jar` is for development and must not be installed as a second mod.
 
-## Updating
-
-Close the game, remove the previous Fingertip JAR, and install `poris-elegies-fingertip-incantations-0.2.4-beta.jar`. Keep only one Fingertip version in each `mods` folder. The `-sources.jar` is for development and does not belong in `mods`.
+Integration authors: the unused `InventorySources.name(SourceAddress)` helper from the public beta has been removed. Update callers to obtain a known provider's display name from `InventorySource.name()`.
 
 Source code uses MIT; logo and artwork have a separate All Rights Reserved statement.
 
 ---
 
-# 0.2.4-beta · 扩大 Iron's Spells 版本支持
+# 1.0.0 · 首个正式版
 
-可选联动 Iron's Spells 'n Spellbooks 的最低要求从 1.21.1-3.15.5 下调至 **1.21-3.4.4**。Minecraft 仍为 **1.21.1**，NeoForge 最低仍为 **21.1.181**。
+以 0.2.8-beta 的玩法与界面加上最终互换提示修正为正式版基线，网络协议仍为 3。互换时只显示底部提示，不在任一格子上打标记；编辑器选中会跟随拖动的内容到目标格。
 
-现有技能适配已能处理旧版法术接口。本次只调整版本声明和说明，玩法代码、美术、配置与网络协议沿用 0.2.3-beta。法术行为以实际安装的 Iron's 版本为准。
+相较公开的 0.2.4-beta，本版精简物品／技能悬停与按键接管文字，物品提示改用支持第三方视觉组件的 NeoForge 接口；优化录键提示、框外点击取消与空白画布取消选择。录键时工具栏只保留「删除」可用，Delete 键本身仍可录为快捷键。编辑器用外框表示编辑选择，同时保留手持格的选中样式。删除、清空或改绑当前手持指尖格后，两种模式都会回到空手。
 
-多人游戏需客户端与服务端均安装指尖咒文。Iron's 并非必装；安装时须满足它自己的前置依赖。最低组合使用 Curios 9.5.1、GeckoLib 4.9.3、Player Animation Library 2.0.4、Caelus 7.0.1，已通过技能、按键接管、轮盘和独立服务端检查。
+需要 Minecraft 1.21.1、对应的 NeoForge 21.1.181 或更新版本。多人游戏需双端安装。Iron's 为可选联动，最低支持 1.21-3.4.4，另需满足它自己的前置依赖。
 
-更新时关闭游戏，移出旧指尖 JAR，再放入 `poris-elegies-fingertip-incantations-0.2.4-beta.jar`，同一个 `mods` 文件夹只保留一版。`-sources.jar` 为开发用源码包，不放进 `mods`。
+更新时关闭游戏，移出旧指尖 JAR，放入 `poris-elegies-fingertip-incantations-1.0.0.jar`，同一 `mods` 文件夹只留一版。源码包 `-sources.jar` 不放进 `mods`。
 
-源码采用 MIT；Logo 与美术素材按独立声明保留所有权利。
+适配开发者注意：已移除公开测试版未使用的 `InventorySources.name(SourceAddress)` 辅助方法；原调用方需要改为从已知来源的 `InventorySource.name()` 获取名称。外部来源可参与查找与计数，编辑器直接浏览、绑定外部容器尚未实现。
+
+源码 MIT；Logo／美术保留权利。

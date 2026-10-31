@@ -30,6 +30,10 @@ Implement [InventorySource](../src/main/java/com/poris/elegies/fingertip/api/inv
 
 A provider owns its real inventory, persistence, and synchronization. Fingertip reads and operates on the source it exposes.
 
+Registered external sources can participate in lookup and counting. The editor currently binds items from the vanilla player inventory; browsing and directly binding items from an external source is not implemented yet.
+
+The unused `InventorySources.name(SourceAddress)` helper from the public beta has been removed. Integrations that called it must be updated; obtain a known provider's display name from `InventorySource.name()`.
+
 - Use a stable provider ID and valid provider-local slot indices.
 - Expose only inventory the player is currently permitted to access.
 - Return the actual mutable stack at a valid slot, rather than a detached copy.

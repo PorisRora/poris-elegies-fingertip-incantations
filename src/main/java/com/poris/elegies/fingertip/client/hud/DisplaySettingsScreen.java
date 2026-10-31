@@ -83,7 +83,7 @@ public final class DisplaySettingsScreen extends Screen {
         g.pose().translate(0, 0, -400);
         try {
             for (var slot : HudLayout.INSTANCE.activeSlots()) if (HudVisibility.includes(slot.id))
-                HudRenderer.renderAt(g, slot.id, slot.screenX(width), slot.screenY(height), false);
+                HudRenderer.renderAt(g, slot.id, slot.screenX(width), slot.screenY(height));
         } finally { g.pose().popPose(); g.setColor(1, 1, 1, 1); }
         g.flush();
         super.render(g, mx, my, partial);

@@ -174,6 +174,9 @@ public final class BindingService {
     /**
      * The held-item choice ends: a Fingertip empty hand, or the vanilla selected slot again. An F that left the item in
      * the off hand is forgotten only where the caller says so, as before (exhaustion, put-away, a change of mode).
+     * Rule (2026-10-31, user: "指尖格丢失物品或者出什么问题一律回空手", "回指尖空手"): whatever ends it through the slot or
+     * its item leaves a Fingertip empty hand in both modes; only vanilla's own choices and a change of mode give the hand
+     * back to vanilla.
      */
     private static void endChoice(ServerPlayer player, Session state, boolean emptyHand) {
         player.stopUsingItem();
@@ -467,8 +470,9 @@ public final class BindingService {
     /** A request changed what a slot holds: save the table and send the change. */
     private static void bindingChanged(ServerPlayer player, Session state, int operation, int hud, int other) {
         // Rebinding/removing the selected HUD entry must not leave a hidden old hand intent. A swap moved the choice
-        // along with its item.
-        if (operation != SWAP && state.selectedHud == hud) endChoice(player, state, ownsHotbar(player));
+        // along with its item. The hand stays a Fingertip empty hand in mixed mode too (see endChoice; mixed mode used
+        // to go back to the vanilla slot here, the only slot-side end that did).
+        if (operation != SWAP && state.selectedHud == hud) endChoice(player, state, true);
         save(player, state);
         // Binding sends that one slot before the reply, whose message names what the slot now holds. Clearing is
         // collected over the tick: removing several slots at once sends the table once (user: "批量操作发整份吧").
@@ -505,6 +509,7 @@ public final class BindingService {
     /**
      * A portal keeps this player and its session: tell the client what the hand holds at once, in the same batch as the
      * new dimension and inventory, as vanilla sends the selected hotbar slot. The client no longer asks after a portal or a respawn.
+
      */
     @SubscribeEvent public static void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) sendHand(player, "");

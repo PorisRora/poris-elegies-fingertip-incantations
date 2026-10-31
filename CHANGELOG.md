@@ -1,5 +1,28 @@
 # Changelog
 
+## 1.0.0
+
+### First stable release
+
+- Promote the 0.2.8-beta gameplay and interface baseline, with the final drag-swap feedback fix, to 1.0.0; network protocol remains 3.
+- Keep drag-swap feedback in the bottom banner without marking either slot, and follow the dragged binding with the editor selection.
+- Keep Minecraft 1.21.1, NeoForge 21.1.181+, and optional Iron's Spells 1.21-3.4.4+ support.
+
+### Changes since the public 0.2.4-beta
+
+- Simplify item and skill tooltips: combine the slot number and shortcut, remove redundant inventory-position/count text, and show offhand or missing-item status when relevant.
+- Render item tooltips through NeoForge's item-aware tooltip path so mod-provided components, such as socket graphics, can appear normally.
+- Clarify key capture, keep Backspace/Esc instructions visible beside validation errors, and cancel capture with a left click outside the box.
+- While capturing a key, disable the layout toolbar except for Delete; retain Delete as an assignable key during capture.
+- Clear editor selection when clicking blank canvas, use an outer selection outline, and preserve the held item's gameplay highlight.
+- Return to an empty hand when the held Fingertip slot is removed, cleared, or rebound in either mode.
+- Shorten key-takeover settings and tooltips; remove unused code and translation keys.
+
+### Integration migration
+
+- Remove the unused public-beta helper `InventorySources.name(SourceAddress)`. Integrations that called it need to use their provider's `InventorySource.name()` instead.
+- External inventory sources participate in lookup and counting; direct editor browsing/binding of external inventories is not implemented yet.
+
 ## 0.2.4-beta
 
 - Lower the optional Iron's Spells 'n Spellbooks requirement to 1.21-3.4.4 for Minecraft 1.21.1.

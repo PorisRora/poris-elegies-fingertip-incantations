@@ -23,7 +23,8 @@ public final class InputSettingsScreen extends Screen {
     }
     private Component state(String name, boolean on) { return tr(name).copy().append(tr(on ? "poris_elegies_fingertip_incantations.switch_on" : "poris_elegies_fingertip_incantations.switch_off")); }
     private void changed() { OptionalKeyPolicy.changed(); rebuildWidgets(); }
-    private Tooltip keyHint(int code) {
+    /** Notes (E, F3) go above the list of what the key already does; lit/dim is explained once, on the F1–F9 switch (10-31). */
+    private Tooltip keyHint(int code, String... notes) {
         var names = new LinkedHashSet<String>();
         // F1/F3 are hard-coded by Minecraft; other entries reflect the player's real mappings.
         if (code == 290) names.add(tr("poris_elegies_fingertip_incantations.native_f1").getString());
@@ -32,7 +33,10 @@ public final class InputSettingsScreen extends Screen {
             if (mapping.getKey().getType() == InputConstants.Type.KEYSYM && mapping.getKey().getValue() == code)
                 names.add(Component.translatable(mapping.getName()).getString());
         }
-        var message = tr("poris_elegies_fingertip_incantations.function_exception_hint").copy().append("\n\n").append(tr("poris_elegies_fingertip_incantations.key_occupants"));
+        var message = Component.empty();
+        for (var note : notes) message.append(tr(note)).append("\n");
+        if (notes.length > 0) message.append("\n");
+        message.append(tr("poris_elegies_fingertip_incantations.key_occupants"));
         if (names.isEmpty()) message.append("\n").append(tr("poris_elegies_fingertip_incantations.key_unassigned"));
         else {
             int count = 0;
@@ -55,10 +59,11 @@ public final class InputSettingsScreen extends Screen {
             int left = edge(i, 9, 2);
             var key = addRenderableWidget(EditorTheme.button(left, top + 25, edge(i + 1, 9, 2) - 2 - left, 18, Component.literal("F" + (i + 1)),
                     b -> { input.functionMask ^= bit; changed(); }, () -> input.functionKeys && (input.functionMask & bit) != 0));
-            key.active = input.functionKeys; key.setTooltip(keyHint(290 + i));
+            key.active = input.functionKeys;
+            key.setTooltip(i == 2 ? keyHint(292, "poris_elegies_fingertip_incantations.take_f3_hint") : keyHint(290 + i));
         }
         toggle(edge(0, 3, 6), top + 54, edge(1, 3, 6) - 6 - edge(0, 3, 6), state("poris_elegies_fingertip_incantations.take_q", input.takeQ), b -> { input.takeQ = !input.takeQ; changed(); }, () -> input.takeQ).setTooltip(keyHint(81));
-        toggle(edge(1, 3, 6), top + 54, edge(2, 3, 6) - 6 - edge(1, 3, 6), state("poris_elegies_fingertip_incantations.take_e", input.takeE), b -> { input.takeE = !input.takeE; changed(); }, () -> input.takeE).setTooltip(keyHint(69));
+        toggle(edge(1, 3, 6), top + 54, edge(2, 3, 6) - 6 - edge(1, 3, 6), state("poris_elegies_fingertip_incantations.take_e", input.takeE), b -> { input.takeE = !input.takeE; changed(); }, () -> input.takeE).setTooltip(keyHint(69, "poris_elegies_fingertip_incantations.take_e_hint"));
         toggle(edge(2, 3, 6), top + 54, edge(3, 3, 6) - 6 - edge(2, 3, 6), state("poris_elegies_fingertip_incantations.take_t", input.takeT), b -> { input.takeT = !input.takeT; changed(); }, () -> input.takeT).setTooltip(keyHint(84));
         // 2026-10-27 (user): the escape hatch for the right-click "real slot" compatibility, in case a mod breaks on it.
         toggle(x + 12, top + 83, w - 24, state("poris_elegies_fingertip_incantations.use_real_slot", input.useRealSlot),
@@ -78,11 +83,6 @@ public final class InputSettingsScreen extends Screen {
     @Override public void render(GuiGraphics g, int mx, int my, float partial) {
         super.render(g, mx, my, partial);
         g.drawString(font, title, x + 14, y + 12, EditorTheme.accent(), false);
-        int lineY = top + 114;
-        for (var line : font.split(tr("poris_elegies_fingertip_incantations.takeover_settings_hint"), w - 28)) {
-            if (lineY + font.lineHeight >= y + h - 34) break;
-            g.drawString(font, line, x + 14, lineY, EditorTheme.MUTED, false); lineY += 12;
-        }
     }
     @Override public boolean isPauseScreen() { return false; }
     @Override public void onClose() { HudLayout.INSTANCE.save(); minecraft.setScreen(parent); }

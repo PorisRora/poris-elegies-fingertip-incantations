@@ -1,7 +1,6 @@
 package com.poris.elegies.fingertip.api.inventory;
 
 import com.poris.elegies.fingertip.inventory.VanillaInventorySource;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -69,10 +68,6 @@ public final class InventorySources {
     /** Call after a server-owned container transaction or storage topology change, never from changed(). */
     public static void committedEdit(ServerPlayer player) {
         com.poris.elegies.fingertip.server.BindingService.sourcesEdited(player);
-    }
-    public static Component name(SourceAddress address) {
-        var source = address == null ? null : providers.get(address.provider());
-        return source == null ? Component.translatable("poris_elegies_fingertip_incantations.missing") : source.name();
     }
     private static SourceAddress[] addresses(InventorySource source, int count) {
         return addresses.compute(source.id(), (id, old) -> {

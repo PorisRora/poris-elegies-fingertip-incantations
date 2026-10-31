@@ -22,6 +22,12 @@ public final class BindingFeedback {
     private static Notice latest;
     private static int latestSequence;
     public static void sent(int sequence, int hud, Operation operation) { sent(sequence, hud, -1, operation); }
+    /**
+     * The slot whose tag shows the notice, or none. A swap tags neither slot: it changes two at once and both icons move in
+     * plain sight, and the banner names the pair (2026-10-31, user: "指尖格换位的勾选好像反了", then "要不互换就不打勾如何";
+     * the tag sat on the slot the content left).
+     */
+    private static int marked(int hud, Operation operation) { return operation == Operation.SWAP ? -1 : hud; }
     public static void sent(int sequence, int hud, int other, Operation operation) {
         if (pending.size() > MAX_PENDING) pending.clear();
         pending.put(sequence, new Pending(hud, other, operation));
@@ -33,7 +39,7 @@ public final class BindingFeedback {
             case REMOVE -> "poris_elegies_fingertip_incantations.remove_wait";
             case SWAP -> "poris_elegies_fingertip_incantations.swap_wait";
         };
-        latest = new Notice(hud, State.WAITING, Component.translatable(key, hud + 1, other + 1), Util.getMillis());
+        latest = new Notice(marked(hud, operation), State.WAITING, Component.translatable(key, hud + 1, other + 1), Util.getMillis());
     }
     public static void received(int sequence, String error) {
         Pending request = pending.remove(sequence);
@@ -53,7 +59,7 @@ public final class BindingFeedback {
             case REMOVE -> Component.translatable("poris_elegies_fingertip_incantations.remove_done", hud + 1);
             case SWAP -> Component.translatable("poris_elegies_fingertip_incantations.swap_done", hud + 1, request.other() + 1);
         };
-        latest = new Notice(hud, success ? State.SUCCESS : State.ERROR,
+        latest = new Notice(marked(hud, request.operation()), success ? State.SUCCESS : State.ERROR,
                 success ? done : Component.translatable(error), Util.getMillis());
         if (success && Minecraft.getInstance().screen != null)
             Minecraft.getInstance().getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK.value(), 1.35F, .3F));

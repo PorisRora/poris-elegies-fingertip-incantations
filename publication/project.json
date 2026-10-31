@@ -12,17 +12,19 @@
   "artwork_license": "All Rights Reserved",
   "summary": "A customizable RPG-style hotbar for inventory items, keybinds, and supported mod skills, with a radial menu and cooldown displays.",
   "category": "Utility & QoL",
-  "release_version": "0.2.4-beta",
+  "release_version": "1.0.0",
   "release_files": [
     {
-      "name": "poris-elegies-fingertip-incantations-0.2.4-beta.jar",
+      "name": "poris-elegies-fingertip-incantations-1.0.0.jar",
       "kind": "mod",
-      "sha256": "ad37868645930593aa2e58f81efdedaea5f0b5221738286b4cf5834e4468b052"
+      "sha256": "824bca124b9fe2b7cb06ee61137fff76042d88a3ecca18301694d7e90dd17815",
+      "bytes": 24318370
     },
     {
-      "name": "poris-elegies-fingertip-incantations-0.2.4-beta-sources.jar",
+      "name": "poris-elegies-fingertip-incantations-1.0.0-sources.jar",
       "kind": "sources",
-      "sha256": "cc05f62d7b247a1f93c54b001bdc9117b3336bb8b3eb173563507a5bd9b53931"
+      "sha256": "70f5cb8d1100b15103c635eba9a87640e9e089cf08e0d438dff8fb0e905f02f3",
+      "bytes": 24060168
     }
   ],
   "repository": "PorisRora/poris-elegies-fingertip-incantations",
