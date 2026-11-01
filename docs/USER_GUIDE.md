@@ -30,7 +30,7 @@ Adding or dropping slots within 8 GUI pixels of an existing group joins it and u
 
 Use the arrow keys for one-pixel moves, or hold Shift for ten pixels. A partly off-screen group moves back in gradually; it is not snapped across an untouched axis. Press Esc during a slot drag to cancel it. Resizing the window also cancels an unfinished drag.
 
-**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.2.1 cannot be read by 1.0.0.
 
 - A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
 

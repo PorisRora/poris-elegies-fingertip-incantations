@@ -36,8 +36,7 @@ layouts saved by 1.2.1.
 
 ### Editor
 
-- The larger editor layout is used when it fits, with a compact layout for smaller GUI sizes. Both follow Minecraft's
-  GUI scale.
+- Improved the existing large/compact editor selection. It now checks title and toolbar text widths and reserves two lines for the item-page hint instead of relying only on fixed window-size thresholds.
 - The item-page hint aligns with its cells. The display panel uses a consistent width, the wheel setup hint is always
   visible, and wheel action cards use the larger size when space allows.
 

@@ -8,9 +8,9 @@
 
 [h2=1.2.1 更新]
 
-改善格子定位、分组与窗口缩放时的操作；方向键微调不合组，拖动中改变窗口大小或按 Esc 可取消拖动。统一文字适配、状态颜色与中英文说明，编辑器按空间选择大号或紧凑布局。
+改善格子定位、分组与窗口缩放时的操作；方向键微调不合组，拖动中改变窗口大小或按 Esc 可取消拖动。统一文字适配、状态颜色与中英文说明，改进原有大小两档编辑器的选择条件与小窗口提示排版。
 
-**从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.1.x 的布局仍能读取；1.0.0 无法读取 1.2.1 保存的布局。
+**从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.0.0 无法读取 1.2.1 保存的布局。
 
 - 贴着屏幕一侧（0–8 个界面像素）放下的组跟随该边，另一端允许溢出；直接拖离后按所在区域重新定位，方向键微调沿用原规则。
 
@@ -87,7 +87,7 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 
 - [GitHub 源码](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
 - [1.2.1 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.2.1)
-- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/docs/USER_GUIDE.zh-CN.md)
+- [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/docs/USER_GUIDE.zh-CN.md)
 - [问题反馈](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
 - [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/ASSET_LICENSE.md)
 

@@ -12,15 +12,15 @@ Items stay in your existing inventory. Pressing a sword's slot equips that sword
 
 ## What's new in 1.2.1
 
-**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.2.1 cannot be read by 1.0.0.
 
 - More stable slot placement across window sizes, with screen anchors and clear grouping rules.
 - A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
 - Arrow-key nudges keep groups separate; resizing or pressing Esc cancels an unfinished slot drag.
 - Consistent text fitting, revised English and Chinese labels, and shared status colors across themes.
-- A larger editor where space allows, with a compact layout for smaller GUI sizes.
+- Improved the existing editor size selection and small-window text layout, with clearer hints and better-fitting labels.
 
-See the [changelog](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/CHANGELOG.md) for details. Screenshots below illustrate the core controls; some labels and panel sizes differ in 1.2.1.
+See the [changelog](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/CHANGELOG.md) for details. Screenshots below illustrate the core controls; some labels and panel sizes differ in 1.2.1.
 
 ## Build your own layout
 
@@ -93,10 +93,10 @@ Item shortcuts use the vanilla player inventory. Third-party backpack contents r
 
 ## Guides and feedback
 
-- [User guide](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/docs/USER_GUIDE.md)
+- [User guide](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/docs/USER_GUIDE.md)
 - [Source code](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
 - [Report a bug or suggest a feature](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
-- [中文介绍](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/README.zh-CN.md)
+- [中文介绍](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/README.zh-CN.md)
 
 For bug reports, include your mod and NeoForge versions, single-player or multiplayer environment, relevant mods, and steps to reproduce the issue.
 

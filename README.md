@@ -20,13 +20,13 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 ## What's new in 1.2.1
 
-**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.2.1 cannot be read by 1.0.0.
 
 - More stable slot placement across window sizes, with screen anchors and clear grouping rules.
 - A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
 - Arrow-key nudges keep groups separate; resizing or pressing Esc cancels an unfinished slot drag.
 - Consistent text fitting, revised English and Chinese labels, and shared status colors across themes.
-- A larger editor where space allows, with a compact layout for smaller GUI sizes.
+- Improved the existing editor size selection and small-window text layout, with clearer hints and better-fitting labels.
 
 See the [changelog](CHANGELOG.md) for details. Screenshots below illustrate the core controls; some labels and panel sizes differ in 1.2.1.
 

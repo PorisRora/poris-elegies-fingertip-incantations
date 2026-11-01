@@ -34,8 +34,7 @@ layouts saved by 1.2.1.
 
 ### Editor
 
-- The larger editor layout is used when it fits, with a compact layout for smaller GUI sizes. Both follow Minecraft's
-  GUI scale.
+- Improved the existing large/compact editor selection. It now checks title and toolbar text widths and reserves two lines for the item-page hint instead of relying only on fixed window-size thresholds.
 - The item-page hint aligns with its cells. The display panel uses a consistent width, the wheel setup hint is always
   visible, and wheel action cards use the larger size when space allows.
 
@@ -56,7 +55,7 @@ layouts saved by 1.2.1.
 
 ## 1.2.1 相较 1.0.0 的变化
 
-**从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.1.x 的布局仍能读取；1.0.0 无法读取 1.2.1 保存的布局。
+**从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.0.0 无法读取 1.2.1 保存的布局。
 
 - **定位与分组**：格组跟随屏幕九宫锚点，保持组内间距。放不下时按保存的位置显示，允许出屏或重叠，由玩家调整。
 - **进组规则明确**：添加或拖放到已有组 8 个界面像素以内时加入该组，沿用目标组的锚点；多个目标选最近的，重叠时选最上层。方向键微调不合组，一起拖动的多个组保持各自分组，未操作的格子不会被重新保存。
@@ -64,7 +63,7 @@ layouts saved by 1.2.1.
 - **移动与取消更稳定**：方向键一次移动 1 像素，Shift 加速到 10 像素；出屏的格子逐步往里挪，不再突然跳回，已出屏的方向不能继续往外推。超长选区不再因移动报错；拖动中改变窗口大小或按 Esc 会取消本次拖动。
 - **文字显示统一**：单行文字放不下时先缩小，再省略并提供悬停全文；多行文字改善换行，尤其是中文、数字和标点。大小编辑器使用相同文案，中英文按钮名称与说明同步修正。
 - **状态颜色统一**：能用、冷却、进行中、缺资源、出错、暂停、再按一次和合计，在三套主题中使用一致的含义色。
-- **编辑器排版调整**：空间充足时使用大号布局，否则使用紧凑布局。物品页说明与格子对齐，显示设置面板宽度统一，轮盘配置提示始终显示。
+- **改进原有编辑器适配**：大小两档布局继续保留；选档时改为检查标题、工具按钮文字和物品页提示能否放下，不再只看固定宽高门槛。紧凑版增加提示空间，物品页说明与格子对齐，显示设置面板宽度统一，小窗口也显示轮盘配置提示。
 - **兼容信息**：网络协议仍为 3，服务端行为与适配接口保持不变。
 
 ### 安装与更新
