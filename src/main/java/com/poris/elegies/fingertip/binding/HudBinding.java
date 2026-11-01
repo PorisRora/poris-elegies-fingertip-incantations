@@ -39,7 +39,7 @@ public record HudBinding(Kind kind, UUID identity, ItemStack template, String ac
     // without durability (preview19.32): right-click wearing it hands back the piece worn before, and only "this one"
     // follows that, as with the armour stand. Found in Kaleidoscope Cookery's farmer clothes and straw hats. So is an
     // item vanilla's rule keeps out of container items (canFitInsideContainerItems): a container itself, like
-    // Kaleidoscope's fruit basket (2026-10-28, user: "原版的物品接口是不是也可以补一下").
+    // Kaleidoscope's fruit basket (2026-10-28).
     /**
      * Whether the item declares NeoForge's standard storage: an inventory, energy or fluid (preview19.32, user: "这个也算
      * 通用解法吧"). A new Sophisticated backpack carries no data until first used, so three of them bound to F1-F3

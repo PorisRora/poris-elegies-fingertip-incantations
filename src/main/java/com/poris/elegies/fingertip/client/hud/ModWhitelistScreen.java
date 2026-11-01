@@ -4,7 +4,6 @@ import com.poris.elegies.fingertip.client.input.ModKeyWhitelist;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.EditBox;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import java.util.ArrayList;
@@ -52,7 +51,7 @@ public final class ModWhitelistScreen extends Screen {
             group.keys().stream().limit(8).forEach(k -> tooltip.append("\n").append(Component.translatable(k.getName()))
                     .append(": ").append(k.getTranslatedKeyMessage()));
             tooltip.append("\n").append(Component.translatable("poris_elegies_fingertip_incantations.whitelist_limits"));
-            button.setTooltip(Tooltip.create(tooltip));
+            button.setTooltip(EditorTheme.tip(tooltip));
             rows.add(addRenderableWidget(button));
         }
     }
@@ -66,11 +65,12 @@ public final class ModWhitelistScreen extends Screen {
     @Override public void render(GuiGraphics g, int mx, int my, float partial) {
         super.render(g, mx, my, partial);
         g.drawString(font, title, x + 12, y + 12, EditorTheme.accent(), false);
-        g.drawWordWrap(font, Component.translatable("poris_elegies_fingertip_incantations.whitelist_hint"), x + 12, y + 29, w - 24, EditorTheme.MUTED);
+        TextFit.drawLines(g, font, Component.translatable("poris_elegies_fingertip_incantations.whitelist_hint"), x + 12, y + 29, w - 24,
+                TextFit.linesIn(font, 28, 9), 9, EditorTheme.MUTED, false);
         g.drawCenteredString(font, (page + 1) + "/" + ListSearch.pages(filtered.size(), capacity), x + 67, y + h - 23, EditorTheme.TEXT);
         if (filtered.isEmpty()) g.drawString(font, Component.translatable("poris_elegies_fingertip_incantations.whitelist_no_results"), x + 12, y + 87, EditorTheme.MUTED, false);
-        if (error != null) g.drawWordWrap(font, error, x + 12, y + h - 53, w - 24, 0xFFEBA892);
-        else if (notice != null) g.drawWordWrap(font, notice, x + 12, y + h - 53, w - 24, EditorTheme.accent());
+        if (error != null) TextFit.drawLines(g, font, error, x + 12, y + h - 53, w - 24, 2, 9, ThemePalette.ERROR, false);
+        else if (notice != null) TextFit.drawLines(g, font, notice, x + 12, y + h - 53, w - 24, 2, 9, EditorTheme.accent(), false);
     }
     @Override public boolean mouseScrolled(double mx, double my, double dx, double dy) {
         if (!EditorGeometry.inside(mx, my, x, y + 82, w, capacity * 24)) return super.mouseScrolled(mx, my, dx, dy);

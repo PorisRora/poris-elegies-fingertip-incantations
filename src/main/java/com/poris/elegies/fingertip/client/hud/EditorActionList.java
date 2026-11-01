@@ -74,7 +74,7 @@ final class EditorActionList {
             collapsed.addAll(previous.collapsed); knownGroups.addAll(previous.knownGroups);
         }
         all = catalog;
-        // Each tab says what its search finds (2026-10-30, user: "这里文案是不是得优化一下").
+        // Each tab says what its search finds (2026-10-30).
         var hint = Component.translatable("poris_elegies_fingertip_incantations.search_" + source.name().toLowerCase(java.util.Locale.ROOT));
         search = new EditBox(font, ui.rightX + 5, ui.listY + 1, ui.rightWidth - 10, 16, hint);
         search.setMaxLength(80); search.setHint(hint);
@@ -106,7 +106,7 @@ final class EditorActionList {
         var listed = section.stream().filter(e -> e.catalog().visible()).toList();
         filtered = listed.stream().filter(e -> e.matches(search.getValue())).toList();
         // Every skill mod is one card, however many there are: its name, then what gives its skills or its own hint
-        // (2026-10-30, user: "只有一个iron应该也有个卡片吧 这样就不用单独做只有一个的了", "卡片就是 mod 提供法术的物品名").
+        // (2026-10-30, "卡片就是 mod 提供法术的物品名").
         // There used to be a status line above a lone mod's skills instead.
         var notes = new HashMap<String, Component>();
         if (skills) providers.forEach(provider -> { var note = provider.note(); if (note != null) notes.put(provider.owner(), note); });
@@ -285,7 +285,7 @@ final class EditorActionList {
                 var switches = skills && row.group().startsWith("skills/") ? switchesOf(row.group().substring(7)) : List.<FingertipApi.ModSwitch>of();
                 int switchRight = row.note() == null ? row.x() + row.width() - 9 - font.width(count) : row.x() + row.width() - 5;
                 int switchY = row.note() == null ? y + 5 : y + 16;
-                // On the switch only the switch lights up, not its mod's row as well.
+                // On the switch only the switch lights up, not its mod's row as well (2026-10-29).
                 boolean onSwitch = overSwitches(switches, switchRight, switchY, mx, my);
                 g.fill(row.x(), y, row.x() + row.width(), y + row.height(), hover && !onSwitch ? EditorTheme.palette().hover() : EditorTheme.palette().raised());
                 String marker = search.getValue().isBlank() && collapsed.contains(row.group()) ? "+" : "-";
@@ -293,11 +293,11 @@ final class EditorActionList {
                 int switchesWidth = drawSwitches(g, switches, switchRight, switchY, mx, my);
                 int onTitle = row.note() == null ? switchesWidth : 0;
                 if (row.count() > 0) g.drawString(font, marker, row.x() + 4, y + 5, EditorTheme.accent(), false);
-                g.drawString(font, font.substrByWidth(row.title(), row.width() - 28 - font.width(count) - onTitle).getString(),
-                        row.x() + 14, y + 5, EditorTheme.accent(), false);
+                TextFit.draw(g, font, row.title().getString(), row.x() + 14, y + 5, row.width() - 28 - font.width(count) - onTitle,
+                        EditorTheme.accent(), false, TextFit.Align.LEFT);
                 g.drawString(font, count, row.x() + row.width() - 5 - font.width(count), y + 5, EditorTheme.MUTED, false);
-                if (row.note() != null) g.drawString(font, font.substrByWidth(row.note(), row.width() - 19 - switchesWidth).getString(),
-                        row.x() + 14, y + 16, EditorTheme.TEXT, false);
+                if (row.note() != null) TextFit.draw(g, font, row.note().getString(), row.x() + 14, y + 16, row.width() - 19 - switchesWidth,
+                        EditorTheme.TEXT, false, TextFit.Align.LEFT);
                 continue;
             }
             var entry = row.entry(); var state = entry.state();
@@ -319,13 +319,11 @@ final class EditorActionList {
             }
         }
         // A search with no result says so. A skill mod that gives nothing yet says why on its own card, if it registered a
-        // hint (FingertipApi.registerEmptyHint); Fingertip adds no line of its own (2026-10-30, user: "其实这里不需要提示").
+        // hint (FingertipApi.registerEmptyHint); Fingertip adds no line of its own (2026-10-30).
         if (filtered.isEmpty() && !(skills && search.getValue().isBlank())) {
             int lineY = rowsY() + 5 - offset;
-            for (var line : font.split(Component.translatable("poris_elegies_fingertip_incantations.no_matches"), ui.rightWidth - 14)) {
-                if (lineY + font.lineHeight > ui.bodyBottom) break;
-                g.drawString(font, line, ui.rightX + 7, lineY, EditorTheme.MUTED, false); lineY += font.lineHeight + 2;
-            }
+            TextFit.drawLines(g, font, Component.translatable("poris_elegies_fingertip_incantations.no_matches"), ui.rightX + 7, lineY,
+                    ui.rightWidth - 14, TextFit.linesIn(font, ui.bodyBottom - lineY, font.lineHeight + 2), font.lineHeight + 2, EditorTheme.MUTED, false);
         }
         g.disableScissor();
         if (maxOffset() > 0) {
@@ -349,6 +347,6 @@ final class EditorActionList {
     private FormattedCharSequence ellipsis(FormattedCharSequence line, int maxWidth) {
         var text = new StringBuilder();
         line.accept((index, style, codePoint) -> { text.appendCodePoint(codePoint); return true; });
-        return FormattedCharSequence.forward(GuiPixels.cut(font, text.toString(), Math.max(1, maxWidth - font.width(GuiPixels.ELLIPSIS))), Style.EMPTY);
+        return FormattedCharSequence.forward(TextLines.ellipsized(text.toString(), Math.max(1, maxWidth), font::width), Style.EMPTY);
     }
 }

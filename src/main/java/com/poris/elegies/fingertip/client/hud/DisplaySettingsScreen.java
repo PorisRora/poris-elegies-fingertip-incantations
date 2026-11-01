@@ -2,7 +2,6 @@ package com.poris.elegies.fingertip.client.hud;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import org.lwjgl.glfw.GLFW;
@@ -23,12 +22,10 @@ public final class DisplaySettingsScreen extends Screen {
     private static Component tr(String key, Object... args) { return Component.translatable("poris_elegies_fingertip_incantations.display." + key, args); }
 
     @Override protected void init() {
-        var occupied = HudLayout.INSTANCE.activeSlots().stream()
-                .map(slot -> new DisplaySettingsGeometry.Rect(slot.screenX(width), slot.screenY(height), 20, 20)).toList();
-        ui = new DisplaySettingsGeometry(width, height, occupied);
+        ui = new DisplaySettingsGeometry(width, height, HudLayout.INSTANCE.frameRects(width, height));
         if (!panelVisible) {
             button(ui.restore, tr("return_settings"), b -> togglePanel())
-                    .setTooltip(Tooltip.create(tr("return_settings_hint")));
+                    .setTooltip(EditorTheme.tip(tr("return_settings_hint")));
             return;
         }
         button(ui.done, tr("done"), b -> onClose());
@@ -39,7 +36,7 @@ public final class DisplaySettingsScreen extends Screen {
                 HudLayout.INSTANCE.skin = theme.id;
                 HudLayout.INSTANCE.save();
                 ThemeTextures.releaseOtherThemes();
-            }, () -> Theme.current() == theme).setTooltip(Tooltip.create(tr("theme_" + theme.id + "_hint")));
+            }, () -> Theme.current() == theme).setTooltip(EditorTheme.tip(tr("theme_" + theme.id + "_hint")));
         }
         var modes = HudVisibility.Mode.values();
         for (int i = 0; i < modes.length; i++) {
@@ -47,26 +44,26 @@ public final class DisplaySettingsScreen extends Screen {
             option(ui.range(i), tr("range_" + mode.id), b -> {
                 HudLayout.INSTANCE.setDisplayMode(mode);
                 HudLayout.INSTANCE.save();
-            }, () -> HudVisibility.mode() == mode).setTooltip(Tooltip.create(tr("mode_" + mode.id + "_hint")));
+            }, () -> HudVisibility.mode() == mode).setTooltip(EditorTheme.tip(tr("mode_" + mode.id + "_hint")));
         }
         button(ui.functions(), functionsLabel(), b -> {
             HudLayout.INSTANCE.hideModFunctions = !HudLayout.INSTANCE.hideModFunctions;
             HudLayout.INSTANCE.save();
             b.setMessage(functionsLabel());
-        }).setTooltip(Tooltip.create(tr("functions_hint")));
+        }).setTooltip(EditorTheme.tip(tr("functions_hint")));
         button(ui.durability(), durabilityLabel(), b -> {
             HudLayout.INSTANCE.durabilityPercent = !HudLayout.INSTANCE.durabilityPercent;
             HudLayout.INSTANCE.save();
             b.setMessage(durabilityLabel());
-        }).setTooltip(Tooltip.create(tr("durability_hint")));
+        }).setTooltip(EditorTheme.tip(tr("durability_hint")));
     }
 
-    private Button button(DisplaySettingsGeometry.Rect r, Component text, Button.OnPress action) {
+    private Button button(HudPlacement.Rect r, Component text, Button.OnPress action) {
         return addRenderableWidget(EditorTheme.button(r.x(), r.y(), r.width(), r.height(), text, action));
     }
 
     /** Segmented display options use the same material states as every other themed button. */
-    private Button option(DisplaySettingsGeometry.Rect r, Component text, Button.OnPress action, BooleanSupplier selected) {
+    private Button option(HudPlacement.Rect r, Component text, Button.OnPress action, BooleanSupplier selected) {
         return addRenderableWidget(EditorTheme.button(r.x(), r.y(), r.width(), r.height(), text, action, selected));
     }
 
@@ -83,18 +80,18 @@ public final class DisplaySettingsScreen extends Screen {
         g.pose().translate(0, 0, -400);
         try {
             for (var slot : HudLayout.INSTANCE.activeSlots()) if (HudVisibility.includes(slot.id))
-                HudRenderer.renderAt(g, slot.id, slot.screenX(width), slot.screenY(height));
+                HudRenderer.renderAt(g, slot.id, slot.screenX(width, height), slot.screenY(width, height));
         } finally { g.pose().popPose(); g.setColor(1, 1, 1, 1); }
         g.flush();
         super.render(g, mx, my, partial);
         if (panelVisible) {
-            g.drawString(font, title, ui.panel.x() + 12, ui.panel.y() + 12, EditorTheme.accent(), false);
+            TextFit.draw(g, font, title, ui.panel.x() + 12, ui.panel.y() + 12, ui.panel.width() - 24, EditorTheme.accent(), false, TextFit.Align.LEFT);
             g.drawString(font, tr("theme_label"), ui.panel.x() + 12, ui.panel.y() + 29, EditorTheme.MUTED, false);
             g.drawString(font, tr("range_label"), ui.panel.x() + 12, ui.panel.y() + 69, EditorTheme.MUTED, false);
             boolean hidden = HudVisibility.mode() == HudVisibility.Mode.HIDDEN;
             var hint = ui.hint(hidden ? 2 : 1);
-            g.drawString(font, tr("panel_hide_hint"), hint.x(), hint.y(), EditorTheme.MUTED, false);
-            if (hidden) g.drawString(font, tr("panel_hidden_hint"), hint.x(), hint.y() + 10, EditorTheme.MUTED, false);
+            TextFit.draw(g, font, tr("panel_hide_hint"), hint.x(), hint.y(), hint.width(), EditorTheme.MUTED, false, TextFit.Align.LEFT);
+            if (hidden) TextFit.draw(g, font, tr("panel_hidden_hint"), hint.x(), hint.y() + 10, hint.width(), EditorTheme.MUTED, false, TextFit.Align.LEFT);
         }
         // Screen.renderWithTooltip draws all deferred tooltips afterwards, outside any widget clipping.
         g.flush();

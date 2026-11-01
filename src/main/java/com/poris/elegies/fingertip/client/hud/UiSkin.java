@@ -14,7 +14,7 @@ final class UiSkin {
     static final Sprite SLOT = new Sprite(classicSlots(92, 93, 483, 443),
             plain("slot_starlight", 440, 432), plain("slot_poris", 498, 463));
     // Every frame of a theme keeps the same size and alpha, so a slot taken in hand changes look and never moves.
-    // Classic: its atlas, and the selected frame, a recoloured copy.
+    // Classic: its atlas, and the selected frame, a recoloured copy (2026-10-29).
     // Starlight and Poris: the selected frame set, redrawn with their own
     // ornaments. Fingertip slots pair set B's plain frame with set A's selected one, natives use set A's pair (user: "那B+A拿着
     // 吧！"): A's own Fingertip pair, and B's, changed only ornaments a few pixels wide, unreadable at 20 GUI px.
@@ -34,7 +34,7 @@ final class UiSkin {
     static final Sprite NATIVE_SELECTED = new Sprite(selected("native_classic", 617, 557),
             selected("native_starlight", 424, 412), selected("native_poris", 628, 556));
     /**
-     * Each frame's rim inside the icon square, drawn over the icon (2026-10-30, user: "这个图标压在下面是不是更合适一点"):
+     * Each frame's rim inside the icon square, drawn over the icon (2026-10-30):
      * made by tools/derive-fingertip-rims.java, bright texels only, so the icon shows through the frame's dark ground.
      */
     private static final Rims RIM = new Rims(new Rim("plain_slot_classic", 483, 443), new Rim("plain_slot_starlight", 440, 432), new Rim("plain_slot_poris", 498, 463));

@@ -14,13 +14,25 @@ Iron's Spells 'n Spellbooks is optional. If you install it, also install the dep
 
 Open the inventory and click the Fingertip logo near the upper-right corner. The editor's item and action pages supply the things you can bind.
 
-Drag an item or action to a slot. Drag one bound slot onto another to swap them, or drag its binding to clear space and confirm the prompt to clear it. Open **Slot configuration** for layout editing: drag to position slots, or click a single Fingertip slot and press the shortcut you want to assign. Alignment and group-arrangement controls help organize the layout.
+Drag an item or action to a slot. Drag one bound slot onto another to swap them, or drag its binding to clear space and confirm the prompt to clear it. Open **Slots** for layout editing: drag to position slots, or click a single Fingertip slot and press the shortcut you want to assign. Alignment and group-arrangement controls help organize the layout.
 
 The HUD can show all slots, only bound slots, or be hidden. Classic, Starlight, and Poris change the visual theme without changing the controls.
 
 While the key capture box is open, the layout toolbar is disabled except for **Delete**. Click Delete to remove the selected slot after confirmation. The Delete key itself can be assigned as a shortcut while capture is open; Backspace clears the shortcut and Esc cancels. A left click outside the box cancels capture; clicking blank canvas also clears the editor selection.
 
 The editor uses an outer selection outline. The slot for the item currently held keeps its normal gameplay highlight.
+
+## Slot placement and window changes
+
+Slots use nine screen anchors and keep their spacing within groups. When the window is too small, slots remain at their saved positions and may extend off screen or overlap. Restore the window size or use the editor to rearrange them.
+
+Adding or dropping slots within 8 GUI pixels of an existing group joins it and uses its anchor. Arrow keys only nudge the selected slots; they do not merge groups. Groups moved together keep their own grouping, while an explicit row, column, or grid arrangement groups the selected slots. An ungrouped move keeps its anchor within the same screen region and can select a new anchor when its center crosses into another region.
+
+Use the arrow keys for one-pixel moves, or hold Shift for ten pixels. A partly off-screen group moves back in gradually; it is not snapped across an untouched axis. Press Esc during a slot drag to cancel it. Resizing the window also cancels an unfinished drag.
+
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+
+- A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
 
 ## Choose a mode
 
@@ -53,11 +65,11 @@ To retain another mod's original shortcuts, allow that mod through. Slots that c
 
 Holding **Esc for three seconds** temporarily disables Fingertip until the game is restarted.
 
-## Radial menu
+## Action wheel
 
 The default is hold-and-release: hold the middle mouse button, point at the action, then release. You can also choose click-based operation.
 
-Open **Wheel Setup** to select a sector and assign an action. The inventory and editor sectors are reserved so those interfaces remain reachable.
+Open **Wheel setup** to select a sector and assign an action. The inventory and editor sectors are reserved so those interfaces remain reachable.
 
 ## Supported skills
 

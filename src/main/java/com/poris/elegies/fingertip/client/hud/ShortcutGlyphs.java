@@ -85,7 +85,7 @@ final class ShortcutGlyphs {
                 graphics.pose().pushPose();
                 graphics.pose().translate(x, y, 0);
                 graphics.pose().scale(height / 8F, height / 8F, 1);
-                graphics.drawString(Minecraft.getInstance().font, text, 0, 0, 0xFFF1E9D8, false);
+                graphics.drawString(Minecraft.getInstance().font, text, 0, 0, EditorTheme.TEXT, false);
                 graphics.pose().popPose();
                 return;
             }

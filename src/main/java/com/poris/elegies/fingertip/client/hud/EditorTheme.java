@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.network.chat.Component;
 import java.util.function.BooleanSupplier;
 
@@ -31,7 +32,7 @@ final class EditorTheme {
     static boolean hoverOrKeyboardFocus(AbstractWidget widget) {
         return widget.isHovered() || widget.isFocused() && Minecraft.getInstance().getLastInputType().isKeyboard();
     }
-    static Button button(int x, int y, int w, int h, Component text, Button.OnPress action) {
+    static ThemedButton button(int x, int y, int w, int h, Component text, Button.OnPress action) {
         return button(x, y, w, h, text, action, () -> false);
     }
     /** Shared face for ordinary controls and rows that position their own icon/label. */
@@ -40,35 +41,73 @@ final class EditorTheme {
         return textInset(w, h);
     }
     static int textInset(int w, int h) { return ButtonArt.textInset(w, h); }
-    static Button button(int x, int y, int w, int h, Component text, Button.OnPress action, BooleanSupplier selected) {
-        return new Button(x, y, w, h, text, action, java.util.function.Supplier::get) {
-            @Override protected void renderWidget(GuiGraphics g, int mx, int my, float partial) {
-                boolean chosen = selected.getAsBoolean();
-                boolean hovered = hoverOrKeyboardFocus(this);
-                boolean lit = active && (hovered || chosen);
-                int margin = buttonFace(g, getX(), getY(), getWidth(), getHeight(), active, hovered, chosen);
-                renderScrollingString(g, Minecraft.getInstance().font, margin, active ? (lit ? accent() : TEXT) : 0xFF918A9B);
-            }
-        };
+    static ThemedButton button(int x, int y, int w, int h, Component text, Button.OnPress action, BooleanSupplier selected) {
+        return new ThemedButton(x, y, w, h, text, action, selected, null);
     }
     /** The icon sits left of the label and the pair is centred; without room for both only the label is drawn. */
-    static Button button(int x, int y, int w, int h, Component text, ActionIcons.Sprite icon, Button.OnPress action) {
-        return new Button(x, y, w, h, text, action, java.util.function.Supplier::get) {
-            @Override protected void renderWidget(GuiGraphics g, int mx, int my, float partial) {
-                boolean hovered = hoverOrKeyboardFocus(this);
-                int margin = buttonFace(g, getX(), getY(), getWidth(), getHeight(), active, hovered, false);
-                int color = active ? (hovered ? accent() : TEXT) : 0xFF918A9B;
-                var font = Minecraft.getInstance().font;
-                int group = ActionIcons.SMALL + ICON_GAP + font.width(getMessage());
-                if (getHeight() < ActionIcons.SMALL + 4 || group > getWidth() - margin * 2) {
-                    renderScrollingString(g, font, margin, color); return;
-                }
-                int left = getX() + (getWidth() - group) / 2;
+    static ThemedButton button(int x, int y, int w, int h, Component text, ActionIcons.Sprite icon, Button.OnPress action) {
+        return new ThemedButton(x, y, w, h, text, action, () -> false, icon);
+    }
+    /** Hover text for a control; a themed button whose label gets cut shows the full label above it (指尖排字法). */
+    static Tooltip tip(Component text) {
+        var tooltip = Tooltip.create(text);
+        TIPS.put(tooltip, text);
+        return tooltip;
+    }
+    private static final java.util.Map<Tooltip, Component> TIPS = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
+
+    /**
+     * The editor's button. Its label follows 指尖排字法 instead of vanilla's scrolling (2026-11-01, user agreed): it
+     * shrinks, then is cut with "…", and a cut label is shown whole in the hover text, before any hint.
+     */
+    static final class ThemedButton extends Button {
+        private final BooleanSupplier selected;
+        private final ActionIcons.Sprite icon;
+        private Component hint, shownFor;
+        private Tooltip external;
+        private boolean cut, settled;
+        ThemedButton(int x, int y, int w, int h, Component text, OnPress action, BooleanSupplier selected, ActionIcons.Sprite icon) {
+            super(x, y, w, h, text, action, java.util.function.Supplier::get);
+            this.selected = selected; this.icon = icon;
+        }
+        @Override public void setTooltip(Tooltip tooltip) {
+            hint = tooltip == null ? null : TIPS.get(tooltip);
+            external = hint == null ? tooltip : null;
+            settled = false;
+            super.setTooltip(tooltip);
+        }
+        @Override protected void renderWidget(GuiGraphics g, int mx, int my, float partial) {
+            boolean chosen = selected.getAsBoolean();
+            boolean hovered = hoverOrKeyboardFocus(this);
+            int margin = buttonFace(g, getX(), getY(), getWidth(), getHeight(), active, hovered, chosen);
+            int color = active ? (hovered || chosen ? accent() : TEXT) : ThemePalette.PAUSED;
+            var font = Minecraft.getInstance().font;
+            int textY = getY() + (getHeight() - 9) / 2 + 1;
+            if (icon != null && showsWhole(font, getMessage(), getWidth(), getHeight())) {
+                int left = getX() + (getWidth() - ActionIcons.SMALL - ICON_GAP - font.width(getMessage())) / 2;
                 icon.drawSmall(g, left, getY() + (getHeight() - ActionIcons.SMALL) / 2);
-                g.drawString(font, getMessage(), left + ActionIcons.SMALL + ICON_GAP, getY() + (getHeight() - 9) / 2 + 1, color);
+                g.drawString(font, getMessage(), left + ActionIcons.SMALL + ICON_GAP, textY, color);
+                settle(false); return;
             }
-        };
+            int room = getWidth() - margin * 2;
+            var line = TextFit.fit(font, getMessage().getString(), room);
+            float w = font.width(line.text()) * line.scale();
+            TextFit.drawLine(g, font, line, getX() + margin + (room - w) / 2, textY, color, true);
+            settle(line.cut());
+        }
+        /** Keeps the hover text in step with whether the label is cut. */
+        private void settle(boolean nowCut) {
+            if (settled && nowCut == cut && getMessage().equals(shownFor)) return;
+            settled = true; cut = nowCut; shownFor = getMessage();
+            if (external != null) { super.setTooltip(external); return; }   // a tooltip set from elsewhere stays as it was
+            Component text = !cut ? hint : hint == null ? getMessage() : getMessage().copy().append("\n").append(hint);
+            super.setTooltip(text == null ? null : Tooltip.create(text));
+        }
     }
     static final int ICON_GAP = 4;
+    /** Whether a button this size shows its icon and its whole label at full size, as ThemedButton draws it first. */
+    static boolean showsWhole(net.minecraft.client.gui.Font font, Component text, int w, int h) {
+        return h >= ActionIcons.SMALL + 4 && ActionIcons.SMALL + ICON_GAP + font.width(text) <= w - textInset(w, h) * 2;
+    }
     private EditorTheme() {}
 }

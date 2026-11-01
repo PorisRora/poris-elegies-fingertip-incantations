@@ -41,25 +41,17 @@ final class RadialPainter {
     /**
      * Text centered on the current origin at {@code y}, no wider than {@code maxWidth} GUI pixels (2026-10-29, user:
      * "轮盘那边英文好像溢出去了" / "我们轮盘可以缩放文字吗": English labels ran into the next sector, and the centre lines past
-     * the circle, in Modern UI's wider font). It shrinks first, then cuts with an ellipsis. Only scales that put a whole
-     * number of screen pixels on each font pixel are used (at GUI scale 5: 1, 0.8, 0.6), so it stays as crisp as the rest;
-     * {@code outer} is a scale already applied around it. Text that fits is drawn as before.
+     * the circle, in Modern UI's wider font). It follows 指尖排字法 (TextFit): shrinks first, only to whole screen pixels per
+     * font pixel (at GUI scale 5: 1, 0.8, 0.6), then cuts with an ellipsis; {@code outer} is a scale already applied around
+     * it. Text that fits is drawn as before.
      */
     static void fitted(GuiGraphics g, String text, int y, int maxWidth, float outer, int color) {
         var font = Minecraft.getInstance().font;
-        int gui = GuiPixels.guiScale();
-        float room = maxWidth / outer, width = font.width(text), fit = 1;
-        if (width > room) {
-            // Largest k / gui, as a total scale, that fits; never under 60 %.
-            int full = Math.max(1, Math.round(outer * gui)), least = (int)Math.ceil(gui * .6F);
-            int k = Math.max(Math.min(full, least), (int)Math.floor(full * room / width));
-            fit = Math.min(1, (float)k / full);
-            if (width * fit > room) text = GuiPixels.cut(font, text, Math.max(0, (int)(room / fit) - font.width(GuiPixels.ELLIPSIS)));
-        }
+        var line = TextLines.line(text, (int)(maxWidth / outer), TextFit.fullPixels(outer), font::width);
         g.pose().pushPose();
         try {
-            g.pose().scale(fit, fit, 1);
-            g.drawCenteredString(font, text, 0, Math.round(y / fit), color);
+            g.pose().scale(line.scale(), line.scale(), 1);
+            g.drawCenteredString(font, line.text(), 0, Math.round(y / line.scale()), color);
         } finally { g.pose().popPose(); }
     }
     private static void band(GuiGraphics g, RadialGeometry geometry, float inner, float outer,

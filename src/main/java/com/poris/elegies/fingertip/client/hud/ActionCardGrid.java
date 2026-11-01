@@ -1,6 +1,6 @@
 package com.poris.elegies.fingertip.client.hud;
 
-/** Pixel geometry shared by card placement and hit testing, including real non-interactive gutters. */
+/** Pixel geometry for laying out cards: columns, card width and the gutters between them. */
 record ActionCardGrid(int x, int width, int columns, int cardWidth, int cardHeight, int gap) {
     static ActionCardGrid fit(int x, int width) {
         int columns = width >= 294 ? 3 : width >= 116 ? 2 : 1;
@@ -10,9 +10,4 @@ record ActionCardGrid(int x, int width, int columns, int cardWidth, int cardHeig
     }
     int cardX(int column) { return x + column * (cardWidth + gap); }
     int rowPitch() { return cardHeight + gap; }
-    int columnAt(double px) {
-        if (px < x || px >= x + width) return -1;
-        int column = (int)(px - x) / (cardWidth + gap);
-        return column < columns && px < cardX(column) + cardWidth ? column : -1;
-    }
 }

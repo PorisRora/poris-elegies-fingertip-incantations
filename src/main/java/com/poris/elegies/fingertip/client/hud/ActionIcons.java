@@ -79,7 +79,7 @@ final class ActionIcons {
             Sprite.HOTBAR_SLOT.draw(g, x, y);
             var font = Minecraft.getInstance().font;
             String text = Integer.toString(number);
-            g.drawString(font, text, x + 8 - font.width(text) / 2, y + 4, 0xFFF1E3BC, true);
+            g.drawString(font, text, x + 8 - font.width(text) / 2, y + 4, EditorTheme.TEXT, true);
         }
     }
     /** The wheel's own actions, by their InputPreferences id. */

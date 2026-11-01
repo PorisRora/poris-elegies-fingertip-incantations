@@ -24,7 +24,7 @@ public final class BindingFeedback {
     public static void sent(int sequence, int hud, Operation operation) { sent(sequence, hud, -1, operation); }
     /**
      * The slot whose tag shows the notice, or none. A swap tags neither slot: it changes two at once and both icons move in
-     * plain sight, and the banner names the pair (2026-10-31, user: "指尖格换位的勾选好像反了", then "要不互换就不打勾如何";
+     * plain sight, and the banner names the pair (2026-10-31, then "要不互换就不打勾如何";
      * the tag sat on the slot the content left).
      */
     private static int marked(int hud, Operation operation) { return operation == Operation.SWAP ? -1 : hud; }

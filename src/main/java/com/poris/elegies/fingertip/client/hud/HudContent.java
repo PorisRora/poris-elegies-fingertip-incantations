@@ -53,7 +53,7 @@ public record HudContent(ItemStack icon, Component name, boolean available, Sele
         if (detail != null) return detail;
         if (selection == Selection.PENDING) return Component.translatable("poris_elegies_fingertip_incantations.selection_pending");
         if (selection == Selection.RESELECT) return Component.translatable("poris_elegies_fingertip_incantations.selection_again");
-        // 2026-10-31 (user: "在背包XX格....很冗杂"): no source slot or stack count; the slot already draws the count.
+        // 2026-10-31 (): no source slot or stack count; the slot already draws the count.
         // Only an item that is not in the backpack gets a line.
         if (sourceStatus == SourceResolver.Status.MISSING) return Component.translatable("poris_elegies_fingertip_incantations.missing");
         if (sourceStatus == SourceResolver.Status.OFFHAND) return Component.translatable("poris_elegies_fingertip_incantations.in_offhand");

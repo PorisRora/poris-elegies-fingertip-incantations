@@ -9,7 +9,8 @@ import net.minecraft.network.chat.Component;
 final class ThemedConfirmScreen extends ConfirmScreen {
     private final BooleanConsumer choice;
     private final Component heading, detail;
-    private int x, y, w, h, headingHeight;
+    private int x, y, w, h;
+    private java.util.List<String> headingLines = java.util.List.of(), detailLines = java.util.List.of();
     private boolean decided;
 
     ThemedConfirmScreen(BooleanConsumer choice, Component title, Component detail) {
@@ -17,8 +18,12 @@ final class ThemedConfirmScreen extends ConfirmScreen {
     }
     @Override protected void init() {
         w = Math.min(380, width - 32);
-        headingHeight = font.split(heading, w - 32).size() * 12;
-        h = Math.min(height - 24, 68 + headingHeight + font.split(detail, w - 32).size() * 12);
+        // The box grows with its text up to the screen; text that still does not fit ends with "…" above the buttons,
+        // instead of running out of the box under them (指尖排字法).
+        int room = w - 32, lines = Math.max(2, (height - 24 - 68) / 12);
+        headingLines = TextLines.wrap(heading.getString(), room, Math.min(3, lines - 1), font::width).lines();
+        detailLines = TextLines.wrap(detail.getString(), room, lines - headingLines.size(), font::width).lines();
+        h = Math.min(height - 24, 68 + (headingLines.size() + detailLines.size()) * 12);
         x = (width - w) / 2; y = (height - h) / 2;
         int bw = (w - 40) / 2;
         addRenderableWidget(EditorTheme.button(x + 16, y + h - 34, bw, 20, Component.translatable("gui.yes"), b -> decide(true)));
@@ -31,9 +36,9 @@ final class ThemedConfirmScreen extends ConfirmScreen {
     @Override public void render(GuiGraphics g, int mx, int my, float partial) {
         renderBackground(g, mx, my, partial);
         int textY = y + 14;
-        for (var line : font.split(heading, w - 32)) { g.drawString(font, line, x + 16, textY, EditorTheme.accent(), false); textY += 12; }
+        for (var line : headingLines) { g.drawString(font, line, x + 16, textY, EditorTheme.accent(), false); textY += 12; }
         textY += 10;
-        for (var line : font.split(detail, w - 32)) { g.drawString(font, line, x + 16, textY, EditorTheme.TEXT, false); textY += 12; }
+        for (var line : detailLines) { g.drawString(font, line, x + 16, textY, EditorTheme.TEXT, false); textY += 12; }
         renderables.forEach(widget -> widget.render(g, mx, my, partial));
     }
     @Override public boolean isPauseScreen() { return false; }

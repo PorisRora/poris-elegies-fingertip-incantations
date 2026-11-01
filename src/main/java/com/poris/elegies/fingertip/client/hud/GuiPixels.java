@@ -11,7 +11,6 @@ import net.minecraft.client.gui.GuiGraphics;
 final class GuiPixels {
     /** The dark outline of small numbers on icons: charges, cooldown seconds, durability. */
     static final int OUTLINE = 0xFF15121C;
-    static final String ELLIPSIS = "…";
 
     /** Screen pixels per GUI pixel, rounded, at least one. */
     static int guiScale() { return Math.max(1, (int)Math.round(Minecraft.getInstance().getWindow().getGuiScale())); }
@@ -31,11 +30,5 @@ final class GuiPixels {
             if (dx != 0 || dy != 0) g.drawString(font, text, x + dx, y + dy, outline, false);
         g.drawString(font, text, x, y, color, false);
     }
-    /** {@code text}, or as much of it as fits in {@code maxWidth} with an ellipsis after it. */
-    static String ellipsize(Font font, String text, int maxWidth) {
-        return font.width(text) > maxWidth ? cut(font, text, maxWidth - font.width(ELLIPSIS)) : text;
-    }
-    /** The start of {@code text} no wider than {@code room}, then an ellipsis. */
-    static String cut(Font font, String text, int room) { return font.plainSubstrByWidth(text, room) + ELLIPSIS; }
     private GuiPixels() {}
 }

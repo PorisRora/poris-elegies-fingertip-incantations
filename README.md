@@ -11,12 +11,24 @@ The slots point to your existing items. Selecting a sword equips that sword with
 
 | Requirement | Supported |
 | --- | --- |
-| Version | **1.0.0** |
+| Version | **1.2.1** |
 | Minecraft | Java Edition **1.21.1** |
 | Loader | **NeoForge 21.1.181 or later** for Minecraft 1.21.1 |
 | Installation | Client and server; single-player uses its integrated server |
 | Optional integration | Iron's Spells 'n Spellbooks **1.21-3.4.4 or later** |
 | License | Source code: **MIT** · Logo and artwork: **All Rights Reserved** |
+
+## What's new in 1.2.1
+
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+
+- More stable slot placement across window sizes, with screen anchors and clear grouping rules.
+- A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
+- Arrow-key nudges keep groups separate; resizing or pressing Esc cancels an unfinished slot drag.
+- Consistent text fitting, revised English and Chinese labels, and shared status colors across themes.
+- A larger editor where space allows, with a compact layout for smaller GUI sizes.
+
+See the [changelog](CHANGELOG.md) for details. Screenshots below illustrate the core controls; some labels and panel sizes differ in 1.2.1.
 
 ## Make the hotbar your own
 
@@ -31,9 +43,9 @@ Choose between two modes:
 
 The **Classic**, **Starlight**, and **Poris** themes share the same controls. Choose which slots remain visible and whether to show item durability percentages.
 
-| Slot configuration | Display settings |
+| Slots | Display |
 | --- | --- |
-| ![Slot configuration: add and delete slots, arrange in a row, column or grid, gap, snapping, canvas](docs/images/en/layout-editor.webp) | ![Display settings: style, which slots show, mod function icons, durability percentage](docs/images/en/display-settings.webp) |
+| ![Slots: add and delete slots, arrange in a row, column or grid, gap, snapping, canvas](docs/images/en/layout-editor.webp) | ![Display: style, which slots show, mod action slots, durability percentage](docs/images/en/display-settings.webp) |
 
 ## Keep equipment and supplies close
 
@@ -45,13 +57,13 @@ Press a bound item's key to equip it. Press the same slot's key again to put it 
 
 ## Put controls on the screen
 
-Bind vanilla actions and supported mod keybinds to visible slots. The configurable radial menu also provides quick access to actions such as opening the inventory, switching perspective, swapping hands, dropping items, and opening the editor.
+Bind vanilla actions and supported mod keybinds to visible slots. The configurable action wheel also provides quick access to actions such as opening the inventory, switching perspective, swapping hands, dropping items, and opening the editor.
 
 By default, **hold the middle mouse button, point at an action, and release**. A click-based mode is available too.
 
-| Mod keybinds on slots | Wheel Setup |
+| Mod keybinds on slots | Wheel setup |
 | --- | --- |
-| ![Mods page: other mods' keybinds can be dragged straight onto a slot](docs/images/en/mod-keybinds.webp) | ![Wheel Setup: pick a position, then a vanilla or mod function](docs/images/en/radial-setup.webp) |
+| ![Mods page: other mods' keybinds can be dragged straight onto a slot](docs/images/en/mod-keybinds.webp) | ![Wheel setup: pick a position, then a vanilla or mod function](docs/images/en/radial-setup.webp) |
 
 **Key takeover changes how mod shortcuts work while the HUD is enabled.** Unbound mod shortcuts are not forwarded unless their mod is turned on in the **Mod whitelist**, opened from the **Key takeover** page. Movement, attack, use, and other basic controls remain available.
 
@@ -73,7 +85,7 @@ The spell's own mod still handles casting rules, resource costs, and gameplay ef
 2. Open your inventory and click the **Fingertip Incantations** logo near the upper-right corner.
 3. Drag items or actions to slots, assign their shortcuts, and arrange the layout.
 4. Check **Key takeover**, and in its **Mod whitelist** switch on any mods whose original shortcuts you want to keep.
-5. Return to the world. Use your slot keys or open the radial menu with the middle mouse button.
+5. Return to the world. Use your slot keys or open the action wheel with the middle mouse button.
 
 See the [user guide](docs/USER_GUIDE.md) for mode differences, key conflicts, controls, and compatibility options.
 

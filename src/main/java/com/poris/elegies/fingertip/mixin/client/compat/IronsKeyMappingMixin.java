@@ -12,7 +12,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Optional Iron's bridge for its spell wheel switch (2026-10-29, user: "iron关轮盘好像没用", "关着也能打开"). Iron's keys are
+ * Optional Iron's bridge for its spell wheel switch (2026-10-29, "关着也能打开"). Iron's keys are
  * a KeyMapping subclass whose setDown override marks itself consumable after calling super, and Iron's opens its spell
  * wheel from that mark through consume(). Fingertip blocks KeyMapping.setDown while it owns a key, but the override's own
  * line still ran, for example when a screen closed with the key held and vanilla set every mapping from the physical

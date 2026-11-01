@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Collects the HUD's plain textured quads while a pass is open and draws each texture and colour in one call
- * (2026-10-28, user: "可以 优化一下"): slot frames and key glyphs used to be a draw call each. The same shader,
+ * (2026-10-28): slot frames and key glyphs used to be a draw call each. The same shader,
  * vertices, texture coordinates and colour as GuiGraphics.blit, with blending on as the callers had it, so the picture
  * does not change; only quads of different textures or colours may swap order, and HUD slots do not overlap.
  */

@@ -70,7 +70,7 @@ abstract class KeyMappingMixin {
     /**
      * When a screen closes, vanilla sets every mapping from the physical keys. A key Fingertip owns is skipped rather than
      * cancelled inside setDown, so a mod's setDown override cannot mark itself pressed after its super call (Iron's spell
-     * wheel opened with its switch off that way; 2026-10-29, user: "关着也能打开").
+     * wheel opened with its switch off that way; 2026-10-29).
      */
     @WrapOperation(method = "setAll", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/KeyMapping;setDown(Z)V"))
     private static void fingertip$ownedOnScreenClose(KeyMapping mapping, boolean down, Operation<Void> original) {

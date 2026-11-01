@@ -1,5 +1,53 @@
 # Changelog
 
+## 1.2.1
+
+**Layouts saved by 1.0.0 are not read.** When you update from 1.0.0, slots go back to their default places (rows of
+nine above the hotbar) and need arranging again; bound items, keys, actions and settings are kept. 1.0.0 cannot read
+layouts saved by 1.2.1.
+
+### Slot placement
+
+- Slots keep their spacing in groups that follow one of nine screen anchors: the corners, edge midpoints, or center.
+- Layouts that do not fit remain at their saved positions. Slots can extend off screen or overlap; adjust them in the
+  editor when needed.
+- Adding or dropping slots within 8 GUI pixels of an existing group joins that group and uses its anchor. The nearest
+  group is chosen, or the topmost when groups overlap. Arrow-key nudges do not merge groups, groups moved together
+  retain their separate grouping, and untouched slots are not rewritten.
+- A group keeps its anchor while its center remains in the same screen region; crossing into another region can change
+  the anchor. Joining an existing group uses that group's anchor.
+- A group put down within 8 GUI pixels of one screen edge, and not of the opposite one, follows that edge even if its
+  other end runs off screen, so a long row against the left edge stays there when the window narrows. Dragged away from
+  that edge, it follows the region it is in again. Arrow-key nudges never apply this rule.
+- Arrow keys move one pixel, or ten with Shift. Partly off-screen groups move back in gradually without jumping
+  sideways; an edge that is already outside the screen cannot be pushed farther out. Oversized selections no longer
+  cause movement errors.
+- Resizing the window or pressing Esc during a slot drag cancels that drag instead of saving its preview.
+- Small floating controls look for clear space where possible.
+
+### Text and colors
+
+- Single-line text that does not fit shrinks, then ends with an ellipsis if necessary; hovering reveals truncated text.
+  Multi-line text has more consistent wrapping, including improved handling of Chinese text, numbers, and punctuation.
+- The editor uses the same wording at both sizes. English labels are shorter and consistent, including **Slots**,
+  **Display**, **Wheel setup**, and **Hide slots**; Chinese instructions have also been corrected.
+- Status colors for readiness, cooldown, progress, missing resources, errors, paused actions, recasts, and totals are
+  consistent across all three themes.
+
+### Editor
+
+- The larger editor layout is used when it fits, with a compact layout for smaller GUI sizes. Both follow Minecraft's
+  GUI scale.
+- The item-page hint aligns with its cells. The display panel uses a consistent width, the wheel setup hint is always
+  visible, and wheel action cards use the larger size when space allows.
+
+### Compatibility
+
+- Requirements remain Minecraft 1.21.1 and NeoForge 21.1.181 or later. Optional Iron's Spells support still starts at
+  1.21-3.4.4.
+- Network protocol remains 3. Server-side behavior and the integration APIs are unchanged from 1.0.0.
+- Layout files: see the note at the top of this section.
+
 ## 1.0.0
 
 ### First stable release

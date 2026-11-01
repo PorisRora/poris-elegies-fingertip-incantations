@@ -48,7 +48,7 @@ public final class FingertipApi {
     /**
      * What gives a skill mod's skills right now, by name; several items can, such as a worn item, a held tool and an
      * accessory. The skill tab shows the names under the mod's name, joined, and one per line on hover; with none, no
-     * line (2026-10-29, user: "这里应该做接口接受消息吧", "这里应该注册物品名 没有的话就不显示吧"). Before, Fingertip took the
+     * line (2026-10-29, "这里应该注册物品名 没有的话就不显示吧"). Before, Fingertip took the
      * first status among the mod's skills, and one skill's reason spoke for the whole mod. {@code owner} is the
      * mod ID before the colon of its action IDs, which the tab groups by. Asked about once a second while the editor is
      * open. Client only; since 0.1.5-beta.
@@ -70,7 +70,7 @@ public final class FingertipApi {
     /**
      * The line under a skill mod's name while it gives no skill, saying why, such as "no spell book equipped"; null or
      * blank shows nothing, and so does a mod that registers none. Fingertip itself writes no such hint: only the mod knows
-     * what its skills need (2026-10-30, user: "有铁魔法的时候显示就行 有魔法书的时候就列出来魔法", "未装备魔法书",
+     * what its skills need (2026-10-30, "未装备魔法书",
      * "什么都没装的时候就不显示提示"). Same {@code owner} and timing as {@link #registerSources}. Client only; since 0.2.1-beta.
      */
     public static void registerEmptyHint(String owner, java.util.function.Supplier<? extends Component> hint) {

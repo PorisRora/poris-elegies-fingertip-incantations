@@ -37,10 +37,14 @@ public final class HudRenderer {
                 || mc.screen instanceof HudEditorScreen
                 || mc.screen instanceof DisplaySettingsScreen || mc.screen instanceof ModWhitelistScreen) return;
         // Pass by pass over the slots rather than slot by slot, so frames, shading, bars, labels and key glyphs each go
-        // to the GPU together instead of one draw call per piece (2026-10-28, user: "可以 优化一下"). Each kind is still
+        // to the GPU together instead of one draw call per piece (2026-10-28). Each kind is still
         // drawn after the kinds beneath it, as within one slot before, so the picture is the same.
+        // Positions are worked out once here (指尖定位法, cached until the screen or the layout changes); the passes read them.
+        var layout = HudLayout.INSTANCE;
+        var offhandSlot = layout.offhand();
+        layout.ensurePlaced(g.guiWidth(), g.guiHeight());
         var slots = new java.util.ArrayList<HudLayout.Slot>();
-        for (var slot : HudLayout.INSTANCE.activeSlots()) if (HudVisibility.includes(slot.id)) slots.add(slot);
+        for (var slot : layout.activeSlots()) if (HudVisibility.includes(slot.id)) slots.add(slot);
         var views = new HudContent[slots.size()];
         for (int i = 0; i < views.length; i++) views[i] = HudContent.forFrame(slots.get(i).id);
         BlitBatch.run(() -> pass(g, slots, views, Pass.FRAMES));
@@ -54,8 +58,7 @@ public final class HudRenderer {
         pass(g, slots, views, Pass.LAST);
         int width = g.guiWidth(), height = g.guiHeight();
         // The off hand keeps its own saved place and shows only while it holds something (2026-10-26, user).
-        var offhandSlot = HudLayout.INSTANCE.offhand();
-        int offhandX = offhandSlot.screenX(width), offhandY = offhandSlot.screenY(height);
+        int offhandX = offhandSlot.placedX, offhandY = offhandSlot.placedY;
         renderOffhand(g, offhandX, offhandY, false);
         if (mc.options.attackIndicator().get() != AttackIndicatorStatus.HOTBAR) return;
         float charge = mc.player.getAttackStrengthScale(0);
@@ -98,10 +101,11 @@ public final class HudRenderer {
     }
     /**
      * Every slot as in gameplay, the one in hand lit. The editor marks its own selection with the outline around the slot,
-     * never with the selected frame, which only means "in hand" (2026-10-31, user: "编辑器做好自己分内的事情就好了").
+     * never with the selected frame, which only means "in hand" (2026-10-31).
      */
     public static void renderSlots(GuiGraphics g) {
-        for (var slot : HudLayout.INSTANCE.activeSlots()) renderAt(g, slot.id, slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()));
+        HudLayout.INSTANCE.ensurePlaced(g.guiWidth(), g.guiHeight());
+        for (var slot : HudLayout.INSTANCE.activeSlots()) renderAt(g, slot.id, slot.placedX, slot.placedY);
     }
     /** Filtering never deletes bindings, changes coordinates or hides remembered missing items as empty. */
     public static java.util.List<HudLayout.Slot> gameplaySlots() {
@@ -116,7 +120,7 @@ public final class HudRenderer {
     private static void pass(GuiGraphics g, java.util.List<HudLayout.Slot> slots, HudContent[] views, Pass pass) {
         for (int i = 0; i < views.length; i++) {
             var slot = slots.get(i);
-            draw(g, slot.id, views[i], slot.screenX(g.guiWidth()), slot.screenY(g.guiHeight()), pass);
+            draw(g, slot.id, views[i], slot.placedX, slot.placedY, pass);
         }
     }
     private static void draw(GuiGraphics g, int id, HudContent view, int x, int y, Pass pass) {
@@ -172,15 +176,15 @@ public final class HudRenderer {
             if (all || pass == Pass.LABELS) {
                 boolean reselect = view.selection() == HudContent.Selection.RESELECT;
                 boolean pending = view.selection() == HudContent.Selection.PENDING;
-                if (totalCount) total(g, view.total(), paused ? 0xFF8D8494 : 0xFFE1CDEB);
+                if (totalCount) total(g, view.total(), paused ? ThemePalette.PAUSED : ThemePalette.TOTAL);
                 if (view.cooldownSeconds() > 0) cooldownSeconds(g, view.cooldownSeconds(), paused);
                 if (charges != null) charges(g, charges, paused);
                 // Bound slots retain frame, icon and count cues; free corners can show unbound status.
                 if (key.isUnbound() && !nativeSlot) {
-                    if (pending) small(g, "…", 14, 1, 0xFFC5B9EC);
+                    if (pending) small(g, "…", 14, 1, ThemePalette.PENDING);
                     // Short of a resource already reads blue; "!" stays the mark of a slot that cannot be used.
-                    else if (!view.available() && !view.lacksResource() && !view.icon().isEmpty()) small(g, "!", 15, 1, 0xFFD69390);
-                    else if (reselect) small(g, "↻", 14, 1, 0xFFE1BE7D);
+                    else if (!view.available() && !view.lacksResource() && !view.icon().isEmpty()) small(g, "!", 15, 1, ThemePalette.ERROR);
+                    else if (reselect) small(g, "↻", 14, 1, ThemePalette.AGAIN);
                 }
             }
             if (all || pass == Pass.LAST) BindingPresentation.slotFeedback(g, id);
@@ -274,19 +278,19 @@ public final class HudRenderer {
         try {
             g.pose().translate(18 - font.width(count) * .75F, 12, 200);
             g.pose().scale(.75F, .75F, 1);
-            g.drawString(font, count, 0, 0, paused ? 0xFF9A929F : 0xFFFFFFFF, true);
+            g.drawString(font, count, 0, 0, paused ? ThemePalette.PAUSED : 0xFFFFFFFF, true);
         } finally { g.pose().popPose(); }
     }
     /**
      * Presses left, where an item's count goes (a skill slot has none). Larger than item counts and outlined (2026-10-29,
-     * user: "这个次数好像不太明显"): about 0.8, at a whole number of screen pixels per font pixel (4 at GUI scale 5). Gold
+     *): about 0.8, at a whole number of screen pixels per font pixel (4 at GUI scale 5). Gold
      * while a recast window is open, white for stored charges that refill ("再施放金色、充能白色"), gray at 0.
      */
     private static void charges(GuiGraphics g, ActionState.Charges charges, boolean paused) {
         var font = Minecraft.getInstance().font;
         String text = Integer.toString(charges.current());
         float scale = GuiPixels.scale(.8F);
-        int color = paused || charges.current() == 0 ? 0xFF9A929F : charges.progress() < 0 ? 0xFFF2C86B : 0xFFFFFFFF;
+        int color = paused || charges.current() == 0 ? ThemePalette.PAUSED : charges.progress() < 0 ? ThemePalette.AGAIN : 0xFFFFFFFF;
         g.pose().pushPose();
         try {
             g.pose().translate(18 - font.width(text) * scale, 18 - 7 * scale, 200);
@@ -299,7 +303,7 @@ public final class HudRenderer {
         g.pose().pushPose(); g.pose().translate(0, 0, 200);
         try {
             g.fill(RenderType.guiOverlay(), 4, 15, 17, 17, 0xFF000000);
-            g.fill(RenderType.guiOverlay(), 4, 15, 4 + Math.round(13 * progress), 16, paused ? 0xFF6F6680 : 0xFFC5B9EC);
+            g.fill(RenderType.guiOverlay(), 4, 15, 4 + Math.round(13 * progress), 16, paused ? ThemePalette.PAUSED : ThemePalette.PENDING);
         } finally { g.pose().popPose(); }
     }
     /** Seconds left, centered over the icon: whole seconds, tenths under three. A dark outline keeps them legible on pale icons. */
@@ -308,25 +312,25 @@ public final class HudRenderer {
         String text = seconds < 3 ? String.format(java.util.Locale.ROOT, "%.1f", seconds) : String.valueOf((int)Math.ceil(seconds));
         int x = Math.round(10 - font.width(text) / 4F);
         g.pose().pushPose(); g.pose().translate(x, 8, 200); g.pose().scale(.5F, .5F, 1);
-        try { GuiPixels.outlined(g, font, text, 0, 0, paused ? 0xFF8D8494 : 0xFFFFFFFF, GuiPixels.OUTLINE); }
+        try { GuiPixels.outlined(g, font, text, 0, 0, paused ? ThemePalette.PAUSED : 0xFFFFFFFF, GuiPixels.OUTLINE); }
         finally { g.pose().popPose(); }
     }
     /**
-     * The combined count, a little larger than the other small labels (2026-10-28, user: "Σ合计可以稍微大一点点"): 0.6
+     * The combined count, a little larger than the other small labels (2026-10-28): 0.6
      * instead of 0.5, three screen pixels per font pixel at the user's GUI scale 5, so it stays even. Four digits fit.
      */
     private static void total(GuiGraphics g, int total, int color) {
         var font = Minecraft.getInstance().font;
         String text = "Σ" + total;
         float scale = .6F, x = 1.2F;
-        text = GuiPixels.ellipsize(font, text, (int)((19 - x) / scale) + 1);
+        text = TextLines.cut(text, (int)((19 - x) / scale) + 1, font::width);
         g.pose().pushPose(); g.pose().translate(x, 11.4F, 200); g.pose().scale(scale, scale, 1);
         g.drawString(font, text, 0, 0, color); g.pose().popPose();
     }
     /** Half-size text from (x, y) to the slot's right edge. */
     private static void small(GuiGraphics g, String text, int x, int y, int color) {
         var font = Minecraft.getInstance().font;
-        text = GuiPixels.ellipsize(font, text, (19 - x) * 2);
+        text = TextLines.cut(text, (19 - x) * 2, font::width);
         g.pose().pushPose(); g.pose().translate(x, y, 200); g.pose().scale(.5F, .5F, 1);
         g.drawString(font, text, 0, 0, color); g.pose().popPose();
     }

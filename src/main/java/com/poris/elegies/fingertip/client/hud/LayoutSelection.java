@@ -30,7 +30,7 @@ final class LayoutSelection {
         endX = Math.clamp(x, 0, width); endY = Math.clamp(y, 0, height);
         var b = bounds(); ids.clear(); ids.addAll(before);
         for (var slot : slots) {
-            int sx = slot.screenX(width), sy = slot.screenY(height);
+            int sx = slot.screenX(width, height), sy = slot.screenY(width, height);
             if (sx < b.right() && sx + 20 > b.left() && sy < b.bottom() && sy + 20 > b.top()) ids.add(slot.id);
         }
         expandLinked();

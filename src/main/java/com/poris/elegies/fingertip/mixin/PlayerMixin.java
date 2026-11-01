@@ -25,9 +25,9 @@ abstract class PlayerMixin {
         var hand = HandAccess.of(inventory);
         if (slot != EquipmentSlot.MAINHAND || hand.writable(inventory)) return;
         // Whatever Fingertip keeps out of the hand goes into the bag, or at the feet when the bag is full; it is never
-        // lost. An empty HUD hand has nowhere to
+        // lost (2026-10-29). An empty HUD hand has nowhere to
         // hold it: Sophisticated Backpacks puts a placed backpack into the hand and then removes the block, which
-        // deleted the backpack and everything in it (2026-10-28, user: "指尖空手默认都回背包"). A lost source, whose
+        // deleted the backpack and everything in it (2026-10-28). A lost source, whose
         // slot no longer holds the chosen stack, still refuses the write itself, which would overwrite what lies there
         // now: an auto-refill mod that fills that slot on NeoForge's use-finish event, before vanilla hands back the
         // empty bottle, kept the refill and lost the bottle until 0.1.2-beta.

@@ -19,11 +19,11 @@ import java.util.function.Consumer;
 
 public final class FingertipNetwork {
     /**
-     * Request operations. Protocol 2 (0.1.2-beta, 2026-10-29, user: "我们指尖的其他也能尽可能贴近原版吗") dropped CLEAR (vanilla's own
+     * Request operations. Protocol 2 (0.1.2-beta, 2026-10-29) dropped CLEAR (vanilla's own
      * hotbar slot packet ends a HUD choice), RECONCILE (the server checks the hand as it handles vanilla's inventory
      * packets) and folded CONTROL and REAL_SLOT into SETTINGS, sent once on joining and on each change, as vanilla
      * sends its client information. The numbers left keep their values. Protocol 3 (0.1.5-beta) adds SWAP: slots hud and
-     * source trade their bindings in one step.
+     * source trade their bindings in one step (2026-10-29).
      */
     public static final int SYNC = 0, BIND_ITEM = 1, SELECT = 2, BIND_ACTION = 4, UNBIND = 5, BIND_HOTBAR = 6, SETTINGS = 7, TOGGLE_SELECT = 9,
             SWAP = 10;
@@ -109,7 +109,7 @@ public final class FingertipNetwork {
         public Type<ActionInput> type() { return TYPE; }
     }
     public static void register(RegisterPayloadHandlersEvent event) {
-        // Counted again from 1 at 0.1-beta (2026-10-28, user: "以当前版本为基线 定成1吧"); raise it whenever a packet changes.
+        // Counted again from 1 at 0.1-beta (2026-10-28); raise it whenever a packet changes.
         // 2 at 0.1.2-beta: SETTINGS, BindingUpdate, predicted selections. 3 at 0.1.5-beta: SWAP.
         var registrar = event.registrar("3");
         registrar.playToServer(Request.TYPE, Request.CODEC, (request, context) -> {

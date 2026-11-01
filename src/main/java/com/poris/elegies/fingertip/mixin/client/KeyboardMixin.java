@@ -29,7 +29,7 @@ abstract class KeyboardMixin {
         var mc = Minecraft.getInstance();
         if (window != mc.getWindow().getWindow()) return;
         // Vanilla takes a screenshot or toggles fullscreen before any screen sees the key, so the key dialog never
-        // got F2 (2026-10-26, user: "F2录不了吗"). While it is recording, those two keys go to the dialog first.
+        // got F2 (2026-10-26). While it is recording, those two keys go to the dialog first.
         if (action == GLFW.GLFW_PRESS && mc.screen instanceof HudEditorScreen editor && editor.capturing()
                 && (mc.options.keyScreenshot.matches(code, scan) || mc.options.keyFullscreen.matches(code, scan))) {
             editor.keyPressed(code, scan, modifiers); ci.cancel(); return;

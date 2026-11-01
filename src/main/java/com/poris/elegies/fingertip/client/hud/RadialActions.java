@@ -113,7 +113,7 @@ public final class RadialActions {
             case "swap" -> mc.getConnection().send(new ServerboundPlayerActionPacket(
                     ServerboundPlayerActionPacket.Action.SWAP_ITEM_WITH_OFFHAND, BlockPos.ZERO, Direction.DOWN));
             case "drop" -> { if (mc.player.drop(false)) mc.player.swing(InteractionHand.MAIN_HAND); }
-            // The whole held stack, as Ctrl+Q (2026-10-28, user: "轮盘那边是不是应该加一个丢全部的功能"); the hand goes on
+            // The whole held stack, as Ctrl+Q (2026-10-28); the hand goes on
             // with the next stack like any Q that empties one.
             case "drop_stack" -> { if (mc.player.drop(true)) mc.player.swing(InteractionHand.MAIN_HAND); }
             case "perspective" -> {

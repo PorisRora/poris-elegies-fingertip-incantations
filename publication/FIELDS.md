@@ -18,7 +18,7 @@
 Summary:
 
 ```text
-A customizable RPG-style hotbar for inventory items, keybinds, and supported mod skills, with a radial menu and cooldown displays.
+A customizable RPG-style hotbar for inventory items, keybinds, and supported mod skills, with an action wheel and cooldown displays.
 ```
 
 ## MC百科

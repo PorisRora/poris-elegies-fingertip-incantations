@@ -85,4 +85,43 @@ class HudArrangementTest {
         assertNotEquals(beside, moved);
         assertTrue(HudArrangement.free(moved, blocked, 2, 640, 400));
     }
+
+    @Test void aSelectionLongerThanTheScreenNeverGoesFurtherOff() {
+        // A row laid out in a big window and selected whole in a small one: dragging or the arrow keys made Math.clamp
+        // throw (2026-11-01, reproduction). Along the long axis it moves only until its end on the screen meets the edge
+        // (1.1.5), and the end already past it never goes further; across it, it moves as usual.
+        var row = new ArrayList<HudArrangement.Point>();
+        for (int i = 0; i < 20; i++) row.add(new HudArrangement.Point(4 + 24 * i, 180));
+        var moved = HudArrangement.translate(row, -30, -10, 320, 240);
+        for (int i = 0; i < row.size(); i++) { assertEquals(row.get(i).x() - 4, moved.get(i).x()); assertEquals(170, moved.get(i).y()); }
+        assertEquals(row, HudArrangement.translate(row, 30, 0, 320, 240), "its right end is past the edge already");
+        var column = new ArrayList<HudArrangement.Point>();
+        for (int i = 0; i < 12; i++) column.add(new HudArrangement.Point(100, 4 + 24 * i));
+        var shifted = HudArrangement.translate(column, 10, 25, 320, 240);
+        for (int i = 0; i < column.size(); i++) { assertEquals(110, shifted.get(i).x()); assertEquals(column.get(i).y(), shifted.get(i).y()); }
+    }
+
+    @Test void aGroupPartlyPastAnEdgeMovesOnlyWhereItIsMoved() {
+        // 1.1.4 shows what does not fit as it is, and such a group moves as usual (1.1.5).
+        // Regression in 1.1.4: a short row past the left edge, moved only up, was also pulled 40 to the right.
+        var row = new ArrayList<HudArrangement.Point>();
+        for (int i = 0; i < 4; i++) row.add(new HudArrangement.Point(-40 + 24 * i, 174));
+        var up = HudArrangement.translate(row, 0, -1, 320, 240);
+        for (int i = 0; i < row.size(); i++) { assertEquals(row.get(i).x(), up.get(i).x(), "Up leaves x alone"); assertEquals(173, up.get(i).y()); }
+        assertEquals(-39, HudArrangement.translate(row, 1, 0, 320, 240).getFirst().x(), "Right brings it in by one, not 40");
+        assertEquals(row, HudArrangement.translate(row, -1, 0, 320, 240), "Left would take it further off");
+        // Past the top, Right leaves y alone and Down brings it in by one.
+        var column = new ArrayList<HudArrangement.Point>();
+        for (int i = 0; i < 4; i++) column.add(new HudArrangement.Point(100, -30 + 24 * i));
+        var right = HudArrangement.translate(column, 1, 0, 320, 240);
+        for (int i = 0; i < column.size(); i++) { assertEquals(101, right.get(i).x()); assertEquals(column.get(i).y(), right.get(i).y(), "Right leaves y alone"); }
+        assertEquals(-29, HudArrangement.translate(column, 0, 1, 320, 240).getFirst().y());
+    }
+
+    @Test void aRowNeedsRoomAcrossAsWellAsAlong() {
+        var two = List.of(new HudArrangement.Point(10, 10), new HudArrangement.Point(40, 10));
+        assertTrue(HudArrangement.line(two, 4, 320, 100, true).isEmpty(), "no room for a row below the toolbar band");
+        assertTrue(HudArrangement.line(two, 4, 20, 240, false).isEmpty(), "no room for a column between the side margins");
+        assertEquals(2, HudArrangement.line(two, 4, 320, 240, true).size());
+    }
 }

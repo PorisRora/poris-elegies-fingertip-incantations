@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  * Magnetic alignment. One delta moves the entire selection, so a native row never splits. A slot lines up with the column
- * or row of any other slot however far apart; sitting one gap
+ * or row of any other slot however far apart (2026-10-29); sitting one gap
  * beside a slot only snaps next to it. On a tie the nearer slot wins.
  */
 final class HudSnap {

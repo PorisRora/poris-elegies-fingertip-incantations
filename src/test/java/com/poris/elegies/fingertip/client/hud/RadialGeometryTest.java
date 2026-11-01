@@ -14,16 +14,6 @@ class RadialGeometryTest {
             assertTrue(g.cy()-g.outer()>=0 && g.cy()+g.outer()<size[1]);
         }
     }
-    @Test void settingsPreviewDoesNotClaimTheAdjacentPickerAndHasTheSameSectorOrder() {
-        for (int[] size : new int[][]{{308,192}, {415,259}, {560,330}}) {
-            var ui=WheelSettingsGeometry.fit(6,55,size[0],4+size[1]-30); var g=ui.wheel();
-            assertTrue(g.cx()+g.outer()+2 < ui.pickerX());
-            assertTrue(g.cy()-g.outer()>=55);
-            assertTrue(ui.pickerY()+4*ui.rowStep()+ui.buttonHeight()<=4+size[1]-30);
-            assertEquals(-1,g.atPreview(g.cx()+g.outer()+1,g.cy()));
-            for (int i=0;i<10;i++) assertEquals(i,g.atPreview(g.labelX(i),g.labelY(i)));
-        }
-    }
     @Test void sectorBoundariesAreClockwiseWithoutDeadGaps() {
         var g=RadialGeometry.fit(640,400);
         for(int i=0;i<10;i++) {

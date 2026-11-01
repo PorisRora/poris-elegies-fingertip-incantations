@@ -14,13 +14,13 @@ import java.util.List;
 /**
  * A normal Screen owns the cursor. A middle press opens it and it stays open: a left click on a sector runs it, and the
  * wheel closes, except after the two drops, which can be clicked again and again; a click in the centre, a right click,
- * Esc or another middle press closes it (2026-10-28, user: "轮盘弄成按压点击", "丢弃一个和整组不关闭轮盘可以继续点").
+ * Esc or another middle press closes it (2026-10-28, "丢弃一个和整组不关闭轮盘可以继续点").
  * Holding the click on drop-one keeps dropping, as holding Q does; drop-stack never repeats, and the other actions,
  * mod ones included, run once. Choosing on release picked a neighbour when the hand slipped, and pressing the scroll
  * wheel scrolled the hotbar.
  * Middle presses and releases go to the wheel while it is open, so they never reach pick block.
  * <p>
- * Drag, the default since 2026-10-29 (user: "滚轮配置里左边加个开关和拖拽吧 默认拖拽模式"; the switch is on the wheel setup
+ * Drag, the default since 2026-10-29 (; the switch is on the wheel setup
  * page): the wheel opens on the middle press and the middle release runs the action under the cursor once, drops
  * included ("拖拽的话全当触发式的"), or nothing in the centre. Left clicks still work as in the click wheel.
  */
@@ -88,8 +88,7 @@ public final class RadialMenuScreen extends Screen {
                                 : "drop".equals(actions.get(selected)) ? "poris_elegies_fingertip_incantations.wheel.repeat_hint"
                                 : "drop_stack".equals(actions.get(selected)) ? "poris_elegies_fingertip_incantations.wheel.repeat_stack_hint"
                                 : "poris_elegies_fingertip_incantations.wheel.execute_hint"));
-        String caption = GuiPixels.ellipsize(font, hint.getString(), width - 24);
-        g.drawCenteredString(font, caption, width / 2, Math.min(height - 12, geometry.cy() + geometry.outer() + 7), EditorTheme.TEXT);
+        TextFit.draw(g, font, hint, 12, Math.min(height - 12, geometry.cy() + geometry.outer() + 7), width - 24, EditorTheme.TEXT, true, TextFit.Align.CENTER);
     }
     /** The sector under the cursor, or -1; read from the mouse itself where no mouse event gives the position. */
     private int sectorUnderCursor() {

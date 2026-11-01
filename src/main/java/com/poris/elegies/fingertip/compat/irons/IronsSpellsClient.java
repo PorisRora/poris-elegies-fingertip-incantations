@@ -39,11 +39,11 @@ final class IronsSpellsClient {
         FingertipApi.registerProvider(Fingertip.id("irons_spells"), IronsSpellsClient::actions);
         // The group's line: what the spells come from, the spell book first, as Iron's lists them (0.1.5-beta).
         FingertipApi.registerSources(IronsSpells.MOD_ID, () -> List.copyOf(snapshot().sources().values()));
-        // With nothing that gives spells, the group says so (2026-10-30, user: "未装备魔法书").
+        // With nothing that gives spells, the group says so (2026-10-30).
         FingertipApi.registerEmptyHint(IronsSpells.MOD_ID, () -> snapshot().sources().isEmpty()
                 ? Component.translatable("poris_elegies_fingertip_incantations.irons.no_spell_book") : null);
         // Iron's spell bar, hidden while the HUD is up unless switched on: the HUD shows the spells, and the bar sat under
-        // the slots (2026-10-29, user: "而且不是施法轮盘！是这个UI", "只管术法栏"). Iron's spell wheel keys are no longer
+        // the slots (2026-10-29, "只管术法栏"). Iron's spell wheel keys are no longer
         // switched here (2026-10-28 to 0.1.4-beta): like any mod's keys, the mod whitelist gives them back to Iron's.
         FingertipApi.registerLayerSwitch(new FingertipApi.LayerSwitch(IronsSpells.MOD_ID,
                 Component.translatable("poris_elegies_fingertip_incantations.irons.spell_bar"),

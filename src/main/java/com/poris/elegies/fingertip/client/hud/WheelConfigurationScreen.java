@@ -3,7 +3,6 @@ package com.poris.elegies.fingertip.client.hud;
 import com.poris.elegies.fingertip.client.input.InputPreferences;
 import com.poris.elegies.fingertip.client.input.OptionalKeyPolicy;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import java.util.List;
@@ -31,11 +30,11 @@ public final class WheelConfigurationScreen extends Screen {
                 b -> { if (!input.takeE) { input.wheelEnabled = !input.wheelEnabled; OptionalKeyPolicy.changed(); rebuildWidgets(); } },
                 () -> input.wheelEnabled));
         toggle.active = !input.takeE;
-        toggle.setTooltip(Tooltip.create(Component.translatable(input.takeE ? "poris_elegies_fingertip_incantations.wheel_required_hint" : "poris_elegies_fingertip_incantations.wheel_setting_hint")));
+        toggle.setTooltip(EditorTheme.tip(Component.translatable(input.takeE ? "poris_elegies_fingertip_incantations.wheel_required_hint" : "poris_elegies_fingertip_incantations.wheel_setting_hint")));
         var mode = addRenderableWidget(EditorTheme.button(ui.modeX, ui.footerY, WheelConfigurationGeometry.MODE_WIDTH, WheelConfigurationGeometry.BUTTON_HEIGHT,
                 Component.translatable(input.wheelDrag ? "poris_elegies_fingertip_incantations.wheel.mode_drag" : "poris_elegies_fingertip_incantations.wheel.mode_click"),
                 b -> { input.wheelDrag = !input.wheelDrag; OptionalKeyPolicy.changed(); rebuildWidgets(); }));
-        mode.setTooltip(Tooltip.create(Component.translatable("poris_elegies_fingertip_incantations.wheel.mode_hint")));
+        mode.setTooltip(EditorTheme.tip(Component.translatable("poris_elegies_fingertip_incantations.wheel.mode_hint")));
         addRenderableWidget(EditorTheme.button(ui.doneX, ui.footerY, WheelConfigurationGeometry.DONE_WIDTH, WheelConfigurationGeometry.BUTTON_HEIGHT,
                 Component.translatable("gui.done"), b -> onClose()));
     }
@@ -68,10 +67,8 @@ public final class WheelConfigurationScreen extends Screen {
         Component center = shown >= 0 ? Component.translatable("poris_elegies_fingertip_incantations.wheel.slot", shown + 1)
                 : Component.translatable("poris_elegies_fingertip_incantations.wheel.choose_sector");
         g.drawCenteredString(font, center, ui.wheel.cx(), ui.wheel.cy() - 4, EditorTheme.accent());
-        if (height >= 270) {
-            Component hint = feedback != null ? feedback : Component.translatable("poris_elegies_fingertip_incantations.wheel.configure_hint");
-            g.drawCenteredString(font, font.substrByWidth(hint, width - 32).getString(), width / 2, 29, EditorTheme.MUTED);
-        }
+        Component hint = feedback != null ? feedback : Component.translatable("poris_elegies_fingertip_incantations.wheel.configure_hint");
+        TextFit.draw(g, font, hint, 16, 29, width - 32, EditorTheme.MUTED, true, TextFit.Align.CENTER);
         // The hovered sector's text, at the mouse (the sector buttons carry no widget tooltip, see WheelSectorButton).
         if (hover >= 0) {
             var lines = new java.util.ArrayList<Component>(List.of(TooltipStyle.title(sectorLabel(hover))));

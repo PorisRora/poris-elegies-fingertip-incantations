@@ -82,7 +82,7 @@ public final class ClientSession {
         // The vanilla slot number stays vanilla's, as in vanilla: the client chooses it and vanilla's slot packets carry
         // it. Until 0.1.2-beta's review a reply set it too, and with no CLEAR left to make older replies stale, one
         // arriving after a vanilla choice set the number back while the server kept the new one; with no change of the
-        // hand there, nothing corrected it.
+        // hand there, nothing corrected it (review, 2026-10-29).
         // Hand acknowledgements never write inventory. Vanilla menu packets own stack synchronization,
         // including creative inventory prediction and changes made while a selection is in flight.
         HandAccess.of(inventory).receive(inventory, packet.controlled(), packet.address(), packet.lost());
@@ -191,7 +191,7 @@ public final class ClientSession {
             request(BIND_ITEM, hud, -1, "", InventorySources.read(player, source), source);
     }
     public static void bindAction(int hud, String id) { if (!nativeBindingLocked(hud)) request(BIND_ACTION, hud, -1, id, ItemStack.EMPTY); }
-    /** Two slots trade contents in one step; their keys stay. */
+    /** Two slots trade contents in one step; their keys stay (2026-10-29). */
     public static void swap(int hud, int other) {
         if (hud == other || nativeBindingLocked(hud) || nativeBindingLocked(other)) return;
         request(SWAP, hud, other, "", ItemStack.EMPTY, null, BindingFeedback.Operation.SWAP);
@@ -206,8 +206,8 @@ public final class ClientSession {
     }
     /**
      * A vanilla hotbar slot is chosen (number key, scroll wheel, pick block), or Fingertip lets go of the hand. Only
-     * vanilla's own slot packet goes out, and the server ends a HUD choice when it arrives. While a HUD slot holds the hand, vanilla's number underneath stays where it was, so the
-
+     * vanilla's own slot packet goes out, and the server ends a HUD choice when it arrives (2026-10-29, user: "指尖格就发
+     * 指尖包 原版格子就发原版包"). While a HUD slot holds the hand, vanilla's number underneath stays where it was, so the
      * same number again would change nothing and vanilla would not send it: then it is sent here. With the HUD taking
      * over the hotbar the server ignores it; the settings message that follows a change of mode does the rest.
      */

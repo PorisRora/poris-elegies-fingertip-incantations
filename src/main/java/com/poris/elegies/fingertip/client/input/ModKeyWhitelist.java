@@ -87,7 +87,7 @@ public final class ModKeyWhitelist {
     }
     /**
      * Enabling a mod whose key a HUD slot uses no longer refuses: that slot is paused, keeps its key and resumes when
-     * the mod leaves the whitelist (2026-10-26, user: "白名单开启的时候应该是禁用绑定的按键不是直接拒绝吧").
+     * the mod leaves the whitelist (2026-10-26).
      */
     public static Component set(String owner, boolean enabled) {
         if (!validId(owner)) return Component.translatable("poris_elegies_fingertip_incantations.whitelist_invalid");

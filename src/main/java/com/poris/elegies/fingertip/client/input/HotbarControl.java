@@ -28,7 +28,7 @@ public final class HotbarControl {
     }
     /**
      * Uses the player's actual hotbar bindings, including remapped number keys. The creative save/load hotbar keys
-     * (C/X) are not kept: Fingertip takes them in mixed mode too (2026-10-26, user: "X C直接接管").
+     * (C/X) are not kept: Fingertip takes them in mixed mode too (2026-10-26).
      */
     public static boolean preserves(KeyMapping mapping) {
         if (HudLayout.INSTANCE.takeOverHotbar || OptionalKeyPolicy.claimed(mapping.getKey()) || OptionalKeyPolicy.wheelKey(mapping.getKey())) return false;

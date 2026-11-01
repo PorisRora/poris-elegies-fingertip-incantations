@@ -6,9 +6,21 @@
 
 **Minecraft 1.21.1 · NeoForge · Client and server**
 
-Fingertip Incantations adds a customizable RPG-style hotbar and a configurable radial menu. Bind an item or action to a visible slot, choose its shortcut, and place it where it feels comfortable.
+Fingertip Incantations adds a customizable RPG-style hotbar and a configurable action wheel. Bind an item or action to a visible slot, choose its shortcut, and place it where it feels comfortable.
 
 Items stay in your existing inventory. Pressing a sword's slot equips that sword without moving it into a different storage slot; attack and use controls still work as usual.
+
+## What's new in 1.2.1
+
+**Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.1.x still load; 1.0.0 cannot read layouts saved by 1.2.1.
+
+- More stable slot placement across window sizes, with screen anchors and clear grouping rules.
+- A group dropped within 8 GUI pixels of one screen edge follows that edge. Dragging directly away from the edge restores anchoring by screen region; arrow-key nudges keep their existing rules.
+- Arrow-key nudges keep groups separate; resizing or pressing Esc cancels an unfinished slot drag.
+- Consistent text fitting, revised English and Chinese labels, and shared status colors across themes.
+- A larger editor where space allows, with a compact layout for smaller GUI sizes.
+
+See the [changelog](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/CHANGELOG.md) for details. Screenshots below illustrate the core controls; some labels and panel sizes differ in 1.2.1.
 
 ## Build your own layout
 
@@ -21,9 +33,9 @@ Drag items and actions into slots, swap bindings by dragging one onto another, o
 
 The **Classic**, **Starlight**, and **Poris** themes provide different looks with the same controls. HUD visibility and optional durability percentages can be configured separately.
 
-| Slot configuration | Display settings |
+| Slots | Display |
 | --- | --- |
-| ![Add, delete, and arrange slots, adjust spacing, and enable snapping](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/layout-editor.webp) | ![Choose a theme, slot visibility, mod icons, and durability percentages](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/display-settings.webp) |
+| ![Add, delete, and arrange slots, adjust spacing, and enable snapping](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/layout-editor.webp) | ![Choose a theme, slot visibility, mod action slots, and durability percentages](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/display-settings.webp) |
 
 ## Equipment and supplies behave differently
 
@@ -35,11 +47,11 @@ Press a bound item key to equip it; press that same slot again to put it away. S
 
 ## Keep common actions within reach
 
-The radial menu can open your inventory, switch perspective, swap hands, drop items, open the editor, and run other assigned actions.
+The action wheel can open your inventory, switch perspective, swap hands, drop items, open the editor, and run other assigned actions.
 
 By default, **hold the middle mouse button, point at an action, and release**. Click-based operation is also available.
 
-| Mod keybinds | Wheel Setup |
+| Mod keybinds | Wheel setup |
 | --- | --- |
 | ![Bind a mod's keybind to a visible slot](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/mod-keybinds.webp) | ![Choose a wheel sector and assign a vanilla or mod action](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/radial-setup.webp) |
 
@@ -57,7 +69,7 @@ Hovering can display the spell's own information, including damage, radius, or d
 
 ![The Skills page groups supported spells by mod; a skill slot shows its readiness, level, resource state, and spell details](https://raw.githubusercontent.com/PorisRora/poris-elegies-fingertip-incantations/v1.0.0/docs/images/en/skill-tooltip.webp)
 
-Other mods can add skill providers and inventory-source integrations through the [public API](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/docs/INTEGRATION.md).
+Other mods can add skill providers and inventory-source integrations through the [public API](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/docs/INTEGRATION.md).
 
 ## Getting started
 
@@ -65,7 +77,7 @@ Other mods can add skill providers and inventory-source integrations through the
 2. Open your inventory and click the Fingertip logo near the upper-right corner.
 3. Bind items or actions, assign shortcuts, and arrange the layout.
 4. Open Key takeover → Mod whitelist and turn on the mods whose original shortcuts you want to keep.
-5. Return to the world and use the slot keys or the radial menu.
+5. Return to the world and use the slot keys or the action wheel.
 
 ## Requirements and compatibility
 
@@ -81,13 +93,13 @@ Item shortcuts use the vanilla player inventory. Third-party backpack contents r
 
 ## Guides and feedback
 
-- [User guide](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/docs/USER_GUIDE.md)
+- [User guide](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/docs/USER_GUIDE.md)
 - [Source code](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
 - [Report a bug or suggest a feature](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
-- [中文介绍](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/README.zh-CN.md)
+- [中文介绍](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/README.zh-CN.md)
 
 For bug reports, include your mod and NeoForge versions, single-player or multiplayer environment, relevant mods, and steps to reproduce the issue.
 
 ## License
 
-Source code, build scripts, configuration data, translations, and technical documentation use the [**MIT License**](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/LICENSE). The logo and artwork are **All Rights Reserved** under a [separate asset statement](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.0.0/ASSET_LICENSE.md). Unmodified official releases may be included in modpacks under that statement.
+Source code, build scripts, configuration data, translations, and technical documentation use the [**MIT License**](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/LICENSE). The logo and artwork are **All Rights Reserved** under a [separate asset statement](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/ASSET_LICENSE.md). Unmodified official releases may be included in modpacks under that statement.

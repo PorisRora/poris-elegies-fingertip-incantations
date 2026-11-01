@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * Each theme's own images (UiSkin, ButtonArt, PanelArt, WheelArt, the key glyphs). Switching themes frees the other
  * themes' images, so one theme's set stays in video memory rather than all three until resources reload (2026-10-29,
- * user: "但切换主题后全部27张图会占到约150MB直到重载资源 这个呢"); switching back loads them again when first drawn.
+ *); switching back loads them again when first drawn.
  * The O glyph image, the function icons and the logo entry serve all three and stay.
  */
 final class ThemeTextures {

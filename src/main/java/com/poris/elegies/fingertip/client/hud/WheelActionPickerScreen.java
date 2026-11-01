@@ -40,6 +40,7 @@ public final class WheelActionPickerScreen extends Screen {
     @Override protected void init() {
         w = Math.min(620, width - 24); h = Math.min(344, height - 16);
         x = (width - w) / 2; y = (height - h) / 2;
+        // 36 high from 270 high up, 30 below (1.1.6, with the editor's normal size; 1.1.5 had 30 everywhere).
         cardHeight = height < 270 ? 30 : 36; rowPitch = cardHeight + CARD_GAP;
         rowY = y + 79; capacity = Math.max(1, (h - 112) / rowPitch);
         columns = w >= 480 ? 3 : 2;
@@ -124,8 +125,9 @@ public final class WheelActionPickerScreen extends Screen {
                 int inset = EditorTheme.buttonFace(g, getX(), getY(), getWidth(), getHeight(), active, hover, selected);
                 ActionIcons.draw(g, choice.sprite(), choice.icon(), getX() + inset + 2, getY() + (getHeight() - 16) / 2);
                 int textWidth = getWidth() - inset * 2 - 26;
-                var lines = font.split(choice.label(), textWidth);
-                int lineCount = Math.min(2, lines.size());
+                // Two lines at most, the second ending with "…" when the name is longer (指尖排字法); the hover text has it whole.
+                var lines = TextLines.wrap(choice.label().getString(), textWidth, 2, font::width).lines();
+                int lineCount = lines.size();
                 int textY = getY() + (getHeight() - lineCount * font.lineHeight) / 2 + 1;
                 for (int line = 0; line < lineCount; line++)
                     g.drawString(font, lines.get(line), getX() + inset + 24, textY + line * font.lineHeight,
@@ -151,7 +153,8 @@ public final class WheelActionPickerScreen extends Screen {
     @Override public void render(GuiGraphics g, int mx, int my, float partial) {
         super.render(g, mx, my, partial);
         g.drawString(font, title, x + 14, y + 12, EditorTheme.accent(), false);
-        if (visibleRows.isEmpty()) g.drawWordWrap(font, Component.translatable("poris_elegies_fingertip_incantations.no_matches"), x + 16, rowY + 6, w - 32, EditorTheme.MUTED);
+        if (visibleRows.isEmpty()) TextFit.drawLines(g, font, Component.translatable("poris_elegies_fingertip_incantations.no_matches"), x + 16, rowY + 6,
+                w - 32, Math.max(1, TextFit.linesIn(font, capacity * rowPitch - 6, 9)), 9, EditorTheme.MUTED, false);
         int pages = pageCount();
         g.drawCenteredString(font, (page + 1) + "/" + pages, x + w / 2, y + h - 21, EditorTheme.MUTED);
     }

@@ -11,11 +11,12 @@ final class EditorDrag {
     ItemStack icon = ItemStack.EMPTY;
     ActionIcons.Icon sprite;
     HudLayout.Slot slot;
-    boolean moved, layoutChanged, canvas;
+    boolean moved, canvas;
     Integer guideX, guideY;
     private double originX, originY;
     private List<HudLayout.Slot> moving = List.of();
-    private List<HudArrangement.Point> startPositions = List.of();
+    private List<HudArrangement.Point> startPositions = List.of(), next = List.of();
+    private HudLayout layout;
 
     boolean active() { return inventory >= 0 || fromHud >= 0 || action != null || slot != null; }
     void content(int id, ItemStack stack, ActionIcons.Icon sprite, double x, double y) {
@@ -32,7 +33,7 @@ final class EditorDrag {
     void layout(HudLayout.Slot target, List<HudLayout.Slot> targets, double x, double y, int width, int height) {
         clear(); slot = target;
         originX = x; originY = y; moving = List.copyOf(targets);
-        startPositions = HudArrangement.positions(moving, width, height);
+        startPositions = next = HudArrangement.positions(moving, width, height);
     }
 
     void move(double x, double y, int width, int height, HudLayout layout) {
@@ -48,8 +49,9 @@ final class EditorDrag {
                 var snap = HudSnap.align(next, fixed, layout.gap, width, height);
                 next = snap.points(); guideX = snap.guideX(); guideY = snap.guideY();
             }
-            layoutChanged |= !next.equals(startPositions);
-            HudArrangement.apply(moving, next, width, height);
+            // Shown where it is held; stored once, when the drag ends (finish), so a group it only passes by keeps its point.
+            this.layout = layout; this.next = next;
+            layout.preview(moving, next);
         } else if (inventory >= 0 || fromHud >= 0 || action != null) {
             moved |= (x - originX) * (x - originX) + (y - originY) * (y - originY) >= 9;
         }
@@ -59,8 +61,17 @@ final class EditorDrag {
         return !current.isEmpty() && ItemStack.isSameItemSameComponents(icon, current);
     }
 
+    /** Ends the drag; a layout drag stores the frames where they were let go, as put down (指尖定位法), and saves. */
+    void finish(int width, int height) {
+        // Dragged back to where it started: nothing to store, however far it went on the way.
+        if (layout != null && !next.equals(startPositions)) { layout.moveTo(moving, next, HudPlacement.Edit.DROP, width, height); layout.save(); }
+        clear();
+    }
+
     void clear() {
-        inventory = fromHud = -1; action = null; icon = ItemStack.EMPTY; sprite = null; slot = null; moved = false; layoutChanged = false; canvas = false;
+        if (layout != null) layout.clearPreview();
+        layout = null; next = List.of();
+        inventory = fromHud = -1; action = null; icon = ItemStack.EMPTY; sprite = null; slot = null; moved = false; canvas = false;
         moving = List.of(); startPositions = List.of();
         guideX = guideY = null;
     }

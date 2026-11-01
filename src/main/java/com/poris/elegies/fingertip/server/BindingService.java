@@ -120,7 +120,7 @@ public final class BindingService {
         }
     }
     /**
-     * Equipment follows what replaces it in the hand.
+     * Equipment follows what replaces it in the hand (2026-10-27, user; revised the same day after review).
      * Touhou Little Maid swaps a held soul charm for a new empty one; an armor stand trades the held chestplate for
      * its own. The HUD slot is rebound to the item that ends up in the hand, which keeps or receives its own
      * identity; the old item keeps its identity, so none is ever copied. Copying it duplicated the identity when the
@@ -174,7 +174,7 @@ public final class BindingService {
     /**
      * The held-item choice ends: a Fingertip empty hand, or the vanilla selected slot again. An F that left the item in
      * the off hand is forgotten only where the caller says so, as before (exhaustion, put-away, a change of mode).
-     * Rule (2026-10-31, user: "指尖格丢失物品或者出什么问题一律回空手", "回指尖空手"): whatever ends it through the slot or
+     * Rule (2026-10-31, "回指尖空手"): whatever ends it through the slot or
      * its item leaves a Fingertip empty hand in both modes; only vanilla's own choices and a change of mode give the hand
      * back to vanilla.
      */
@@ -374,7 +374,7 @@ public final class BindingService {
         }
         if (changed) bindingChanged(player, state, request.operation(), hud, request.source());
         // A choice the client predicted, and the server agrees with, needs no answer, as vanilla does not answer a
-        // hotbar slot change. The change counts as sent, or the end of the tick
+        // hotbar slot change (2026-10-29). The change counts as sent, or the end of the tick
         // would send it after all.
         if (message.isEmpty() && !changed && predictedHand(player, state, request)) {
             InventorySources.synchronize(player);
@@ -475,7 +475,7 @@ public final class BindingService {
         if (operation != SWAP && state.selectedHud == hud) endChoice(player, state, true);
         save(player, state);
         // Binding sends that one slot before the reply, whose message names what the slot now holds. Clearing is
-        // collected over the tick: removing several slots at once sends the table once (user: "批量操作发整份吧").
+        // collected over the tick: removing several slots at once sends the table once ().
         if (operation == UNBIND) state.cleared.set(hud);
         else sendBinding(player, hud);
         if (operation == SWAP) sendBinding(player, other);
@@ -508,8 +508,8 @@ public final class BindingService {
     }
     /**
      * A portal keeps this player and its session: tell the client what the hand holds at once, in the same batch as the
-     * new dimension and inventory, as vanilla sends the selected hotbar slot. The client no longer asks after a portal or a respawn.
-
+     * new dimension and inventory, as vanilla sends the selected hotbar slot (2026-10-29, user: "这样等于就是原版了 损耗也会
+     * 变少"). The client no longer asks after a portal or a respawn.
      */
     @SubscribeEvent public static void changedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (event.getEntity() instanceof ServerPlayer player) sendHand(player, "");

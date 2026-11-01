@@ -15,7 +15,6 @@ import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
-import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.neoforged.neoforge.client.settings.KeyModifier;
@@ -73,28 +72,42 @@ public final class HudEditorScreen extends Screen {
     private Button button(String key, int x, int y, int w, Button.OnPress press) {
         return addRenderableWidget(EditorTheme.button(x, y, w, 18, tr(key), press));
     }
-    private Button toolbarButton(int index, String key, ActionIcons.Sprite icon, Button.OnPress press) {
+    /** The four tool buttons under the title, by index. */
+    private static final String[] TOOLS = {"poris_elegies_fingertip_incantations.slot_configuration",
+            "poris_elegies_fingertip_incantations.settings_display", "poris_elegies_fingertip_incantations.settings_keys",
+            "poris_elegies_fingertip_incantations.settings_wheel"};
+    /** The star seal before the title. */
+    private static final int SEAL_ROOM = ActionIcons.SMALL + EditorTheme.ICON_GAP;
+    private Button toolbarButton(int index, ActionIcons.Sprite icon, Button.OnPress press) {
         return addRenderableWidget(EditorTheme.button(ui.toolbarX(index), ui.toolbarY,
-                ui.toolbarWidth(), ui.toolbarButtonHeight, tr(key), icon, press));
+                ui.toolbarWidth(), ui.toolbarButtonHeight, tr(TOOLS[index]), icon, press));
+    }
+    /** Whether the title and the four tool labels show whole in {@code g}, the normal layout being tried. */
+    private boolean textsFit(EditorGeometry g) {
+        if (SEAL_ROOM + font.width(title) > g.titleWidth()) return false;
+        for (var key : TOOLS) if (!EditorTheme.showsWhole(font, tr(key), g.toolbarWidth(), g.toolbarButtonHeight)) return false;
+        return true;
     }
     @Override protected void init() {
-        cancelDrag(); capture = false;
-        ui = new EditorGeometry(width, height, layout().activeSlots().size());
+        // Also run on a resize, with the new size already set: a drag still held was measured on the old one, so it is
+        // dropped, not stored (Regression in 1.1.5: finishing it here stored the old place against the new size).
+        dropDrag(); capture = false;
+        ui = EditorGeometry.of(width, height, this::textsFit);
         selection.linked(HudLayout.INSTANCE.takeOverHotbar ? java.util.Set.of()
                 : java.util.stream.IntStream.range(0, 9).boxed().collect(java.util.stream.Collectors.toSet()));
         ensureSelection();
         toolbar = positioning ? new LayoutToolbarGeometry(width) : null;
         if (canvasOnly) {
             var p = canvasRestorePosition();
-            button("poris_elegies_fingertip_incantations.canvas_return", p[0], p[1], 100, b -> toggleCanvas())
-                    .setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.canvas_hint")));
+            // No hover text: the label already says Tab and the editor is already hidden (2026-11-01).
+            button("poris_elegies_fingertip_incantations.canvas_return", p[0], p[1], 100, b -> toggleCanvas());
             return;
         }
         if (positioning) {
             button("gui.done", toolbar.doneX(), toolbar.y + 9, LayoutToolbarGeometry.DONE_WIDTH, b -> finishPositioning());
             addButton = button("poris_elegies_fingertip_incantations.add_short", toolbar.groupX(0), toolbar.buttonY(0), 44, b -> addSlot());
             button("poris_elegies_fingertip_incantations.select_all", toolbar.groupX(0) + 48, toolbar.buttonY(0), 44,
-                    b -> { cancelDrag(); selection.all(layout().layoutSlots()); });
+                    b -> { finishDrag(); selection.all(layout().layoutSlots()); });
             button("poris_elegies_fingertip_incantations.horizontal", toolbar.groupX(1), toolbar.buttonY(1), 40, b -> arrangeLine(true));
             button("poris_elegies_fingertip_incantations.vertical", toolbar.groupX(1) + 44, toolbar.buttonY(1), 40, b -> arrangeLine(false));
             var spacing = addRenderableWidget(EditorTheme.button(toolbar.groupX(2), toolbar.buttonY(2), 48, 18,
@@ -102,45 +115,41 @@ public final class HudEditorScreen extends Screen {
                         layout().gap = (layout().gap + 2) % 10;
                         b.setMessage(tr("poris_elegies_fingertip_incantations.spacing", layout().gap)); layout().save();
                     }));
-            spacing.setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.spacing_hint")));
+            spacing.setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.spacing_hint")));
             button("poris_elegies_fingertip_incantations.arrange", toolbar.groupX(1) + 88, toolbar.buttonY(1), 40, b -> {
-                cancelDrag();
+                finishDrag();
                 var slots = arrangeable();
                 if (slots.isEmpty()) { BindingFeedback.hint(-1, "poris_elegies_fingertip_incantations.select_first"); return; }
                 applyArrangement(slots, HudArrangement.arrange(HudArrangement.positions(slots, width, height),
                         layout().gap, width, height));
-            }).setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.arrange_hint")));
+            }).setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.arrange_hint")));
             button("poris_elegies_fingertip_incantations.canvas_short", toolbar.groupX(3), toolbar.buttonY(3), 48, b -> toggleCanvas())
-                    .setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.canvas_hint")));
+                    .setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.canvas_hint")));
             addRenderableWidget(EditorTheme.button(toolbar.groupX(2) + 52,
                     toolbar.buttonY(2), 80, 18, tr(layout().snapToSlots ? "poris_elegies_fingertip_incantations.snap_on" : "poris_elegies_fingertip_incantations.snap_off"), b -> {
-                        cancelDrag();
+                        finishDrag();
                         layout().snapToSlots = !layout().snapToSlots; layout().save();
                         b.setMessage(tr(layout().snapToSlots ? "poris_elegies_fingertip_incantations.snap_on" : "poris_elegies_fingertip_incantations.snap_off"));
-                    }, () -> layout().snapToSlots)).setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.snap_hint")));
+                    }, () -> layout().snapToSlots)).setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.snap_hint")));
             removeSelectionButton = button("poris_elegies_fingertip_incantations.remove_selection",
                     toolbar.groupX(3) + 52, toolbar.buttonY(3), 64,
                     b -> removeSlots(selection.slots(layout().activeSlots())));
-            removeSelectionButton.setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.remove_selection_hint")));
+            removeSelectionButton.setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.remove_selection_hint")));
             updateControls();
             return;
         }
         var enableLabel = tr(HudLayout.INSTANCE.enabled ? "poris_elegies_fingertip_incantations.enabled_short" : "poris_elegies_fingertip_incantations.disabled_short");
         addRenderableWidget(EditorTheme.button(ui.enableX(), ui.y + ui.headerInset, ui.enableWidth(), ui.toolbarButtonHeight,
                 enableLabel, b -> { HotbarControl.setEnabled(!HudLayout.INSTANCE.enabled); rebuildWidgets(); },
-                () -> HudLayout.INSTANCE.enabled)).setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.enable_hint")));
+                () -> HudLayout.INSTANCE.enabled)).setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.enable_hint")));
         addRenderableWidget(HotbarModeButton.create(ui.modeX(), ui.y + ui.headerInset,
                 ui.modeWidth(), ui.toolbarButtonHeight, this::rebuildWidgets));
         addRenderableWidget(EditorTheme.button(ui.doneX(), ui.y + ui.headerInset,
                 ui.doneWidth(), ui.toolbarButtonHeight, tr("gui.done"), b -> onClose()));
-        positionButton = toolbarButton(0, ui.compact ? "poris_elegies_fingertip_incantations.slot_configuration_short" : "poris_elegies_fingertip_incantations.slot_configuration",
-                ActionIcons.Sprite.SLOTS, b -> setPositioning(true));
-        toolbarButton(1, "poris_elegies_fingertip_incantations.settings_display", ActionIcons.Sprite.DISPLAY,
-                b -> minecraft.setScreen(new DisplaySettingsScreen(this)));
-        toolbarButton(2, "poris_elegies_fingertip_incantations.settings_keys", ActionIcons.Sprite.KEYS,
-                b -> minecraft.setScreen(new InputSettingsScreen(this)));
-        toolbarButton(3, "poris_elegies_fingertip_incantations.settings_wheel", ActionIcons.Sprite.WHEEL,
-                b -> minecraft.setScreen(new WheelConfigurationScreen(this))).setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.wheel.configure_hint")));
+        positionButton = toolbarButton(0, ActionIcons.Sprite.SLOTS, b -> setPositioning(true));
+        toolbarButton(1, ActionIcons.Sprite.DISPLAY, b -> minecraft.setScreen(new DisplaySettingsScreen(this)));
+        toolbarButton(2, ActionIcons.Sprite.KEYS, b -> minecraft.setScreen(new InputSettingsScreen(this)));
+        toolbarButton(3, ActionIcons.Sprite.WHEEL, b -> minecraft.setScreen(new WheelConfigurationScreen(this))).setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.wheel.configure_hint")));
         skillButton = null;
         var catalog = ActionCatalog.entries();   // built once per rebuild and handed to the list below
         hasSkills = catalog.stream().anyMatch(e -> e.catalog().kind() == com.poris.elegies.fingertip.api.ActionCatalogInfo.Kind.SKILL);
@@ -148,7 +157,7 @@ public final class HudEditorScreen extends Screen {
         int tabCount = hasSkills ? 4 : 3;
         int tabWidth = (ui.rightWidth - (tabCount - 1) * 3) / tabCount;
         addRenderableWidget(EditorTheme.button(ui.rightX, ui.tabsY, tabWidth, 18, tr("poris_elegies_fingertip_incantations.items_short"),
-                b -> { actions = false; capture = false; cancelDrag(); }, () -> !actions));
+                b -> { actions = false; capture = false; finishDrag(); }, () -> !actions));
         addRenderableWidget(EditorTheme.button(ui.rightX + tabWidth + 3, ui.tabsY, tabWidth, 18, tr("poris_elegies_fingertip_incantations.vanilla_short"),
                 b -> { nativeActions = true; selectActionPage(false); }, () -> actions && nativeActions && !skills));
         addRenderableWidget(EditorTheme.button(ui.rightX + (tabWidth + 3) * 2, ui.tabsY, tabWidth, 18, tr("poris_elegies_fingertip_incantations.mods_short"),
@@ -163,10 +172,10 @@ public final class HudEditorScreen extends Screen {
     private void setPositioning(boolean enabled) {
         if (!enabled) { finishPositioning(); return; }
         selection.single(selected);
-        positioning = true; capture = false; cancelDrag(); rebuildWidgets();
+        positioning = true; capture = false; finishDrag(); rebuildWidgets();
     }
     private void finishPositioning() {
-        cancelDrag(); positioning = false; capture = false; canvasOnly = false;
+        finishDrag(); positioning = false; capture = false; canvasOnly = false;
         layout().save(); ensureSelection();
         if (layoutOnly) minecraft.setScreen(parent); else rebuildWidgets();
     }
@@ -186,41 +195,45 @@ public final class HudEditorScreen extends Screen {
         KeyMapping.resetMapping(); ShortcutConfiguration.save();
         return slot;
     }
-    private void toggleCanvas() { cancelDrag(); canvasOnly = !canvasOnly; rebuildWidgets(); }
+    private void toggleCanvas() { finishDrag(); canvasOnly = !canvasOnly; rebuildWidgets(); }
+    /** The canvas view's way back: top right, else top left, a row lower each time, clear of every frame (指尖定位法). */
     private int[] canvasRestorePosition() {
-        for (int y = 6; y < height - 24; y += 24) for (int x : new int[]{width - 106, 6}) {
-            final int px = x, py = y;
-            if (layout().activeSlots().stream().noneMatch(s -> s.screenX(width) < px + 100 && s.screenX(width) + 20 > px
-                    && s.screenY(height) < py + 18 && s.screenY(height) + 20 > py)) return new int[]{x, y};
-        }
-        return new int[]{width - 106, 6};
+        var candidates = new java.util.ArrayList<HudPlacement.Rect>();
+        for (int y = 6; y < height - 24; y += 24) for (int x : new int[]{width - 106, 6}) candidates.add(new HudPlacement.Rect(x, y, 100, 18));
+        var spot = HudPlacement.bestSpot(candidates, layout().frameRects(width, height), 0, width, height);
+        return spot == null ? new int[]{width - 106, 6} : new int[]{spot.x(), spot.y()};
     }
     private void selectActionPage(boolean skills) {
-        cancelDrag(); capture = false; actions = true;
+        finishDrag(); capture = false; actions = true;
         this.skills = skills; rebuildWidgets();
     }
     @Override public void tick() {
         if (++age % 20 == 0 && !positioning && !canvasOnly && !drag.active() && actionList != null) actionList.refresh();
         // MouseHandler.isLeftPressed only updates when no Screen is open: it cancels every GUI drag.
         // Poll GLFW's actual button state to keep held drags alive and recover consumed mouse-up events.
-        if (!minecraft.isWindowActive() || !primaryButtonDown.getAsBoolean()) cancelDrag();
+        if (!minecraft.isWindowActive() || !primaryButtonDown.getAsBoolean()) finishDrag();
     }
-    private void cancelDrag() {
-        if (drag.layoutChanged) layout().save();
+    /** Ends a drag as let go: a frame drag stores where the frames are (指尖定位法). */
+    private void finishDrag() {
+        drag.finish(width, height); selection.cancel();
+        if (actionList != null) actionList.endScroll();
+    }
+    /** Ends a drag without storing it: Esc, or a resize, the drag having been measured on the old size. */
+    private void dropDrag() {
         drag.clear(); selection.cancel();
         if (actionList != null) actionList.endScroll();
     }
     /**
      * The binding page marks its slot with the same outline as the layout page; slots keep their gameplay frames, so the
-     * one in hand stays lit (2026-10-31, user: "编辑器做好自己分内的事情就好了"). None after a click on blank canvas.
+     * one in hand stays lit (2026-10-31). None after a click on blank canvas.
      */
     private void outlineSelected(GuiGraphics g) {
         g.pose().pushPose(); g.pose().translate(0, 0, 300);
         for (var slot : layout().activeSlots())
-            if (slot.id == selected) SelectionFrame.slot(g, slot.screenX(width) - 1, slot.screenY(height) - 1, 22, 22);
+            if (slot.id == selected) SelectionFrame.slot(g, slot.screenX(width, height) - 1, slot.screenY(width, height) - 1, 22, 22);
         g.pose().popPose();
     }
-    /** Blank canvas leaves the slot on both pages (2026-10-31, user: "鼠标点外面 指尖格的失焦选中"). */
+    /** Blank canvas leaves the slot on both pages (2026-10-31). */
     private void deselect() { selected = -1; selection.single(-1); }
     private void ensureSelection() {
         if (selected >= 0 && !layout().visible(selected))
@@ -254,7 +267,7 @@ public final class HudEditorScreen extends Screen {
         if (canvasOnly) return;
         if (positioning) {
             // While the key box is open the toolbar goes dark, all but 删除: deleting the clicked slot is the one other thing
-            // to do with it (2026-10-31, user: "点击以后上面全暗 删除所选亮", then "删除所选就可以改叫删除了"; the Delete key
+            // to do with it (2026-10-31, then "删除所选就可以改叫删除了"; the Delete key
             // stays a key a slot can take).
             for (var child : children())
                 if (child instanceof net.minecraft.client.gui.components.AbstractWidget widget && widget != removeSelectionButton) widget.active = !capture;
@@ -310,30 +323,29 @@ public final class HudEditorScreen extends Screen {
         if (drag.canvas) {
             if (drag.fromHud >= 0) {
                 // A slot's content: onto another slot they trade places, onto blank canvas it is cleared (2026-10-29,
-                // user: "这个做个换位置？ 拖到空白处"; the "drag here to clear" box is gone).
+                //; the "drag here to clear" box is gone).
                 var target = slotAt(mouseX, mouseY);
                 boolean swap = target != null && target.id != drag.fromHud && target.id != HudLayout.OFFHAND;
                 if (swap && !HotbarControl.nativeSlot(target.id))
-                    BindingPresentation.target(g, target.id, target.screenX(width), target.screenY(height), drag.icon, drag.sprite);
+                    BindingPresentation.target(g, target.id, target.screenX(width, height), target.screenY(width, height), drag.icon, drag.sprite);
                 BindingPresentation.banner(g, target == null ? tr("poris_elegies_fingertip_incantations.drag_clear", drag.fromHud + 1)
                         : !swap ? tr("poris_elegies_fingertip_incantations.drag_back")
                         : HotbarControl.nativeSlot(target.id) ? tr("poris_elegies_fingertip_incantations.native_slot_locked")
-                        : tr("poris_elegies_fingertip_incantations.drag_swap", drag.fromHud + 1, target.id + 1), 9);
+                        : tr("poris_elegies_fingertip_incantations.drag_swap", drag.fromHud + 1, target.id + 1), 9, 12, layout().frameRects(width, height));
                 renderDraggedIcon(g, mouseX, mouseY); return;
             }
             var target = slotAt(mouseX, mouseY);
-            if (target != null) BindingPresentation.target(g, target.id, target.screenX(width), target.screenY(height), drag.icon, drag.sprite);
+            if (target != null) BindingPresentation.target(g, target.id, target.screenX(width, height), target.screenY(width, height), drag.icon, drag.sprite);
             BindingPresentation.banner(g, tr(target == null ? "poris_elegies_fingertip_incantations.drop_hint" : HotbarControl.nativeSlot(target.id)
-                    ? "poris_elegies_fingertip_incantations.native_slot_locked" : "poris_elegies_fingertip_incantations.drop_target", target == null ? 0 : target.id + 1), 9);
+                    ? "poris_elegies_fingertip_incantations.native_slot_locked" : "poris_elegies_fingertip_incantations.drop_target", target == null ? 0 : target.id + 1), 9, 12, layout().frameRects(width, height));
             renderDraggedIcon(g, mouseX, mouseY); return;
         }
         g.pose().pushPose(); g.pose().translate(0, 0, 400);
         super.render(g, mouseX, mouseY, partial);
         // The star seal leads the title, as the layout page's icon leads its heading (2026-10-27, user).
-        int sealRoom = ActionIcons.SMALL + EditorTheme.ICON_GAP;
         ActionIcons.Sprite.FINGERTIP.drawSmall(g, ui.x + ui.headerInset, ui.y + ui.headerInset + 2);
-        g.drawString(font, font.plainSubstrByWidth(title.getString(), ui.titleWidth() - sealRoom),
-                ui.x + ui.headerInset + sealRoom, ui.y + ui.headerInset + 4, EditorTheme.accent(), false);
+        TextFit.draw(g, font, title, ui.x + ui.headerInset + SEAL_ROOM, ui.y + ui.headerInset + 4, ui.titleWidth() - SEAL_ROOM,
+                EditorTheme.accent(), false, TextFit.Align.LEFT);
         if (!ready()) {
             g.drawCenteredString(font, tr("poris_elegies_fingertip_incantations.enter_world"), width / 2, height / 2, EditorTheme.TEXT);
             g.pose().popPose(); return;
@@ -346,28 +358,29 @@ public final class HudEditorScreen extends Screen {
         } else renderInventory(g, mouseX, mouseY);
         var notice = BindingFeedback.latest();
         var message = notice == null ? tr("poris_elegies_fingertip_incantations.real_canvas_hint") : notice.text();
-        int feedbackY = feedbackY();
-        if (feedbackY >= 0) g.drawCenteredString(font, font.plainSubstrByWidth(message.getString(), width - 20), width / 2, feedbackY,
-                notice == null ? EditorTheme.MUTED : BindingPresentation.color(notice));
+        var fitted = TextFit.fit(font, message.getString(), width - 20);
+        int feedbackY = feedbackY(Math.round(font.width(fitted.text()) * fitted.scale()));
+        if (feedbackY >= 0) TextFit.draw(g, font, message, 10, feedbackY, width - 20,
+                notice == null ? EditorTheme.MUTED : BindingPresentation.color(notice), true, TextFit.Align.CENTER);
         renderTooltip(g, mouseX, mouseY);
         renderDraggedIcon(g, mouseX, mouseY);
         g.pose().popPose();
     }
-    private int feedbackY() {
+    /** The line nearest the bottom, under the panels, where the hint covers no frame, else the one covering least (指尖定位法). */
+    private int feedbackY(int textWidth) {
         int bottom = ui.bodyBottom + ui.panelPad + 4;
-        for (int y = height - 12; y > bottom; y -= 12) {
-            final int line = y;
-            if (layout().activeSlots().stream().noneMatch(s -> s.screenY(height) - 6 < line + 10
-                    && s.screenY(height) + 24 > line)) return line;
-        }
-        return -1;
+        var candidates = new java.util.ArrayList<HudPlacement.Rect>();
+        for (int y = height - 12; y > bottom; y -= 12) candidates.add(new HudPlacement.Rect((width - textWidth) / 2, y, Math.max(1, textWidth), 10));
+        // 6 px clear of every frame, the spacing the hint kept before 1.1.0.
+        var spot = HudPlacement.bestSpot(candidates, layout().frameRects(width, height), 6, width, height);
+        return spot == null ? -1 : spot.y();
     }
     private void renderPositioning(GuiGraphics g, int mouseX, int mouseY, float partial) {
         g.fill(0, 0, width, height, 0x1810131C);
         if (ready()) {
             HudRenderer.renderSlots(g);
             var offhand = layout().offhand();
-            HudRenderer.renderOffhand(g, offhand.screenX(width), offhand.screenY(height), true);
+            HudRenderer.renderOffhand(g, offhand.screenX(width, height), offhand.screenY(width, height), true);
             g.pose().pushPose(); g.pose().translate(0, 0, 300);
             SelectionFrame.guides(g, drag.guideX, drag.guideY, canvasOnly || drag.moved ? 0 : toolbar.canvasTop(), width, height);
             if (selection.boxing()) {
@@ -378,7 +391,7 @@ public final class HudEditorScreen extends Screen {
                 SelectionFrame.group(g, box.left() - 4, box.top() - 4, box.width() + 8, box.height() + 8);
             }
             for (var slot : selection.slots(layout().layoutSlots()))
-                SelectionFrame.slot(g, slot.screenX(width) - 1, slot.screenY(height) - 1, 22, 22);
+                SelectionFrame.slot(g, slot.screenX(width, height) - 1, slot.screenY(width, height) - 1, 22, 22);
             g.pose().popPose();
         }
         if (drag.moved) return;
@@ -398,8 +411,8 @@ public final class HudEditorScreen extends Screen {
         ActionIcons.Sprite.EDITOR.drawSmall(g, headingX - iconRoom, toolbar.y + 12);
         g.drawString(font, heading, headingX, toolbar.y + 14, EditorTheme.accent(), false);
         int countX = toolbar.x + 12;
-        g.drawString(font, font.plainSubstrByWidth(tr("poris_elegies_fingertip_incantations.selection_count", selection.ids.size()).getString(),
-                Math.max(0, headingX - iconRoom - countX - 10)), countX, toolbar.y + 14, EditorTheme.MUTED, false);
+        TextFit.draw(g, font, tr("poris_elegies_fingertip_incantations.selection_count", selection.ids.size()), countX, toolbar.y + 14,
+                Math.max(0, headingX - iconRoom - countX - 10), EditorTheme.MUTED, false, TextFit.Align.LEFT);
         String[] groups = {"select", "arrange", "align", "manage"};
         for (int i = 0; i < groups.length; i++) {
             g.drawString(font, tr("poris_elegies_fingertip_incantations.layout_group_" + groups[i]), toolbar.groupX(i), toolbar.labelY(i), EditorTheme.MUTED, false);
@@ -411,7 +424,7 @@ public final class HudEditorScreen extends Screen {
         if (capture) { renderCapture(g, mouseX, mouseY, partial); g.pose().popPose(); return; }
         g.pose().popPose();
         if (!ready()) g.drawCenteredString(font, tr("poris_elegies_fingertip_incantations.enter_world"), width / 2, toolbar.canvasTop(), EditorTheme.TEXT);
-        BindingPresentation.feedback(g, height - 30);
+        BindingPresentation.feedback(g, height - 30, -12, layout().frameRects(width, height));
         if (!drag.active() && !selection.boxing()
                 && EditorGeometry.inside(mouseX, mouseY, headingX - 4, toolbar.y + 10, font.width(heading) + 8, 17))
             tooltip(g, List.of(tr("poris_elegies_fingertip_incantations.layout_help_hint")), mouseX, toolbar.canvasTop() + 12);
@@ -455,16 +468,14 @@ public final class HudEditorScreen extends Screen {
             }
             g.pose().popPose();
         }
-        int hintY = ui.inventoryY(0) + ui.inventoryCell + 10;
-        wrapped(g, tr(ui.compact ? "poris_elegies_fingertip_incantations.drag_out_hint" : "poris_elegies_fingertip_incantations.bind_hint"), ui.rightX + 8, hintY,
-                ui.rightWidth - 16, ui.bodyBottom - hintY - 6, EditorTheme.MUTED);
+        // Under the cells, from their left edge to their right (2026-11-01);
+        // one wording in every window, wrapped by 指尖排字法 ().
+        wrapped(g, tr("poris_elegies_fingertip_incantations.bind_hint"), ui.inventoryX(), ui.hintY(),
+                ui.inventoryWidth, ui.hintHeight(), EditorTheme.MUTED);
     }
+    /** Wrapped into the lines that fit in {@code h}; the last one ends with "…" when text is left (指尖排字法). */
     private void wrapped(GuiGraphics g, Component text, int x, int y, int w, int h, int color) {
-        int line = 0;
-        for (var part : font.split(text, Math.max(1, w))) {
-            if (line + font.lineHeight > h) break;
-            g.drawString(font, part, x, y + line, color, false); line += font.lineHeight + 2;
-        }
+        TextFit.drawLines(g, font, text, x, y, Math.max(1, w), TextFit.linesIn(font, h, font.lineHeight + 2), font.lineHeight + 2, color, false);
     }
     private void renderTooltip(GuiGraphics g, int mx, int my) {
         if (drag.active() || selection.boxing()) return;
@@ -525,7 +536,7 @@ public final class HudEditorScreen extends Screen {
         if (!drag.canvas && onPanel(x, y)) return null;
         // Only the layout page can pick up the off-hand frame; binding pages never target it.
         for (var slot : (positioning ? layout().layoutSlots() : layout().activeSlots()).reversed())
-            if (EditorGeometry.inside(x, y, slot.screenX(width), slot.screenY(height), 20, 20)) return slot;
+            if (EditorGeometry.inside(x, y, slot.screenX(width, height), slot.screenY(width, height), 20, 20)) return slot;
         return null;
     }
     @Override public boolean mouseClicked(double x, double y, int button) {
@@ -537,10 +548,10 @@ public final class HudEditorScreen extends Screen {
             }
             capture = false;
             // Only 删除 is lit while the box is open (updateControls), so only it takes this click: click a slot, then 删除
-            // deletes it (2026-10-31, user: "我要删1个指尖格的时候怎么办", "点击以后上面全暗 删除所选亮").
+            // deletes it (2026-10-31, "点击以后上面全暗 删除所选亮").
             // The dark buttons only close the box, like any click outside it; the canvas view has no 删除 to take it.
             if (!canvasOnly && super.mouseClicked(x, y, button)) return true;
-            // The same click also leaves the slot when it lands on blank canvas (2026-10-31, user: "样式还在选中").
+            // The same click also leaves the slot when it lands on blank canvas (2026-10-31).
             if (slotAt(x, y) == null && !onPanel(x, y) && !(positioning && !canvasOnly && toolbar.contains(x, y))) deselect();
             return true;
         }
@@ -575,7 +586,7 @@ public final class HudEditorScreen extends Screen {
             if (canvasOnly || y >= toolbar.canvasTop()) { selection.begin(x, y, hasShiftDown()); return true; }
             return false;
         }
-        // 2026-10-31 (user: "鼠标点外面 指尖格的失焦选中是不是应该做一些"): a click on blank canvas drops the selected
+        // 2026-10-31 (): a click on blank canvas drops the selected
         // slot, as an empty box does on the layout page; picking content afterwards asks for a slot first.
         if (!onPanel(x, y)) { deselect(); return false; }
         if (!canBind() || canvasOnly) return false;
@@ -609,13 +620,13 @@ public final class HudEditorScreen extends Screen {
         if (drag.fromHud >= 0) {
             int id = drag.fromHud; boolean moved = drag.moved;
             var target = moved ? slotAt(x, y) : null;
-            cancelDrag();
+            finishDrag();
             if (!moved || !canBind()) return true;
             if (target == null) confirmClear(id);   // blank canvas: clear, after asking
             else if (target.id != id && target.id != HudLayout.OFFHAND) {
                 ClientSession.swap(id, target.id);
                 // The selection follows the dragged content, as a dropped binding selects its slot and the hand follows
-                // its item on the server (2026-10-31, user: "指尖格换位的勾选好像反了"). Vanilla slots refuse a swap.
+                // its item on the server (2026-10-31). Vanilla slots refuse a swap.
                 if (!HotbarControl.nativeSlot(target.id)) selected = target.id;
             }
             return true;
@@ -637,13 +648,13 @@ public final class HudEditorScreen extends Screen {
                 if (drag.action != null) ClientSession.bindAction(selected, drag.action);
                 else ClientSession.bindItem(selected, drag.inventory);
             }
-            cancelDrag(); return true;
+            finishDrag(); return true;
         }
         if (drag.slot != null) {
             // A click on one slot records its key; the off-hand frame has no key, so a click only selects it.
             boolean clicked = !drag.moved && drag.slot.id != HudLayout.OFFHAND && selection.ids.size() == 1 && !HotbarControl.nativeSlot(selected)
                     && !hasShiftDown() && !hasControlDown() && !hasAltDown();
-            cancelDrag();
+            finishDrag();
             if (clicked) { capture = true; keyError = null; }
             return true;
         }
@@ -662,7 +673,8 @@ public final class HudEditorScreen extends Screen {
             if (KeyModifier.isKeyCodeModifier(InputConstants.getKey(key, scan))) return true;
             setKey(key == GLFW.GLFW_KEY_BACKSPACE ? InputConstants.UNKNOWN : InputConstants.getKey(key, scan)); return true;
         }
-        if (key == GLFW.GLFW_KEY_ESCAPE && (drag.active() || selection.boxing())) { cancelDrag(); return true; }
+        // Esc drops a drag, a frame drag as an item drag and a box selection (2026-11-01; it used to store frames where held).
+        if (key == GLFW.GLFW_KEY_ESCAPE && (drag.active() || selection.boxing())) { dropDrag(); return true; }
         if (key == GLFW.GLFW_KEY_TAB && !(getFocused() instanceof net.minecraft.client.gui.components.EditBox)) {
             toggleCanvas(); return true;
         }
@@ -672,21 +684,23 @@ public final class HudEditorScreen extends Screen {
         }
         if (positioning && key == GLFW.GLFW_KEY_ESCAPE) { setPositioning(false); return true; }
         if (positioning && !selection.ids.isEmpty() && key >= GLFW.GLFW_KEY_RIGHT && key <= GLFW.GLFW_KEY_UP) {
-            cancelDrag();
+            finishDrag();
             int step = hasShiftDown() ? 10 : 1;
             int dx = key == GLFW.GLFW_KEY_LEFT ? -step : key == GLFW.GLFW_KEY_RIGHT ? step : 0;
             int dy = key == GLFW.GLFW_KEY_UP ? -step : key == GLFW.GLFW_KEY_DOWN ? step : 0;
             var moving = selection.slots(layout().layoutSlots());
-            HudArrangement.apply(moving, HudArrangement.translate(HudArrangement.positions(moving, width, height),
-                    dx, dy, width, height), width, height);
-            layout().save(); return true;
+            var from = HudArrangement.positions(moving, width, height);
+            var to = HudArrangement.translate(from, dx, dy, width, height);
+            // Held by an edge it is at or already past: nothing moved, nothing to store.
+            if (!to.equals(from)) { layout().moveTo(moving, to, HudPlacement.Edit.NUDGE, width, height); layout().save(); }
+            return true;
         }
         return super.keyPressed(key, scan, modifiers);
     }
     private void arrangeLine(boolean horizontal) {
-        cancelDrag();
+        finishDrag();
         var slots = arrangeable().stream()
-                .sorted(java.util.Comparator.comparingInt((HudLayout.Slot s) -> s.screenY(height)).thenComparingInt(s -> s.screenX(width))).toList();
+                .sorted(java.util.Comparator.comparingInt((HudLayout.Slot s) -> s.screenY(width, height)).thenComparingInt(s -> s.screenX(width, height))).toList();
         if (slots.isEmpty()) { BindingFeedback.hint(-1, "poris_elegies_fingertip_incantations.select_first"); return; }
         var points = HudArrangement.line(HudArrangement.positions(slots, width, height), layout().gap, width, height, horizontal);
         applyArrangement(slots, points);
@@ -697,7 +711,8 @@ public final class HudEditorScreen extends Screen {
         if (points.isEmpty() || points.stream().anyMatch(p -> !HudArrangement.free(p, others, 0, width, height))) {
             BindingFeedback.hint(-1, "poris_elegies_fingertip_incantations.arrange_no_room"); return;
         }
-        HudArrangement.apply(slots, points, width, height); layout().save();
+        if (points.equals(HudArrangement.positions(slots, width, height))) return;   // already so: nothing to store
+        layout().moveTo(slots, points, HudPlacement.Edit.ARRANGE, width, height); layout().save();
     }
     private List<HudLayout.Slot> arrangeable() {
         return selection.slots(layout().activeSlots()).stream().filter(s -> !HotbarControl.nativeSlot(s.id)).toList();
@@ -718,11 +733,11 @@ public final class HudEditorScreen extends Screen {
     }
     @Override public void onClose() {
         if (positioning) { finishPositioning(); return; }
-        cancelDrag(); HudLayout.INSTANCE.save();
+        finishDrag(); HudLayout.INSTANCE.save();
         minecraft.setScreen(parent);
     }
     @Override public void removed() {
-        cancelDrag(); capture = false;
+        finishDrag(); capture = false;
         HudLayout.INSTANCE.save(); super.removed();
     }
 }

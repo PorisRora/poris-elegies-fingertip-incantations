@@ -16,9 +16,9 @@ import net.neoforged.neoforge.client.event.RegisterItemDecorationsEvent;
  * Durability left as a percentage on worn items (2026-10-30, user: "有耐久的物品要不要加个显示百分比 不过背包的也要显示百分比了
  * 可以显示设置加个开关？"). A NeoForge item decorator, so every screen that draws item decorations shows it, the inventory
  * and containers alike, and the HUD too (HudRenderer runs each item's decorators in its last pass). Only on items
- * vanilla counts as worn: damageable and damaged, so nothing on unbreakable or unworn items (user: "不可破坏就不显示耐久？"),
+ * vanilla counts as worn: damageable and damaged, so nothing on unbreakable or unworn items (),
  * and nothing for a bar an item uses for something else, such as a bundle's fullness. It takes the durability bar's place, small and centred under the
- * icon (user: "这个是不是太大了。。。而且原版的耐久条就不用了吧 而且位置好像没居中"): ItemBarMixin and HudRenderer leave the bar out
+ * icon (): ItemBarMixin and HudRenderer leave the bar out
  * where {@link #shows} holds. Display settings switch it ({@link HudLayout#durabilityPercent}); switched off, the bar is back.
  */
 @EventBusSubscriber(modid = Fingertip.MOD_ID, value = Dist.CLIENT)

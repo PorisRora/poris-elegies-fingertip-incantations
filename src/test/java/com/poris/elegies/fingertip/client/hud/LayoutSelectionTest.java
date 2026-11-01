@@ -14,7 +14,7 @@ class LayoutSelectionTest {
             selection.begin(reverse ? 128 : 55, reverse ? 165 : 135, false);
             selection.move(reverse ? 55 : 128, reverse ? 135 : 165, slots, 320, 200);
             assertEquals(Set.of(0, 1), selection.ids); selection.end();
-            assertEquals(-100, slots.getFirst().x);
+            assertEquals(-100, slots.getFirst().dx);   // the box selected it without moving it
         }
     }
     @Test void addSelectionAndCancelPreservePriorSelection() {

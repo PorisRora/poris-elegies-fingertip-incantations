@@ -43,7 +43,7 @@ public final class InputSettingsScreen extends Screen {
             for (var name : names) { if (count++ == 6) break; message.append("\n• " + name); }
             if (names.size() > 6) message.append("\n").append(tr("poris_elegies_fingertip_incantations.key_more", names.size() - 6));
         }
-        return Tooltip.create(message);
+        return EditorTheme.tip(message);
     }
     @Override protected void init() {
         w = Math.min(480, width - 24); h = Math.min(260, height - 16);
@@ -53,7 +53,7 @@ public final class InputSettingsScreen extends Screen {
                 b -> minecraft.setScreen(new ModWhitelistScreen(this)));
         var input = OptionalKeyPolicy.settings();
         toggle(x + 12, top, w - 24, state("poris_elegies_fingertip_incantations.take_functions", input.functionKeys), b -> { input.functionKeys = !input.functionKeys; changed(); }, () -> input.functionKeys)
-                .setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.take_functions_hint")));
+                .setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.take_functions_hint")));
         for (int i = 0; i < 9; i++) {
             final int bit = 1 << i;
             int left = edge(i, 9, 2);
@@ -68,7 +68,7 @@ public final class InputSettingsScreen extends Screen {
         // 2026-10-27 (user): the escape hatch for the right-click "real slot" compatibility, in case a mod breaks on it.
         toggle(x + 12, top + 83, w - 24, state("poris_elegies_fingertip_incantations.use_real_slot", input.useRealSlot),
                 b -> { input.useRealSlot = !input.useRealSlot; changed(); }, () -> input.useRealSlot)
-                .setTooltip(Tooltip.create(tr("poris_elegies_fingertip_incantations.use_real_slot_hint")));
+                .setTooltip(EditorTheme.tip(tr("poris_elegies_fingertip_incantations.use_real_slot_hint")));
     }
     /**
      * Left edge of the i-th of {@code count} buttons sharing the full row with {@code gap} between them; edge(count) - gap

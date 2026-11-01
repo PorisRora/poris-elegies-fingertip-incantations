@@ -2,7 +2,7 @@ package com.poris.elegies.fingertip.client.hud;
 
 /**
  * The three looks: classic, Starlight (星辉) and Poris. The id is what layout.json saves and what names each theme's
- * lang keys and images. Starlight's id was "magic" until 0.2-beta; HudLayout reads that as "starlight".
+ * lang keys and images. An unknown id reads as classic; since 1.2.0 so does "magic", Starlight's id until 0.2-beta.
  */
 enum Theme {
     CLASSIC("classic"), STARLIGHT("starlight"), PORIS("poris");

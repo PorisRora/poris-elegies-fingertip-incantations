@@ -61,7 +61,7 @@ public final class ShortcutKeyRules {
 
     /**
      * A key a whitelisted mod also uses is accepted: the slot is paused while that mod stays whitelisted, the same as
-     * when the mod takes the key later (2026-10-26, user: "白名单开启的时候应该是禁用绑定的按键不是直接拒绝吧").
+     * when the mod takes the key later (2026-10-26).
      */
     private static Component problem(int slot, InputConstants.Key key, KeyModifier modifier, int limit,
                                      IntFunction<KeyChoice> choices) {
@@ -101,7 +101,7 @@ public final class ShortcutKeyRules {
                 || code >= 340 && code <= 348;
     }
 
-    // Each slot's standing is worked out only when something it depends on changes (2026-10-26, user: "变了才查"):
+    // Each slot's standing is worked out only when something it depends on changes (2026-10-26):
     // KeyMapping.resetMapping (every rebind, ours or vanilla's Controls), a screen opening or closing, joining a world,
     // and our own input settings call changed(). A slot whose saved key now conflicts (core key, a whitelisted mod's
     // key, an earlier slot's key) is paused, not cleared: it keeps the key and owns it again once the conflict is gone.

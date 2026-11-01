@@ -6,7 +6,7 @@ import com.poris.elegies.fingertip.api.inventory.SourceAccess;
  * The 指尖检索法 (Fingertip search; the user named it on 2026-10-27: "从小到大找到就用"): matching, nonempty sources in
  * address order, the first one in storage is used. The off hand only reports that the item sits there; observed slots
  * (armour, cursor) never count. Supplies and equipment alike: an equipment identity found twice is not special, both
- * sides reach the same lowest-numbered copy (the user: "就算重复了 计算到的也应该一样才对").
+ * sides reach the same lowest-numbered copy (the).
  */
 public final class SourceResolver {
     public enum Status { READY, MISSING, OFFHAND }

@@ -13,7 +13,7 @@ final class HudArrangement {
     }
 
     static List<Point> positions(List<HudLayout.Slot> slots, int width, int height) {
-        return slots.stream().map(s -> new Point(s.screenX(width), s.screenY(height))).toList();
+        return slots.stream().map(s -> new Point(s.screenX(width, height), s.screenY(width, height))).toList();
     }
 
     static Bounds bounds(List<Point> points) {
@@ -24,12 +24,18 @@ final class HudArrangement {
                 points.stream().mapToInt(Point::y).max().orElseThrow() + CELL);
     }
 
-    /** A single clamped delta preserves every internal gap, including at a screen edge. */
+    /**
+     * A single clamped delta preserves every internal gap, including at a screen edge. The range always holds 0, so a
+     * selection already past an edge (1.1.4 shows what does not fit as it is) moves as usual (1.1.5, 2026-11-01, user:
+     * "挤出去也按照正常挪"): an axis it was not moved along stays put, and no step takes a frame further off the screen,
+     * while a step back in is taken as it is. The range used to leave 0 out there: Up on a row past the left edge also
+     * pulled it 40 to the right (Regression in 1.1.4), and a selection longer than the screen made Math.clamp throw.
+     */
     static List<Point> translate(List<Point> points, int dx, int dy, int width, int height) {
         if (points.isEmpty()) return points;
         var bounds = bounds(points);
-        int x = Math.clamp(dx, -bounds.left, width - bounds.right);
-        int y = Math.clamp(dy, -bounds.top, height - bounds.bottom);
+        int x = Math.clamp(dx, Math.min(0, -bounds.left), Math.max(0, width - bounds.right));
+        int y = Math.clamp(dy, Math.min(0, -bounds.top), Math.max(0, height - bounds.bottom));
         return points.stream().map(p -> new Point(p.x + x, p.y + y)).toList();
     }
 
@@ -51,21 +57,15 @@ final class HudArrangement {
         return result;
     }
 
-    static void apply(List<HudLayout.Slot> slots, List<Point> points, int width, int height) {
-        for (int i = 0; i < slots.size(); i++) {
-            slots.get(i).x = points.get(i).x - width / 2;
-            slots.get(i).y = points.get(i).y - height;
-        }
-    }
-
     /** A straight row/column has a fixed pitch; refuse overflow instead of wrapping or squeezing gaps. */
     static List<Point> line(List<Point> points, int gap, int width, int height, boolean horizontal) {
         if (points.isEmpty()) return points;
         int pitch = CELL + Math.clamp(gap, 0, 8);
         int length = CELL + (points.size() - 1) * pitch;
-        if (length > (horizontal ? width - 8 : height - 84)) return List.of();
-        var old = bounds(points);
         int w = horizontal ? length : CELL, h = horizontal ? CELL : length;
+        // Between the side margins and below the toolbar band, across as well as along (a very short or narrow window).
+        if (w > width - 8 || h > height - 84) return List.of();
+        var old = bounds(points);
         int left = Math.clamp(old.left(), 4, width - w - 4);
         int top = Math.clamp(old.top(), 80, height - h - 4);
         var result = new ArrayList<Point>();
@@ -74,9 +74,7 @@ final class HudArrangement {
     }
 
     static boolean free(Point p, List<Point> occupied, int gap, int width, int height) {
-        if (p.x < 0 || p.y < 0 || p.x + CELL > width || p.y + CELL > height) return false;
-        return occupied.stream().noneMatch(q -> p.x < q.x + CELL + gap && p.x + CELL + gap > q.x
-                && p.y < q.y + CELL + gap && p.y + CELL + gap > q.y);
+        return HudPlacement.firstFree(List.of(HudPlacement.Rect.cell(p.x, p.y)), HudPlacement.Rect.cells(occupied), gap, width, height) != null;
     }
 
     /** Follow the moved HUD, rather than colliding with its wider row at vanilla's fixed coordinates. */
@@ -90,17 +88,15 @@ final class HudArrangement {
     static Point auxiliary(List<Point> anchor, List<Point> occupied, int side, int width, int height) {
         var box = bounds(anchor);
         int left = box.left - CELL - DEFAULT_GAP, right = box.right + DEFAULT_GAP;
-        for (var p : List.of(new Point(side < 0 ? left : right, box.bottom - CELL),
-                new Point(side < 0 ? right : left, box.bottom - CELL),
-                new Point(box.left, box.top - CELL - DEFAULT_GAP),
-                new Point(box.left, box.bottom + DEFAULT_GAP)))
-            if (free(p, occupied, 2, width, height)) return p;
+        // Beside the box on the asked side, then the other side, above, below; then the screen row by row from the bottom.
+        var candidates = new java.util.ArrayList<>(List.of(HudPlacement.Rect.cell(side < 0 ? left : right, box.bottom - CELL),
+                HudPlacement.Rect.cell(side < 0 ? right : left, box.bottom - CELL),
+                HudPlacement.Rect.cell(box.left, box.top - CELL - DEFAULT_GAP),
+                HudPlacement.Rect.cell(box.left, box.bottom + DEFAULT_GAP)));
         for (int y = height - CELL - 2; y >= 0; y -= CELL + DEFAULT_GAP)
-            for (int x = 2; x + CELL <= width; x += CELL + DEFAULT_GAP) {
-                var p = new Point(x, y);
-                if (free(p, occupied, 2, width, height)) return p;
-            }
-        return null;
+            for (int x = 2; x + CELL <= width; x += CELL + DEFAULT_GAP) candidates.add(HudPlacement.Rect.cell(x, y));
+        var spot = HudPlacement.firstFree(candidates, HudPlacement.Rect.cells(occupied), 2, width, height);
+        return spot == null ? null : new Point(spot.x(), spot.y());
     }
     private HudArrangement() {}
 }
