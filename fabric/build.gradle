@@ -1,0 +1,58 @@
+plugins {
+    id 'net.fabricmc.fabric-loom-remap' version '1.17.12'
+    id 'java-library'
+}
+group = 'com.poris'
+version = '1.2.1'
+base { archivesName = 'poris-elegies-fingertip-incantations-fabric-1.21.1' }
+repositories {
+    mavenCentral()
+    maven { url = 'https://maven.terraformersmc.com/releases/' }
+}
+dependencies {
+    minecraft 'com.mojang:minecraft:1.21.1'
+    mappings loom.officialMojangMappings()
+    modImplementation 'net.fabricmc:fabric-loader:0.16.14'
+    modImplementation 'net.fabricmc.fabric-api:fabric-api:0.106.0+1.21.1'
+    modCompileOnly 'com.terraformersmc:modmenu:11.0.5'
+    testImplementation platform('org.junit:junit-bom:5.10.3')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+java { toolchain.languageVersion = JavaLanguageVersion.of(21); withSourcesJar() }
+tasks.named('sourcesJar') {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn tasks.processResources
+    from('LICENSE', 'ASSET_LICENSE.md', 'THIRD_PARTY_NOTICES.md')
+    into('licenses') { from 'licenses' }
+    from(layout.buildDirectory.file('resources/main/PORIS_BUILD.txt'))
+}
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8'; options.release = 21 }
+// Both loaders use the same artwork and translations, without duplicating the originals.
+sourceSets.main.resources.srcDir '../src/main/resources'
+tasks.processResources {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    inputs.property 'version', project.version
+    filesMatching('fabric.mod.json') { expand version: project.version }
+    from('LICENSE', 'ASSET_LICENSE.md', 'THIRD_PARTY_NOTICES.md')
+    into('licenses') { from 'licenses' }
+    doLast { new File(destinationDir, 'PORIS_BUILD.txt').setText("${project.version}\nFingertip Incantations | Fabric | Minecraft 1.21.1 | protocol 3\n", 'UTF-8') }
+}
+loom {
+    runs {
+        client { client(); runDir 'run/client' }
+        server { server(); runDir 'run/server' }
+    }
+}
+def testCopyDirectory = new File(gradle.gradleUserHomeDir, "caches/fingertip-fabric/tests-${rootDir.absolutePath.hashCode()}")
+def copyForTests = tasks.register('copyForTests', Sync) {
+    into testCopyDirectory
+    into('main') { from sourceSets.main.output }
+    into('test') { from sourceSets.test.output }
+}
+tasks.test {
+    useJUnitPlatform()
+    dependsOn copyForTests
+    testClassesDirs = files(new File(testCopyDirectory, 'test'))
+    classpath = files(new File(testCopyDirectory, 'test'), new File(testCopyDirectory, 'main')) + configurations.testRuntimeClasspath
+}

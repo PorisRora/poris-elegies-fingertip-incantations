@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "poris_elegies_fingertip_incantations",
+  "version": "${version}",
+  "name": "Poris Elegies: Fingertip Incantations",
+  "description": "Customizable HUD slots and an action wheel for items, key bindings and integrated skills.",
+  "authors": [
+    "Rooboko"
+  ],
+  "icon": "assets/poris_elegies_fingertip_incantations/textures/gui/mod_logo.png",
+  "license": "LicenseRef-MIT-Code-Reserved-Artwork",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.poris.elegies.fingertip.Fingertip"
+    ],
+    "client": [
+      "com.poris.elegies.fingertip.client.FingertipClient"
+    ],
+    "modmenu": [
+      "com.poris.elegies.fingertip.client.FingertipModMenu"
+    ]
+  },
+  "mixins": [
+    "poris_elegies_fingertip_incantations.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.16.14",
+    "minecraft": "1.21.1",
+    "java": ">=21",
+    "fabric-api": ">=0.106.0"
+  },
+  "contact": {
+    "sources": "https://github.com/PorisRora/poris-elegies-fingertip-incantations"
+  }
+}

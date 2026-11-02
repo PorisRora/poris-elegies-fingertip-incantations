@@ -1,6 +1,6 @@
 # Building from source
 
-The public repository is a standalone NeoForge project. Use its repository root for these commands.
+The repository root builds the NeoForge edition. The `fabric/` directory is an independent Fabric project; clone the whole repository because both editions share the resources in `src/main/resources`. The commands below refer to NeoForge unless stated otherwise.
 
 ## Requirements
 
@@ -34,6 +34,19 @@ To run only the unit tests:
 ./gradlew :test
 ```
 
+## Fabric build
+
+Use JDK 21. From the repository root:
+
+```powershell
+cd fabric
+.\gradlew.bat :build
+```
+
+On Linux/macOS, run `./gradlew :build` inside `fabric/`. This runs the unit tests and produces the runtime and sources JARs in `fabric/build/libs/`. Version and dependency settings are in `fabric/build.gradle`; runtime requirements are in `fabric/src/main/resources/fabric.mod.json`. The compile-time Fabric API is pinned to the supported minimum, **0.106.0+1.21.1**.
+
+Fabric development runs use `:runClient` and `:runServer` from `fabric/`. Mod Menu is compile-only and is not required to run Fingertip.
+
 ## Development runs
 
 ```sh
@@ -56,7 +69,9 @@ The repository's source code is MIT-licensed. Art assets have separate rights un
 - `src/main/java`: runtime code and public integration interfaces
 - `src/main/resources`: game-ready textures, translations, and configuration
 - `src/main/templates`: generated mod metadata template
-- `src/test`: unit tests
+- `src/test`: NeoForge unit tests
+- `fabric/src`: Fabric runtime code, integration interfaces, metadata, and unit tests
+- `fabric/docs`: Fabric integration documentation
 - `docs`: user and developer documentation
 - `publication`: platform description and release-note drafts
 

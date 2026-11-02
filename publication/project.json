@@ -28,5 +28,30 @@
     }
   ],
   "repository": "PorisRora/poris-elegies-fingertip-incantations",
-  "minimum_irons_spellbooks": "1.21-3.4.4"
+  "minimum_irons_spellbooks": "1.21-3.4.4",
+  "loaders": [
+    "NeoForge",
+    "Fabric"
+  ],
+  "minimum_fabric_loader": "0.16.14",
+  "minimum_fabric_api": "0.106.0+1.21.1",
+  "fabric_release_version": "1.2.1",
+  "fabric_release_tag": "fabric-v1.2.1",
+  "fabric_required_mods": [
+    "fabric-api"
+  ],
+  "fabric_release_files": [
+    {
+      "name": "poris-elegies-fingertip-incantations-fabric-1.21.1-1.2.1.jar",
+      "kind": "mod",
+      "sha256": "9b63eb8b82526eae22a6cdd85b54432b016b1056f522296e44d2452078cded6b",
+      "bytes": 24332064
+    },
+    {
+      "name": "poris-elegies-fingertip-incantations-fabric-1.21.1-1.2.1-sources.jar",
+      "kind": "sources",
+      "sha256": "e2f6d7f7022ad6414a513f6cf6968dd89d693405d93951249933570f8aba0820",
+      "bytes": 24066595
+    }
+  ]
 }

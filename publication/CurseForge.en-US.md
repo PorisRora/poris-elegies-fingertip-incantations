@@ -4,13 +4,15 @@
 
 **Keep the items, controls, and skills you use most within reach.**
 
-**Minecraft 1.21.1 · NeoForge · Client and server**
+**Minecraft 1.21.1 · NeoForge / Fabric · Client and server**
 
 Fingertip Incantations adds a customizable RPG-style hotbar and a configurable action wheel. Bind an item or action to a visible slot, choose its shortcut, and place it where it feels comfortable.
 
 Items stay in your existing inventory. Pressing a sword's slot equips that sword without moving it into a different storage slot; attack and use controls still work as usual.
 
 ## What's new in 1.2.1
+
+The **Fabric edition is now available**, with the same slot editor, layouts, action wheel, item bindings, themes, and standard mod keybind support. It does not include the NeoForge edition's Iron's Spells adapter.
 
 **Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.2.1 cannot be read by 1.0.0.
 
@@ -63,7 +65,7 @@ Vanilla actions and supported mod keybinds can be bound to visible slots. **Whil
 
 ## Supported mod skills
 
-Built-in integration with **Iron's Spells 'n Spellbooks** makes available spells appear on the Skills page. Skill slots can show cooldowns, active states, charges, and recast counts when supplied by the integration.
+The NeoForge edition's built-in integration with **Iron's Spells 'n Spellbooks** makes available spells appear on the Skills page. Skill slots can show cooldowns, active states, charges, and recast counts when supplied by the integration.
 
 Hovering can display the spell's own information, including damage, radius, or duration. Casting rules, resource costs, and gameplay remain controlled by the spell's own mod.
 
@@ -82,10 +84,13 @@ Other mods can add skill providers and inventory-source integrations through the
 ## Requirements and compatibility
 
 - **Minecraft Java Edition 1.21.1**
-- **NeoForge 21.1.181 or later** for Minecraft 1.21.1
+- **NeoForge 21.1.181+** or **Fabric Loader 0.16.14+**; use the JAR for your loader
+- **Required mod on Fabric: Fabric API 0.106.0+1.21.1 or later for Minecraft 1.21.1**
 - Required on **both client and server** for multiplayer
-- Works independently; Iron's Spells is optional
-- Built-in Iron's Spells integration supports **1.21-3.4.4 or later**
+- NeoForge requires no extra library mod
+- Optional Iron's Spells integration is NeoForge-only, supporting **1.21-3.4.4 or later**; Fabric retains the integration API without this adapter
+
+**Fabric compatibility note:** Inventory Profiles Next's automatic refill can interfere with returning an item from the offhand in multiplayer, especially with latency. Disable its automatic refill if this occurs; this interaction is not fixed in 1.2.1.
 
 Item shortcuts use the vanilla player inventory. Third-party backpack contents require an inventory-source integration. Mods with their own physical-input handling may need additional compatibility support.
 
@@ -98,7 +103,7 @@ Item shortcuts use the vanilla player inventory. Third-party backpack contents r
 - [Report a bug or suggest a feature](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
 - [中文介绍](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/README.zh-CN.md)
 
-For bug reports, include your mod and NeoForge versions, single-player or multiplayer environment, relevant mods, and steps to reproduce the issue.
+For bug reports, include your mod, Minecraft, and loader versions, single-player or multiplayer environment, relevant mods, and steps to reproduce the issue.
 
 ## License
 

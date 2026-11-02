@@ -10,7 +10,8 @@
 | Additional categories | Optional; no extra category is required |
 | License | Custom License; paste the full text of [CurseForge-LICENSE.txt](CurseForge-LICENSE.txt), covering MIT source code and separate artwork rights |
 | Supported game version | Minecraft 1.21.1 |
-| Mod loader | NeoForge |
+| Mod loader | NeoForge / Fabric (separate files) |
+| Required dependency for Fabric files | Fabric API; minimum 0.106.0+1.21.1 |
 | Environment | Client and server |
 | Project icon | `../docs/images/logo-square.png` |
 | Description | [CurseForge.en-US.md](CurseForge.en-US.md) |
@@ -29,7 +30,8 @@ A customizable RPG-style hotbar for inventory items, keybinds, and supported mod
 | 英文名 | Poris Elegies: Fingertip Incantations |
 | MODID | poris_elegies_fingertip_incantations |
 | MC 版本 | 1.21.1 |
-| 加载方式 | NeoForge |
+| 加载方式 | NeoForge / Fabric（分别下载） |
+| Fabric 必需前置 | Fabric API，最低 0.106.0+1.21.1 |
 | 运行环境 | 客户端、服务端均需 |
 | 开源状态 | 源码 MIT；美术素材保留权利 |
 | 封面素材 | `../docs/images/logo-horizontal.png` |

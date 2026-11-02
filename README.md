@@ -13,12 +13,17 @@ The slots point to your existing items. Selecting a sword equips that sword with
 | --- | --- |
 | Version | **1.2.1** |
 | Minecraft | Java Edition **1.21.1** |
-| Loader | **NeoForge 21.1.181 or later** for Minecraft 1.21.1 |
+| Loader | **NeoForge 21.1.181+** or **Fabric Loader 0.16.14+**; download the matching edition |
+| Required mod (Fabric) | **Fabric API 0.106.0+1.21.1 or later for Minecraft 1.21.1** |
 | Installation | Client and server; single-player uses its integrated server |
-| Optional integration | Iron's Spells 'n Spellbooks **1.21-3.4.4 or later** |
+| Optional integration (NeoForge only) | Iron's Spells 'n Spellbooks **1.21-3.4.4 or later** |
 | License | Source code: **MIT** · Logo and artwork: **All Rights Reserved** |
 
+[Download for NeoForge](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.2.1) · [Download for Fabric](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/fabric-v1.2.1)
+
 ## What's new in 1.2.1
+
+The **Fabric edition is now available**, with the same slot editor, layouts, action wheel, item bindings, themes, and standard mod keybind support. It does not include the NeoForge edition's Iron's Spells adapter.
 
 **Updating from 1.0.0:** Slot positions reset to the default rows and need arranging again. Item and action bindings, shortcut keys, and other settings are retained. Layouts saved by 1.2.1 cannot be read by 1.0.0.
 
@@ -73,15 +78,17 @@ By default, **hold the middle mouse button, point at an action, and release**. A
 
 ## See supported skills at a glance
 
-The built-in Iron's Spells 'n Spellbooks integration adds available spells to the **Skills** page. Skill slots can display cooldowns, active states, charges, and recast counts when the integration provides them. Hovering can show the skill's own information, such as damage, range, or duration.
+The NeoForge edition's built-in Iron's Spells 'n Spellbooks integration adds available spells to the **Skills** page. Skill slots can display cooldowns, active states, charges, and recast counts when the integration provides them. Hovering can show the skill's own information, such as damage, range, or duration.
 
 ![The Skills page and a skill tooltip: supported spells grouped by mod; hovering shows readiness, level, mana, and damage](docs/images/en/skill-tooltip.webp)
+
+The Iron's Spells screenshot above shows the NeoForge integration. Fabric skill entries require a separate provider.
 
 The spell's own mod still handles casting rules, resource costs, and gameplay effects. Fingertip supplies the interface and forwards the action. Other mods can add integrations through the public API.
 
 ## Start playing
 
-1. Install the mod in your Minecraft instance. For multiplayer, the server and participating clients also need it.
+1. Install the JAR for your loader. On Fabric, also install Fabric API. Multiplayer requires the same edition on the server and participating clients.
 2. Open your inventory and click the **Fingertip Incantations** logo near the upper-right corner.
 3. Drag items or actions to slots, assign their shortcuts, and arrange the layout.
 4. Check **Key takeover**, and in its **Mod whitelist** switch on any mods whose original shortcuts you want to keep.
@@ -91,7 +98,9 @@ See the [user guide](docs/USER_GUIDE.md) for mode differences, key conflicts, co
 
 ## Compatibility
 
-Fingertip works on its own with Minecraft and NeoForge. Iron's Spells is optional.
+The NeoForge edition needs no additional library mod. The Fabric edition requires **Fabric API 0.106.0+1.21.1 or later for Minecraft 1.21.1**. Iron's Spells integration is optional and available only in the NeoForge edition. The Fabric edition retains the public skill and inventory-source APIs.
+
+**Fabric compatibility note:** Inventory Profiles Next's automatic refill can interfere with returning an item from the offhand in multiplayer, especially with latency. Disable its automatic refill if this occurs; this interaction is not fixed in 1.2.1.
 
 | Situation | Current behavior |
 | --- | --- |
@@ -107,11 +116,11 @@ In Fingertip mode, the mouse wheel does not select slots. Use their assigned key
 ## Development and feedback
 
 - [Build from source](docs/BUILDING.md)
-- [Skill and inventory integrations](docs/INTEGRATION.md)
+- [Skill and inventory integrations](docs/INTEGRATION.md) · [Fabric specifics](fabric/docs/INTEGRATION.md)
 - [Changelog](CHANGELOG.md)
 - [Source license](LICENSE) and [artwork rights](ASSET_LICENSE.md)
 
-Bug reports are welcome through the repository's Issues tab. Include the mod and NeoForge versions, whether the issue occurs in single-player or multiplayer, relevant mods, and steps to reproduce it.
+Bug reports are welcome through the repository's Issues tab. Include the mod, Minecraft, and loader versions, whether the issue occurs in single-player or multiplayer, relevant mods, and steps to reproduce it.
 
 ## License
 

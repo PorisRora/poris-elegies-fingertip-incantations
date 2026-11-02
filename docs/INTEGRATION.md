@@ -1,5 +1,7 @@
 # Integration guide
 
+The examples and source links below use the NeoForge edition. For Fabric initialization, networking, key handling, and cooperative HUD layers, see the [Fabric integration guide](../fabric/docs/INTEGRATION.md). Compile against the artifact for the intended loader.
+
 Fingertip exposes a client-side action interface and an inventory-source interface. The source declarations are the reference for exact signatures.
 
 ## Skills and actions
@@ -22,7 +24,7 @@ The owning mod remains responsible for validating gameplay requests on its serve
 
 Provider registration can also supply the names of items contributing skills and a meaningful empty-state hint. Key-switch and HUD-layer hooks allow integrations to expose relevant control options without duplicating gameplay logic.
 
-The [built-in Iron's Spells adapter](../src/main/java/com/poris/elegies/fingertip/compat/irons/) is a working example. It reads that mod's own spell state and descriptions.
+The NeoForge [built-in Iron's Spells adapter](../src/main/java/com/poris/elegies/fingertip/compat/irons/) is a working example. It reads that mod's own spell state and descriptions.
 
 ## External inventories
 

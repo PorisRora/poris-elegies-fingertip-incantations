@@ -8,6 +8,8 @@
 
 [h2=1.2.1 更新]
 
+现已提供 **Fabric 版**，保留指尖格编辑、布局、轮盘、物品绑定、主题与标准模组按键支持；暂不包含 NeoForge 版的 Iron's Spells 适配。
+
 改善格子定位、分组与窗口缩放时的操作；方向键微调不合组，拖动中改变窗口大小或按 Esc 可取消拖动。统一文字适配、状态颜色与中英文说明，改进原有大小两档编辑器的选择条件与小窗口提示排版。
 
 **从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.0.0 无法读取 1.2.1 保存的布局。
@@ -23,7 +25,7 @@
 - 拖放绑定物品或动作，拖到另一格交换绑定，拖到空白处并确认后清空。
 - 装备记住绑定的那一件物品，补给按种类和物品数据匹配，一叠用完后接续下一叠匹配物品。
 - 可配置操作轮盘，默认按住鼠标中键打开、指向后松开执行，也可改成点击式。
-- 内置 Iron's Spells 'n Spellbooks 适配，可将可用法术放入格子，并显示适配方提供的冷却、充能、开关状态与技能说明。
+- NeoForge 版内置 Iron's Spells 'n Spellbooks 适配，可将可用法术放入格子，并显示适配方提供的冷却、充能、开关状态与技能说明。
 - 提供普通、星辉、Poris 三套主题，可设置格子显示范围、模组功能指尖格和耐久百分比。
 - 界面支持简体中文和英文，随游戏语言切换。
 
@@ -31,7 +33,9 @@
 
 当前版本：1.2.1。
 
-支持 Minecraft Java 版 1.21.1，使用对应的 NeoForge 21.1.181 或更新版本。
+支持 Minecraft Java 版 1.21.1，使用 NeoForge 21.1.181+ 或 Fabric Loader 0.16.14+，请选择对应加载器的 JAR。
+
+Fabric 必需前置：Fabric API 0.106.0+1.21.1 或更新的 1.21.1 版。
 
 客户端与服务端均需安装，多人游戏建议使用相同版本。将模组 JAR 放入实例的 mods 文件夹，更新时移出旧版文件并完整重启游戏。
 
@@ -71,7 +75,9 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 
 [h1=兼容与联动]
 
-指尖咒文可以独立使用，Iron's Spells 'n Spellbooks 为可选联动，内置适配支持 1.21-3.4.4 及以上版本。安装联动模组时，还需满足该模组自己的依赖要求。
+NeoForge 版无需额外函数库模组。Fabric 版的必需前置为 **Fabric API 0.106.0+1.21.1 或更新的 1.21.1 版**。Iron's Spells 联动仅在 NeoForge 版内置；Fabric 版保留技能与物品来源接口。 NeoForge 的 Iron's Spells 适配支持 1.21-3.4.4 及以上版本，联动模组自身的依赖仍需满足。
+
+**Fabric 兼容提示：** Inventory Profiles Next 的自动补货可能干扰多人游戏中的副手物品归还，延迟较高时更容易出现。遇到时请关闭它的自动补货；1.2.1 尚未修复这一兼容问题。
 
 技能能否施放、消耗多少资源和产生什么效果，由技能所属模组决定。指尖负责显示与操作转发，其他技能模组需要通过接口接入，不会自动识别任意法术。
 
@@ -86,7 +92,7 @@ HUD 开启时会接管模组功能按键。需要保留其他模组的原快捷�
 源码采用 MIT 许可，Logo 与美术素材保留所有权利。素材声明允许将未经修改的官方发行包加入整合包，并保留许可与来源信息。
 
 - [GitHub 源码](https://github.com/PorisRora/poris-elegies-fingertip-incantations)
-- [1.2.1 发行页面](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.2.1)
+- [NeoForge 1.2.1](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.2.1) · [Fabric 1.2.1](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/fabric-v1.2.1)
 - [中文使用指南](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/main/docs/USER_GUIDE.zh-CN.md)
 - [问题反馈](https://github.com/PorisRora/poris-elegies-fingertip-incantations/issues)
 - [MIT 许可](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/LICENSE)与[素材权利声明](https://github.com/PorisRora/poris-elegies-fingertip-incantations/blob/v1.2.1/ASSET_LICENSE.md)

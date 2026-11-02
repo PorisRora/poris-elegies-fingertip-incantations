@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.2.1 — Fabric (2026-11-02)
+
+The **Fabric edition is now available**, with the same slot editor, layouts, action wheel, item bindings, themes, and standard mod keybind support. It does not include the NeoForge edition's Iron's Spells adapter.
+
+Requires Minecraft 1.21.1, Fabric Loader 0.16.14+, and Fabric API 0.106.0+1.21.1 or later for that game version. Install on both client and server.
+
+**Fabric compatibility note:** Inventory Profiles Next's automatic refill can interfere with returning an item from the offhand in multiplayer, especially with latency. Disable its automatic refill if this occurs; this interaction is not fixed in 1.2.1.
+
+See [Fabric release notes](publication/RELEASE_NOTES.fabric.md).
+
 ## 1.2.1
 
 **Layouts saved by 1.0.0 are not read.** When you update from 1.0.0, slots go back to their default places (rows of

@@ -14,3 +14,5 @@ __pycache__/
 *.py[cod]
 .DS_Store
 Thumbs.db
+
+!fabric/gradle/wrapper/gradle-wrapper.jar

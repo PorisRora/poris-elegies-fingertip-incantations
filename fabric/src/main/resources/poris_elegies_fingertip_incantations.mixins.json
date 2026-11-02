@@ -1,0 +1,44 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.poris.elegies.fingertip.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+    "ArmorStandMixin",
+    "InventoryMixin",
+    "PlayerMixin",
+    "ServerPlayerMixin",
+    "ServerInputMixin",
+    "CreativeCloneMixin",
+    "WritableBookMixin",
+    "ServerBookMixin",
+    "SupplyUseMixin",
+    "SupplyFinishMixin",
+    "PlayerDataMixin"
+  ],
+  "client": [
+    "client.compat.InventoryProfilesRefillMixin",
+    "client.ContainerPredictionMixin",
+    "client.KeyMappingAccess",
+    "client.KeyMappingMixin",
+    "client.ToggleKeyMappingMixin",
+    "client.ShortcutModifierMixin",
+    "client.KeyboardMixin",
+    "client.MouseInputMixin",
+    "client.GameModeAccess",
+    "client.GameModeMixin",
+    "client.LocalPlayerMixin",
+    "client.NativeSelectionMixin",
+    "client.ScrollSelectionMixin",
+    "client.GuiMixin",
+    "client.ItemBarMixin",
+    "client.BookEditorMixin",
+    "client.MinecraftActions",
+    "client.ClientLifecycleMixin",
+    "client.ClientRespawnMixin",
+    "client.ContainerScreenAccess"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

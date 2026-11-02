@@ -13,12 +13,17 @@
 | --- | --- |
 | 版本 | **1.2.1** |
 | Minecraft | Java 版 **1.21.1** |
-| 加载器 | Minecraft 1.21.1 对应的 **NeoForge 21.1.181 及以上** |
+| 加载器 | **NeoForge 21.1.181+** 或 **Fabric Loader 0.16.14+**，下载对应版本 |
+| 必需前置（Fabric） | **Fabric API 0.106.0+1.21.1 或更新的 1.21.1 版** |
 | 安装端 | 客户端和服务端都要安装；单人游戏使用内置服务端 |
-| 可选联动 | Iron's Spells 'n Spellbooks **1.21-3.4.4 及以上** |
+| 可选联动（仅 NeoForge） | Iron's Spells 'n Spellbooks **1.21-3.4.4 及以上** |
 | 许可 | 源码 **MIT**；Logo 与美术素材 **保留所有权利** |
 
+[NeoForge 版下载](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/v1.2.1) · [Fabric 版下载](https://github.com/PorisRora/poris-elegies-fingertip-incantations/releases/tag/fabric-v1.2.1)
+
 ## 1.2.1 更新内容
+
+现已提供 **Fabric 版**，保留指尖格编辑、布局、轮盘、物品绑定、主题与标准模组按键支持；暂不包含 NeoForge 版的 Iron's Spells 适配。
 
 **从 1.0.0 升级请注意：格子位置会恢复为默认排列，需要重新摆放。** 物品与动作绑定、快捷键和其他设置保留。1.0.0 无法读取 1.2.1 保存的布局。
 
@@ -73,15 +78,17 @@
 
 ## 看清已适配技能的状态
 
-内置 Iron's Spells 'n Spellbooks 适配，其可用法术会出现在「技能」页。技能格可以显示适配方提供的冷却、开关状态、充能和再施放次数；悬停时还能显示法术自己的伤害、范围、持续时间等说明。
+NeoForge 版内置 Iron's Spells 'n Spellbooks 适配，其可用法术会出现在「技能」页。技能格可以显示适配方提供的冷却、开关状态、充能和再施放次数；悬停时还能显示法术自己的伤害、范围、持续时间等说明。
 
 ![技能页与技能悬停：已适配的法术按模组分组，悬停显示能否施放、等级、法力和伤害](docs/images/zh-CN/skill-tooltip.webp)
+
+上图的 Iron's 法术来自 NeoForge 联动；Fabric 技能页需要其他模组提供适配。
 
 技能是否能够释放、消耗多少资源、产生什么效果，仍由技能所属模组处理。指尖负责显示与转发操作，其他模组可以通过公开接口接入。
 
 ## 第一次使用
 
-1. 把模组安装到 Minecraft 实例；多人游戏的服务端和参与玩家也需要安装。
+1. 下载对应加载器的 JAR；Fabric 另装 Fabric API。多人游戏的服务端和参与玩家都需安装同一加载器版本。
 2. 打开背包，点击右上角附近的**指尖咒文 Logo**。
 3. 把物品或动作拖到格子上，配置快捷键并调整布局。
 4. 检查「按键接管」，在「模组白名单」里打开需要继续沿用原始快捷键的模组。
@@ -91,7 +98,9 @@
 
 ## 兼容范围
 
-指尖可以只与 Minecraft、NeoForge 一起运行，Iron's Spells 是可选联动。
+NeoForge 版无需额外函数库模组。Fabric 版的必需前置为 **Fabric API 0.106.0+1.21.1 或更新的 1.21.1 版**。Iron's Spells 联动仅在 NeoForge 版内置；Fabric 版保留技能与物品来源接口。
+
+**Fabric 兼容提示：** Inventory Profiles Next 的自动补货可能干扰多人游戏中的副手物品归还，延迟较高时更容易出现。遇到时请关闭它的自动补货；1.2.1 尚未修复这一兼容问题。
 
 | 情况 | 当前行为 |
 | --- | --- |
@@ -107,11 +116,11 @@
 ## 开发与反馈
 
 - [从源码构建](docs/BUILDING.md)
-- [技能与物品来源接口](docs/INTEGRATION.md)
+- [技能与物品来源接口](docs/INTEGRATION.md) · [Fabric 接入说明](fabric/docs/INTEGRATION.md)
 - [更新记录](CHANGELOG.md)
 - [源码许可](LICENSE)与[素材权利声明](ASSET_LICENSE.md)
 
-反馈问题时请提供指尖版本、NeoForge 版本、单人或多人环境、相关模组和复现步骤，可通过仓库的 Issues 页面提交。
+反馈问题时请提供指尖版本、Minecraft 与加载器版本、单人或多人环境、相关模组和复现步骤，可通过仓库的 Issues 页面提交。
 
 ## 许可
 

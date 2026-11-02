@@ -4,11 +4,13 @@
 
 ## Installation
 
-Use Minecraft Java Edition 1.21.1 with NeoForge 21.1.181 or later for that game version. Put the official Fingertip JAR in the instance's `mods` directory.
+Use Minecraft Java Edition 1.21.1 with NeoForge 21.1.181+ or Fabric Loader 0.16.14+. Put the matching Fingertip JAR in `mods`. Fabric additionally requires **Fabric API 0.106.0+1.21.1 or later for Minecraft 1.21.1**. Use the same loader and mod version on client and server.
 
 For multiplayer, install Fingertip on the server and participating clients. Use matching versions when setting up a server. Single-player already includes an integrated server.
 
-Iron's Spells 'n Spellbooks is optional. If you install it, also install the dependencies required by its own download page.
+The optional Iron's Spells 'n Spellbooks integration is available only on NeoForge. Fabric retains the integration API without this adapter. If you install it, also install the dependencies required by its own download page.
+
+**Fabric compatibility note:** Inventory Profiles Next's automatic refill can interfere with returning an item from the offhand in multiplayer, especially with latency. Disable its automatic refill if this occurs; this interaction is not fixed in 1.2.1.
 
 ## First layout
 
@@ -88,4 +90,4 @@ The owning mod still validates the action and performs the gameplay. Fingertip's
 
 ## Reporting a problem
 
-Include the Fingertip version, Minecraft and NeoForge versions, single-player or server environment, selected hotbar mode, relevant mods, exact actions that reproduce the issue, and a useful log or screenshot. For a key issue, include the key and whether the other mod is allowed through.
+Include the Fingertip version, Minecraft and loader versions, single-player or server environment, selected hotbar mode, relevant mods, exact actions that reproduce the issue, and a useful log or screenshot. For a key issue, include the key and whether the other mod is allowed through.
